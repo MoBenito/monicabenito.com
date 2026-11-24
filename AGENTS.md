@@ -84,6 +84,9 @@ coloured areas or for renders, so look at the result in dark mode and change `da
 - The site must work on phones (burger menu below 640 px), in light and dark mode, with reduced motion, and
   without JavaScript.
 - Links to journals and arXiv open in a new tab (`target="_blank" rel="noopener"`).
+- Every publication also gets `citation.bib` and `citation.ris` (output formats in `hugo.toml`, templates
+  `layouts/publications/single.bibtex.bib` and `single.ris.ris`, key from `partials/cite-key.html`); they are
+  built from the front matter, so keep authors, journal, volume, pages, DOI and arXiv correct.
 - Keep old WordPress addresses working through `aliases`.
 - After editing CSS, make sure braces are balanced: a stray `}` silently drops the next rule.
 

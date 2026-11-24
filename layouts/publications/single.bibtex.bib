@@ -1,0 +1,36 @@
+{{- $key := partial "cite-key.html" . -}}
+{{- $authors := slice -}}
+{{- range .Params.authors -}}
+  {{- $parts := split . " " -}}
+  {{- $authors = $authors | append (printf "%s, %s" (index (last 1 $parts) 0) (delimit (first (sub (len $parts) 1) $parts) " ")) -}}
+{{- end -}}
+{{- if .Params.journal -}}
+@article{ {{- $key }},
+  title         = { {{- printf "{%s}" .Title -}} },
+  author        = { {{- delimit $authors " and " -}} },
+  journal       = { {{- .Params.journal -}} },
+{{- with .Params.volume }}
+  volume        = { {{- . -}} },
+{{- end }}
+{{- with .Params.pages }}
+  pages         = { {{- replace . "-" "--" -}} },
+{{- end }}
+  year          = { {{- .Date.Year -}} },
+{{- with .Params.doi }}
+  doi           = { {{- . -}} },
+{{- end }}
+{{- with .Params.arxiv }}
+  eprint        = { {{- . -}} },
+  archiveprefix = {arXiv},
+{{- end }}
+}
+{{ else -}}
+@misc{ {{- $key }},
+  title         = { {{- printf "{%s}" .Title -}} },
+  author        = { {{- delimit $authors " and " -}} },
+  year          = { {{- .Date.Year -}} },
+  eprint        = { {{- .Params.arxiv -}} },
+  archiveprefix = {arXiv},
+  note          = {Preprint},
+}
+{{ end -}}

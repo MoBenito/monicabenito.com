@@ -1,0 +1,14 @@
+{{- /* Citation key: first author's last name + year + first title word of 4+ letters, lowercase ASCII,
+       e.g. adelsberger2022hole. Also used as the download file name. Context: the publication page. */ -}}
+{{- $plain := dict "á" "a" "à" "a" "â" "a" "ä" "a" "ã" "a" "å" "a" "é" "e" "è" "e" "ê" "e" "ë" "e" "í" "i" "ì" "i" "î" "i" "ï" "i"
+      "ó" "o" "ò" "o" "ô" "o" "ö" "o" "õ" "o" "ø" "o" "ú" "u" "ù" "u" "û" "u" "ü" "u" "ñ" "n" "ç" "c" "š" "s" "ž" "z" "č" "c" "ć" "c" "ß" "ss" }}
+{{- $first := index (.Params.authors | default (slice "anon")) 0 }}
+{{- $last := index (last 1 (split $first " ")) 0 | lower }}
+{{- range $k, $v := $plain }}{{ $last = replace $last $k $v }}{{ end }}
+{{- $last = $last | replaceRE "[^a-z]" "" }}
+{{- $word := "" }}
+{{- range split (.Title | lower) " " }}
+  {{- $w := . }}{{ range $k, $v := $plain }}{{ $w = replace $w $k $v }}{{ end }}{{ $w = $w | replaceRE "[^a-z]" "" }}
+  {{- if and (not $word) (ge (len $w) 4) (not (in (slice "with" "from" "into" "over" "under" "via") $w)) }}{{ $word = $w }}{{ end }}
+{{- end }}
+{{- return printf "%s%d%s" $last .Date.Year $word }}

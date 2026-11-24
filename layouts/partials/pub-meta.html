@@ -11,5 +11,8 @@
 </p>
 <p class="links">
   {{- with .Params.doi }}<a href="https://doi.org/{{ . }}" target="_blank" rel="noopener">Journal</a>{{ end }}
-  {{- with .Params.arxiv }}<a href="https://arxiv.org/abs/{{ . }}" target="_blank" rel="noopener">arXiv</a>{{ end -}}
+  {{- with .Params.arxiv }}<a href="https://arxiv.org/abs/{{ . }}" target="_blank" rel="noopener">arXiv</a>{{ end }}
+  {{- $key := partial "cite-key.html" . }}
+  {{- with .OutputFormats.Get "bibtex" }}<a href="{{ .RelPermalink }}" download="{{ $key }}.bib" title="Download the citation as BibTeX">BibTeX</a>{{ end }}
+  {{- with .OutputFormats.Get "ris" }}<a href="{{ .RelPermalink }}" download="{{ $key }}.ris" title="Download the citation as RIS (EndNote, Zotero, Mendeley)">RIS</a>{{ end -}}
 </p>

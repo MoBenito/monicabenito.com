@@ -1,0 +1,22 @@
+{{- $pages := split (.Params.pages | default "") "-" -}}
+TY  - {{ if .Params.journal }}JOUR{{ else }}UNPB{{ end }}
+TI  - {{ .Title }}
+{{ range .Params.authors -}}
+{{- $parts := split . " " -}}
+AU  - {{ index (last 1 $parts) 0 }}, {{ delimit (first (sub (len $parts) 1) $parts) " " }}
+{{ end -}}
+{{ with .Params.journal }}JO  - {{ . }}
+{{ end -}}
+{{ with .Params.volume }}VL  - {{ . }}
+{{ end -}}
+{{ with .Params.pages }}SP  - {{ index $pages 0 }}
+{{ if gt (len $pages) 1 }}EP  - {{ index $pages 1 }}
+{{ end }}{{ end -}}
+PY  - {{ .Date.Year }}
+DA  - {{ .Date.Format "2006/01/02" }}
+{{ with .Params.doi }}DO  - {{ . }}
+UR  - https://doi.org/{{ . }}
+{{ end -}}
+{{ with .Params.arxiv }}UR  - https://arxiv.org/abs/{{ . }}
+{{ end -}}
+ER  - 

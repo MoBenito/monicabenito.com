@@ -3,6 +3,8 @@ locale = "en"
 title = "Mónica Benito"
 disableKinds = ["taxonomy", "term"]
 enableRobotsTXT = true
+# stamp files written by tools/darkfigs.py are not part of the site
+ignoreFiles = ["\\.mode$"]
 
 [params]
   description = "Mónica Benito, theoretical quantum physicist and professor at the University of Augsburg, where she leads the group Quantum Information and Quantum Computing."
@@ -46,3 +48,22 @@ enableRobotsTXT = true
 [outputs]
   home = ["HTML", "RSS"]
   section = ["HTML", "RSS"]
+
+# Citation files generated for every publication (see layouts/publications/single.bibtex.bib and single.ris.ris)
+[mediaTypes]
+  [mediaTypes."application/x-bibtex"]
+    suffixes = ["bib"]
+  [mediaTypes."application/x-research-info-systems"]
+    suffixes = ["ris"]
+
+[outputFormats]
+  [outputFormats.bibtex]
+    mediaType = "application/x-bibtex"
+    baseName = "citation"
+    isPlainText = true
+    notAlternative = true
+  [outputFormats.ris]
+    mediaType = "application/x-research-info-systems"
+    baseName = "citation"
+    isPlainText = true
+    notAlternative = true
