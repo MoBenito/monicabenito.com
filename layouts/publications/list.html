@@ -1,10 +1,114 @@
 {{ define "main" }}
 <h1>{{ .Title }}</h1>
-{{ .Content }}
+<div class="page-head">
+  <div class="page-intro">{{ .Content }}</div>
+  {{- /* Sort and filter: a small icon next to the intro line that opens a panel; only with JavaScript
+         (without it the list stays by year) */}}
+  <div class="filter-wrap">
+    <button type="button" class="filter-btn" id="pub-filter-btn" aria-expanded="false" aria-controls="pub-controls" title="Sort and filter" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+      <span class="badge" id="pub-badge" hidden></span>
+      <span class="visually-hidden">Sort and filter</span>
+    </button>
+    <form class="pub-controls" id="pub-controls" hidden role="search" aria-label="Sort and filter publications">
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="pub-q" placeholder="Search title, author, journal" aria-label="Search publications">
+      </label>
+      <label class="sort">Sort by
+        <select id="pub-sort">
+          <option value="new">Newest first</option>
+          <option value="old">Oldest first</option>
+          <option value="cites">Most cited</option>
+          <option value="title">Title A–Z</option>
+        </select>
+      </label>
+      <div class="chips" role="group" aria-label="Research area">
+        {{- range (site.GetPage "/research").Pages.ByWeight }}
+        <button type="button" class="chip" data-area="{{ .File.ContentBaseName }}" aria-pressed="false">{{ .Title }}</button>
+        {{- end }}
+      </div>
+      <div class="chips" role="group" aria-label="Type">
+        <button type="button" class="chip" data-type="journal" aria-pressed="false">Journal papers</button>
+        <button type="button" class="chip" data-type="preprint" aria-pressed="false">Preprints</button>
+      </div>
+      <p class="count" id="pub-count" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+
+<div id="pub-list">
 {{- range .Pages.GroupByDate "2006" }}
-<section>
-  <h2 class="year">{{ .Key }}</h2>
+  <h2 class="year" data-year="{{ .Key }}">{{ .Key }}</h2>
   <div class="tiles">{{- range .Pages }}{{ partial "pub-item.html" . }}{{ end }}</div>
-</section>
 {{- end }}
+</div>
+<p class="empty" id="pub-empty" hidden>No publications match. <button type="button" id="pub-reset">Clear the filters</button></p>
+{{- with hugo.Data.citations }}
+<p class="meta source-note">Citation counts from {{ .source }}, updated {{ (time .updated).Format "2 January 2006" }}.</p>
+{{- end }}
+
+<script>
+  (function () {
+    var form = document.getElementById("pub-controls"), list = document.getElementById("pub-list"),
+        cards = Array.prototype.slice.call(list.querySelectorAll("article.tile")),
+        q = document.getElementById("pub-q"), sort = document.getElementById("pub-sort"),
+        count = document.getElementById("pub-count"), empty = document.getElementById("pub-empty"),
+        areaChips = form.querySelectorAll("[data-area]"), typeChips = form.querySelectorAll("[data-type]");
+    function pressed(chips, attr) {
+      return Array.prototype.filter.call(chips, function (c) { return c.getAttribute("aria-pressed") === "true"; })
+        .map(function (c) { return c.dataset[attr]; });
+    }
+    function render() {
+      var words = q.value.toLowerCase().split(/\s+/).filter(Boolean), areas = pressed(areaChips, "area"), types = pressed(typeChips, "type");
+      var shown = cards.filter(function (c) {
+        if (words.some(function (w) { return c.dataset.search.indexOf(w) < 0; })) return false;
+        if (areas.length && !areas.some(function (a) { return (" " + c.dataset.areas + " ").indexOf(" " + a + " ") >= 0; })) return false;
+        if (types.length && types.indexOf(c.dataset.type) < 0) return false;
+        return true;
+      });
+      var by = sort.value;
+      shown.sort(function (a, b) {
+        if (by === "old") return a.dataset.date.localeCompare(b.dataset.date);
+        if (by === "cites") return b.dataset.cites - a.dataset.cites || b.dataset.date.localeCompare(a.dataset.date);
+        if (by === "title") return a.dataset.title.localeCompare(b.dataset.title);
+        return b.dataset.date.localeCompare(a.dataset.date);
+      });
+      // rebuild the list: year headings only when sorted by date
+      list.textContent = "";
+      var group = null, year = null, byYear = by === "new" || by === "old";
+      if (!byYear) { group = document.createElement("div"); group.className = "tiles"; list.appendChild(group); }
+      shown.forEach(function (c) {
+        if (byYear && c.dataset.year !== year) {
+          year = c.dataset.year;
+          var h = document.createElement("h2"); h.className = "year"; h.textContent = year; list.appendChild(h);
+          group = document.createElement("div"); group.className = "tiles"; list.appendChild(group);
+        }
+        c.classList.add("shown");  // re-ordered cards skip the scroll fade-in
+        group.appendChild(c);
+      });
+      count.textContent = shown.length === cards.length ? cards.length + " publications" : "Showing " + shown.length + " of " + cards.length;
+      empty.hidden = shown.length > 0;
+      var filtered = shown.length < cards.length;
+      badge.hidden = !filtered; badge.textContent = shown.length + "/" + cards.length;
+      btn.classList.toggle("on", filtered || by !== "new");
+    }
+    var btn = document.getElementById("pub-filter-btn"), badge = document.getElementById("pub-badge");
+    function setOpen(open) { form.hidden = !open; btn.setAttribute("aria-expanded", open); if (open) q.focus(); }
+    btn.hidden = false;
+    btn.addEventListener("click", function () { setOpen(form.hidden); });
+    document.addEventListener("click", function (e) { if (!form.hidden && !form.contains(e.target) && !btn.contains(e.target)) setOpen(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !form.hidden) { setOpen(false); btn.focus(); } });
+    form.addEventListener("submit", function (e) { e.preventDefault(); setOpen(false); });
+    q.addEventListener("input", render);
+    sort.addEventListener("change", render);
+    form.querySelectorAll(".chip").forEach(function (c) {
+      c.addEventListener("click", function () { c.setAttribute("aria-pressed", c.getAttribute("aria-pressed") !== "true"); render(); });
+    });
+    document.getElementById("pub-reset").addEventListener("click", function () {
+      q.value = ""; form.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); }); render();
+    });
+    render();
+  })();
+</script>
 {{ end }}

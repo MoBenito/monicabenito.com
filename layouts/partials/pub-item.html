@@ -1,6 +1,12 @@
-{{- /* One publication card. Context: the publication page. */ -}}
+{{- /* One publication card. Context: the publication page. The data-* attributes feed the sort and filter
+       controls on the publications page. */ -}}
 {{- $img := .Resources.GetMatch "featured.*" }}
-<article class="reveal tile{{ if not $img }} no-thumb{{ end }}">
+{{- $cites := 0 }}{{ with index (hugo.Data.citations.papers | default dict) .File.ContentBaseName }}{{ $cites = .count }}{{ end }}
+{{- $search := printf "%s %s %s" .Title (delimit (.Params.authors | default slice) " ") (.Params.journal | default "arxiv preprint") | lower }}
+<article class="reveal tile{{ if not $img }} no-thumb{{ end }}"
+  data-date="{{ .Date.Format "2006-01-02" }}" data-year="{{ .Date.Year }}" data-cites="{{ $cites }}"
+  data-title="{{ .Title | lower }}" data-areas="{{ delimit (.Params.research | default slice) " " }}"
+  data-type="{{ if .Params.journal }}journal{{ else }}preprint{{ end }}" data-search="{{ $search }}">
   {{- with $img }}
   <div class="tile-thumb">{{ partial "featured.html" (dict "page" $ "width" 220 "alt" "") }}</div>
   {{- end }}

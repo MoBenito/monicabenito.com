@@ -7,9 +7,15 @@
   </article>
   {{- $slug := .File.ContentBaseName }}
   {{- with where (where site.RegularPages "Section" "publications") "Params.research" "intersect" (slice $slug) }}
+  {{- /* most cited first (counts from data/citations.json), newest first among equal counts */}}
+  {{- $ranked := slice }}
+  {{- range .ByDate.Reverse }}
+    {{- $c := 0 }}{{ with index (hugo.Data.citations.papers | default dict) .File.ContentBaseName }}{{ $c = .count }}{{ end }}
+    {{- $ranked = $ranked | append (dict "cites" $c "page" .) }}
+  {{- end }}
   <section>
     <h2 class="section-title">Related publications</h2>
-    <div class="tiles">{{- range . }}{{ partial "pub-item.html" . }}{{ end }}</div>
+    <div class="tiles">{{- range sort $ranked "cites" "desc" }}{{ partial "pub-item.html" .page }}{{ end }}</div>
   </section>
   {{- end }}
 </div>

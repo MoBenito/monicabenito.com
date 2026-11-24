@@ -1,0 +1,146 @@
+{
+  "source": "OpenAlex",
+  "updated": "2026-11-24",
+  "papers": {
+    "a-coherent-spin-photon-interface-in-silicon": {
+      "count": 512,
+      "openalex": "W2761331534"
+    },
+    "blueprint-for-quantum-computing-with-electrons-in-helium": {
+      "count": 48,
+      "openalex": "W4388524770"
+    },
+    "closed-form-generators-for-perturbative-transformations-in-static-and-periodical": {
+      "count": 5,
+      "openalex": "W4404571079"
+    },
+    "degenerate-parametric-oscillation-in-quantum-membrane-optomechanics": {
+      "count": 35,
+      "openalex": "W1793257536"
+    },
+    "dissipative-long-range-entanglement-generation-between-electronic-spins": {
+      "count": 16,
+      "openalex": "W2291924728"
+    },
+    "edge-state-blockade-of-transport-in-quantum-dot-arrays": {
+      "count": 16,
+      "openalex": "W2335203336"
+    },
+    "electric-field-control-and-noise-protection-of-the-flopping-mode-spin-qubit": {
+      "count": 74,
+      "openalex": "W2974898393"
+    },
+    "electrical-readout-of-spins-in-the-absence-of-spin-blockade": {
+      "count": 7,
+      "openalex": "W4414748723"
+    },
+    "entangling-nuclear-spins-in-distant-quantum-dots-via-an-electron-bus": {
+      "count": 2,
+      "openalex": "W3112980206"
+    },
+    "escaping-ab-caging-via-floquet-engineering-photo-induced-long-range-interference": {
+      "count": 0,
+      "openalex": "W4416771181"
+    },
+    "fast-coherent-control-of-a-charge-qubit-on-solid-neon-with-a-spin-qubit-compatib": {
+      "count": 1,
+      "openalex": "W7163063232"
+    },
+    "flopping-mode-electric-dipole-spin-resonance": {
+      "count": 62,
+      "openalex": "W2942833205"
+    },
+    "floquet-engineering-of-long-range-p-wave-superconductivity": {
+      "count": 101,
+      "openalex": "W2051832479"
+    },
+    "floquet-majorana-fermions-in-superconducting-quantum-dots": {
+      "count": 10,
+      "openalex": "W1767527130"
+    },
+    "floquet-physics-from-quantized-light-matter-interaction-geometric-phases-gauge-c": {
+      "count": 3,
+      "openalex": "W7213920201"
+    },
+    "full-counting-statistics-of-time-dependent-conductors": {
+      "count": 30,
+      "openalex": "W2516305293"
+    },
+    "ground-state-phase-diagram-and-parity-flipping-microwave-transitions-in-a-gate-t": {
+      "count": 16,
+      "openalex": "W4390073193"
+    },
+    "hole-spin-qubits": {
+      "count": 56,
+      "openalex": "W3208208980"
+    },
+    "hybrid-superconductor-semiconductor-systems-for-quantum-technology": {
+      "count": 37,
+      "openalex": "W3024866997"
+    },
+    "input-output-theory-for-spin-photon-coupling-in-si-double-quantum-dots": {
+      "count": 125,
+      "openalex": "W2763972235"
+    },
+    "lindblad-theory-of-linear-response-susceptibility-and-dispersive-readout-in-mini": {
+      "count": 1,
+      "openalex": "W7167573491"
+    },
+    "modeling-of-flopping-mode-spin-qubits-beyond-the-two-site-model": {
+      "count": 2,
+      "openalex": "W7204069560"
+    },
+    "multi-cavity-strong-coupling-to-an-electron-spin-ensemble-spectral-and-dark-stat": {
+      "count": 1,
+      "openalex": "W7201840340"
+    },
+    "nbtin-nanowire-resonators-and-prospects-for-spin-photon-coupling-with-electrons": {
+      "count": 10,
+      "openalex": "W4414856859"
+    },
+    "optimized-cavity-mediated-dispersive-two-qubit-gates-between-spin-qubits": {
+      "count": 97,
+      "openalex": "W2915696440"
+    },
+    "polarimetry-with-spins-in-the-solid-state": {
+      "count": 6,
+      "openalex": "W4410141444"
+    },
+    "programmable-two-qubit-gates-in-capacitively-coupled-flopping-mode-spin-qubits": {
+      "count": 23,
+      "openalex": "W3010461990"
+    },
+    "random-walk-topological-transition-revealed-via-electron-counting": {
+      "count": 13,
+      "openalex": "W2737827285"
+    },
+    "readout-of-multi-level-quantum-geometry-from-electronic-transport": {
+      "count": 0,
+      "openalex": "W4416243645"
+    },
+    "squeezed-hole-spin-qubits-in-ge-quantum-dots-with-ultrafast-gates-at-low-power": {
+      "count": 100,
+      "openalex": "W3151290787"
+    },
+    "sympt-a-comprehensive-tool-for-automating-effective-hamiltonian-derivations": {
+      "count": 4,
+      "openalex": "W4405434069"
+    },
+    "topological-instabilities-in-ac-driven-bosonic-systems": {
+      "count": 50,
+      "openalex": "W2210302631"
+    },
+    "topologically-enforced-bifurcations-in-superconducting-circuits": {
+      "count": 33,
+      "openalex": "W2557034593"
+    },
+    "transport-shot-noise-and-topology-in-ac-driven-dimer-arrays": {
+      "count": 14,
+      "openalex": "W2464542378"
+    },
+    "unified-linear-response-theory-of-quantum-electronic-circuits": {
+      "count": 17,
+      "openalex": "W4404199215"
+    }
+  }
+}

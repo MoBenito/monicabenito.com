@@ -1,13 +1,28 @@
 {{ define "main" }}
-<section class="intro">
+<section class="hero" id="hero">
   {{- with .Resources.GetMatch "portrait.*" }}
-  {{ partial "image.html" (dict "res" . "width" 360 "alt" "Portrait of Mónica Benito" "class" "portrait" "eager" true) }}
+  {{ partial "image.html" (dict "res" . "width" 300 "alt" "Portrait of Mónica Benito" "class" "portrait" "eager" true) }}
   {{- end }}
-  <div class="prose">
+  <div class="hero-text">
     <h1>{{ .Title }}</h1>
-    {{ .Content }}
-    {{ partial "contact.html" . }}
+    <div class="lede">{{ .Content }}</div>
   </div>
+  {{- /* An electron spin in a magnetic field, precessing on the Bloch sphere (assets/js/bloch.js). Click or drag
+         on the sphere to point the spin, drag the B arrow to change the field, the gate buttons appear with JavaScript. */}}
+  <div class="bloch-wrap">
+    <figure class="bloch" tabindex="0" role="img" aria-label="An electron spin precessing about a magnetic field on the Bloch sphere. Click or drag to point the spin. Keys: Enter applies an X gate, 0 and 1 prepare the basis states, up and down change the field.">
+      <canvas></canvas>
+    </figure>
+    <div class="bloch-controls" hidden>
+      <div class="gates" role="group" aria-label="Quantum gates">
+        <button type="button" data-gate="X" title="X gate: π rotation about x">X</button>
+        <button type="button" data-gate="Y" title="Y gate: π rotation about y">Y</button>
+        <button type="button" data-gate="Z" title="Z gate: π rotation about z">Z</button>
+        <button type="button" data-gate="H" title="Hadamard gate: π rotation about (x + z)/√2">H</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-foot">{{ partial "contact.html" . }}</div>
 </section>
 
 
@@ -32,4 +47,6 @@
   {{ partial "cv-figure.html" . }}
   {{ partial "cv.html" . }}
 </section>
+{{- $bloch := resources.Get "js/bloch.js" | minify | fingerprint }}
+<script src="{{ $bloch.RelPermalink }}" integrity="{{ $bloch.Data.Integrity }}" defer></script>
 {{ end }}

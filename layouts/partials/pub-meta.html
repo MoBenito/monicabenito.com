@@ -14,5 +14,8 @@
   {{- with .Params.arxiv }}<a href="https://arxiv.org/abs/{{ . }}" target="_blank" rel="noopener">arXiv</a>{{ end }}
   {{- $key := partial "cite-key.html" . }}
   {{- with .OutputFormats.Get "bibtex" }}<a href="{{ .RelPermalink }}" download="{{ $key }}.bib" title="Download the citation as BibTeX">BibTeX</a>{{ end }}
-  {{- with .OutputFormats.Get "ris" }}<a href="{{ .RelPermalink }}" download="{{ $key }}.ris" title="Download the citation as RIS (EndNote, Zotero, Mendeley)">RIS</a>{{ end -}}
+  {{- with .OutputFormats.Get "ris" }}<a href="{{ .RelPermalink }}" download="{{ $key }}.ris" title="Download the citation as RIS (EndNote, Zotero, Mendeley)">RIS</a>{{ end }}
+  {{- with index (hugo.Data.citations.papers | default dict) .File.ContentBaseName }}{{ if gt .count 0 }}
+  <a class="cited" href="https://openalex.org/works?filter=cites:{{ .openalex }}" target="_blank" rel="noopener" title="Citations counted by OpenAlex">Cited by {{ .count }}</a>
+  {{- end }}{{ end -}}
 </p>

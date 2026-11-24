@@ -11,6 +11,7 @@ small theme of its own; there is no external theme and no JavaScript build step.
     python tools/darkfigs.py     # after adding or changing any figure
     python tools/logo.py         # only when the logo or favicon changes
     python tools/webfont.py      # only when the heading font changes
+    python tools/citations.py    # refreshes citation counts (data/citations.json) from OpenAlex
 
 The tools need Python with fontTools, numpy and Pillow; `logo.py` also needs `rsvg-convert`.
 
