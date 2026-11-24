@@ -5,7 +5,7 @@ disableKinds = ["taxonomy", "term"]
 enableRobotsTXT = true
 
 [params]
-  description = "Mónica Benito, theoretical quantum physicist and professor at the University of Augsburg, where she leads the group Quantum Computing and Devices."
+  description = "Mónica Benito, theoretical quantum physicist and professor at the University of Augsburg, where she leads the group Quantum Information and Quantum Computing."
   # Highlighted in author lists
   authorName = "Mónica Benito"
   authorAliases = ["Mónica Benito", "M. Benito", "Monica Benito"]

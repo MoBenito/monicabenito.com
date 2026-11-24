@@ -26,7 +26,10 @@
 {{- end }}
 
 <section id="cv">
-  <h2 class="section-title">Curriculum Vitae</h2>
+  <h2 class="section-title">Curriculum Vitae
+    <button class="cv-toggle" type="button" aria-expanded="false" aria-controls="cv-list" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg><span>Show timeline</span></button>
+  </h2>
+  {{ partial "cv-figure.html" . }}
   {{ partial "cv.html" . }}
 </section>
 {{ end }}

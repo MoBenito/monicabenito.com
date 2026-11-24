@@ -1,68 +1,114 @@
 [
   {
-    "title": "Professor Quantum Computing and Devices",
+    "title": "Professor Quantum Information and Quantum Computing",
     "date": "2023-04",
     "text": "University of Augsburg",
-    "kind": "professor"
+    "kind": "professor",
+    "wire": "career",
+    "short": "Professor"
+  },
+  {
+    "title": "Emmy Noether grant",
+    "date": "2023",
+    "text": "Emmy Noether junior research group of the German Research Foundation (DFG).",
+    "kind": "award",
+    "wire": "awards",
+    "short": "Emmy Noether"
   },
   {
     "title": "Researcher DLR",
     "date": "2021-09",
     "text": "",
-    "kind": "position"
+    "kind": "position",
+    "wire": "career",
+    "short": "DLR"
   },
   {
     "title": "Interim professor",
     "date": "2021-03",
     "text": "Department of Theoretical Physics II, University of Augsburg (Germany). Teaching Basics of quantum computing and Seminar about modern aspects of quantum theory.",
-    "kind": "professor"
+    "kind": "professor",
+    "wire": "career",
+    "short": "Interim prof."
+  },
+  {
+    "title": "QSIT INSPIRE Postdoc Award",
+    "date": "2020-06",
+    "text": "INSPIRE award for postdocs of the National Center of Competence in Research Quantum Science and Technology (QSIT).",
+    "kind": "award",
+    "wire": "awards",
+    "short": "INSPIRE"
   },
   {
     "title": "PostDoc",
     "date": "2020-03",
     "text": "At the University of Basel (Switzerland) in the group of Prof. Daniel Loss. Georg H. Endress Postdoc Fellow. Working on modeling and simulation of hole spin qubits.",
-    "kind": "position"
+    "kind": "position",
+    "wire": "career",
+    "short": "Postdoc"
   },
   {
     "title": "PostDoc",
     "date": "2017-06",
     "text": "At the University of Konstanz (Germany) in the group of Prof. Guido Burkard. I worked on hybrid semiconductor-superconductors systems for quantum technology.",
-    "kind": "position"
+    "kind": "position",
+    "wire": "career",
+    "short": "Postdoc"
   },
   {
     "title": "PhD",
     "date": "2017-04",
-    "text": "At Autonoma University of Madrid (Spain) in the group of Prof. Gloria Platero. PhD thesis: Floquet and dissipative engineering in mesoscopic systems. FPI Grant for Doctorate Studies awarded by the Spanish Government, including three financed research stays. I was working in condensed matter theoretical physics, quantum information and quantum transport, under the supervision of Prof. Gloria Platero at the Institute of Materials Science of Madrid.",
-    "kind": "degree"
+    "text": "At Autonoma University of Madrid (Spain) in the group of Prof. Gloria Platero. PhD thesis: Floquet and dissipative engineering in mesoscopic systems. I was working in condensed matter theoretical physics, quantum information and quantum transport, under the supervision of Prof. Gloria Platero at the Institute of Materials Science of Madrid.",
+    "kind": "degree",
+    "wire": "career",
+    "short": "PhD"
   },
   {
     "title": "Research visit",
     "date": "2016-05",
     "text": "At the Technical University of Berlin (Germany) in the group of Prof. Tobias Brandes. Exploring the relationship between topological insulators and superconductors and the field of nonlinear dynamics with G. Engelhardt and T. Brandes.",
-    "kind": "visit"
+    "kind": "visit",
+    "wire": "career",
+    "short": "Visit"
   },
   {
     "title": "Research visit",
     "date": "2015-05",
     "text": "At the Max Planck Institute for Quantum Optics in Garching (Germany) in the group of Prof. Juan Ignacio Cirac Sasturain. Working with M. Schütz, I. Cirac and G. Giedke on a proposal for deterministic generation and long-term stabilization of entanglement between two electronic spin qubits confined in spatially separated quantum dots. Working with C. Navarrete-Benlloch and C. Sánchez Muñoz on a proposal for the implementation of degenerate parametric oscillation in modern optomechanical setups.",
-    "kind": "visit"
+    "kind": "visit",
+    "wire": "career",
+    "short": "Visit"
   },
   {
     "title": "Research visit",
     "date": "2014-09",
     "text": "At the Max Planck Institute for Quantum Optics in Garching (Germany) in the group of Prof. Juan Ignacio Cirac Sasturain. Working with M. Schütz, I. Cirac and G. Giedke on a proposal for deterministic generation and long-term stabilization of entanglement between two electronic spin qubits confined in spatially separated quantum dots. Working with C. Navarrete-Benlloch and C. Sánchez Muñoz on a proposal for the implementation of degenerate parametric oscillation in modern optomechanical setups.",
-    "kind": "visit"
+    "kind": "visit",
+    "wire": "career",
+    "short": "Visit"
+  },
+  {
+    "title": "FPI grant",
+    "date": "2014",
+    "text": "FPI grant for doctoral studies from the Spanish government, including three funded research stays.",
+    "kind": "award",
+    "wire": "awards",
+    "short": "FPI grant"
   },
   {
     "title": "Master’s degree",
     "date": "2013-07",
     "text": "In Fundamental Physics at the Complutense University of Madrid (Spain). Master thesis: End-states behavior in finite systems and their interaction with phonons .",
-    "kind": "degree"
+    "kind": "degree",
+    "wire": "career",
+    "short": "MSc"
   },
   {
     "title": "Bachelor’s degree",
     "date": "2012-07",
     "text": "At the Autonoma University of Madrid (Spain). I was working in theoretical physics and condensed matter.",
-    "kind": "degree"
+    "kind": "degree",
+    "wire": "career",
+    "short": "BSc"
   }
 ]

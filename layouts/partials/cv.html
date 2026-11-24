@@ -1,15 +1,19 @@
-{{- /* CV timeline from data/cv.json; each entry's "kind" picks its icon */ -}}
+{{- /* CV details from data/cv.json, below the circuit figure (cv-figure.html). With JavaScript the vertical
+       timeline is hidden by default: clicking a gate shows just that station, and the "Show timeline" button
+       in the section heading unfolds the full timeline. Without JavaScript the full timeline is always shown.
+       Dates are "YYYY-MM" or just "YYYY"; ids are the targets of the gates. */ -}}
 {{- $icons := dict
   "professor" `<path d="M3 10 12 5l9 5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/>`
   "position" `<rect x="3" y="7.5" width="18" height="12" rx="2"/><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path d="M3 13h18"/>`
   "degree" `<path d="M2 9.5 12 5l10 4.5L12 14z"/><path d="M6 11.5V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.5"/><path d="M22 9.5v5"/>`
   "visit" `<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>`
+  "award" `<circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/>`
 }}
-<ol class="timeline">
+<ol class="timeline" id="cv-list" aria-live="polite">
   {{- range hugo.Data.cv }}
-  <li class="reveal">
+  <li class="{{ if eq .wire "awards" }}award{{ end }}" id="cv-{{ .date }}-{{ urlize .short }}">
     <span class="cv-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{{ index $icons (.kind | default "position") | safeHTML }}</svg></span>
-    <time>{{ (time (printf "%s-01" .date)).Format "January 2006" }}</time>
+    <time>{{ if gt (len .date) 4 }}{{ (time (printf "%s-01" .date)).Format "January 2006" }}{{ else }}{{ .date }}{{ end }}</time>
     <div>
       <h3>{{ .title }}</h3>
       {{- with .text }}<p>{{ . }}</p>{{ end }}
@@ -17,3 +21,40 @@
   </li>
   {{- end }}
 </ol>
+<script>
+  (function () {
+    var list = document.getElementById("cv-list"), items = list.querySelectorAll("li"),
+        toggle = document.querySelector(".cv-toggle"), gates = document.querySelectorAll(".cvfig .gate"),
+        current = items[0], full = false, measure = null;
+    function show(li) {  // one station: highlight it in the list and its gate in the circuit
+      current = li;
+      items.forEach(function (x) { x.classList.toggle("current", x === li); });
+      gates.forEach(function (g) { g.classList.toggle("active", g.getAttribute("href") === "#" + li.id); });
+    }
+    function setFull(on) {
+      full = on;
+      list.classList.toggle("folded", !on);
+      toggle.setAttribute("aria-expanded", on);
+      toggle.querySelector("span").textContent = on ? "Hide timeline" : "Show timeline";
+      if (measure) measure.classList.toggle("on", on);
+    }
+    gates.forEach(function (g) {
+      g.addEventListener("click", function (e) {
+        var li = document.getElementById(g.getAttribute("href").slice(1)); if (!li) return;
+        show(li);
+        if (!full) { e.preventDefault(); history.replaceState(null, "", "#" + li.id); }  // folded: the station appears right below, no jump
+      });
+    });
+    toggle.hidden = false;
+    toggle.addEventListener("click", function () { setFull(!full); });
+    measure = document.querySelector(".cvfig .measure");  // clicking either measurement does the same
+    if (measure) {
+      measure.setAttribute("tabindex", "0");
+      measure.addEventListener("click", function () { setFull(!full); });
+      measure.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setFull(!full); } });
+    }
+    var start = location.hash.indexOf("#cv-") === 0 && document.getElementById(location.hash.slice(1));
+    show(start || current);  // the most recent station unless a gate link was opened
+    setFull(false);
+  })();
+</script>

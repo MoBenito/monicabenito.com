@@ -1,0 +1,64 @@
+{{- /* CV as a two-qubit circuit. Like a real circuit diagram, gates sit in columns in date order (not on a time
+       axis). Positions are single-qubit gates on the top wire; each grant or award is a gate
+       on the bottom wire controlled by the top wire (control dot + vertical line), i.e. tied to the position
+       held at that time. Years are written under the columns where the year changes.
+       Each gate links to its entry in the list below. Long labels break onto two lines at the first space. */ -}}
+{{- /* year-only dates ("2023") count as the start of that year when sorting */ -}}
+{{- $keyed := slice }}
+{{- range hugo.Data.cv }}{{ $keyed = $keyed | append (merge . (dict "key" (cond (gt (len .date) 4) .date (printf "%s-01" .date)))) }}{{ end }}
+{{- $cv := sort $keyed "key" }}
+{{- $n := len $cv }}
+{{- $x0 := 150.0 }}{{ $x1 := 1090.0 }}
+{{- /* column spacing: a full step between two positions, a narrow one next to a grant, so the control dot sits
+       in a short gap on the career wire instead of taking a whole column */ -}}
+{{- $narrow := 0.62 }}
+{{- $units := 0.0 }}{{ $xs := slice 0.0 }}
+{{- range $i, $e := after 1 $cv }}
+  {{- $prev := index $cv $i }}
+  {{- $units = add $units (cond (or (eq $e.wire "awards") (eq $prev.wire "awards")) $narrow 1.0) }}
+  {{- $xs = $xs | append $units }}
+{{- end }}
+{{- $step := div (sub $x1 $x0) $units }}
+{{- $top := 78.0 }}{{ $bottom := 178.0 }}{{ $gw := 66.0 }}{{ $gh := 44.0 }}
+<figure class="cvfig">
+  <div class="cvfig-scroll">
+  <svg viewBox="0 0 1200 262" role="img" aria-labelledby="cvfig-cap">
+    <text class="ket" x="10" y="{{ add $top 5 }}">|ψ<tspan class="sub" dy="5">career</tspan><tspan dy="-5">⟩</tspan></text>
+    <text class="ket" x="10" y="{{ add $bottom 5 }}">|ψ<tspan class="sub" dy="5">grants</tspan><tspan dy="-5">⟩</tspan></text>
+    <line class="wire" x1="104" y1="{{ $top }}" x2="1132" y2="{{ $top }}"/>
+    <line class="wire" x1="104" y1="{{ $bottom }}" x2="1132" y2="{{ $bottom }}"/>
+    {{- $prevYear := "" }}
+    {{- range $i, $e := $cv }}
+    {{- $x := add $x0 (mul (index $xs $i) $step) }}
+    {{- $award := eq $e.wire "awards" }}
+    {{- $wy := cond $award $bottom $top }}
+    {{- $words := split $e.short " " }}
+    {{- $year := substr $e.date 0 4 }}
+    {{- if ne $year $prevYear }}<text class="year" x="{{ $x }}" y="250">{{ $year }}</text>{{ end }}
+    {{- $prevYear = $year }}
+    <a class="gate{{ if $award }} awards{{ end }}" href="#cv-{{ $e.date }}-{{ urlize $e.short }}">
+      <title>{{ $e.title }}, {{ if gt (len $e.date) 4 }}{{ (time (printf "%s-01" $e.date)).Format "January 2006" }}{{ else }}{{ $e.date }}{{ end }}</title>
+      {{- if $award }}
+      <line class="ctrl" x1="{{ $x }}" y1="{{ $top }}" x2="{{ $x }}" y2="{{ sub $bottom (div $gh 2) }}"/>
+      <circle class="dot" cx="{{ $x }}" cy="{{ $top }}" r="6"/>
+      {{- end }}
+      <rect x="{{ sub $x (div $gw 2) }}" y="{{ sub $wy (div $gh 2) }}" width="{{ $gw }}" height="{{ $gh }}" rx="3"/>
+      {{- if and (gt (len $words) 1) (gt (countrunes $e.short) 8) }}
+      <text x="{{ $x }}" y="{{ sub $wy 3 }}">{{ index $words 0 }}</text>
+      <text x="{{ $x }}" y="{{ add $wy 13 }}">{{ delimit (after 1 $words) " " }}</text>
+      {{- else }}
+      <text x="{{ $x }}" y="{{ add $wy 5 }}">{{ $e.short }}</text>
+      {{- end }}
+    </a>
+    {{- end }}
+    {{- /* both measurements together act as a second "show timeline" control (wired up in cv.html) */}}
+    <g class="measure" role="button" tabindex="-1" aria-label="Measure: show the full timeline">
+      <title>Measure: show the full timeline</title>
+      {{- range $wy := slice $top $bottom }}
+      <g class="meter" transform="translate(1136 {{ sub $wy 20 }})"><rect width="40" height="40" rx="3"/><path d="M8 30 A12 12 0 0 1 32 30"/><line x1="20" y1="30" x2="30" y2="12"/></g>
+      {{- end }}
+    </g>
+  </svg>
+  </div>
+  <figcaption id="cvfig-cap">Career as a two-qubit circuit, read from left to right: positions on the top wire, grants and awards on the bottom wire, each controlled by the position held at the time. Select a gate for details, or measure to see the whole timeline.</figcaption>
+</figure>

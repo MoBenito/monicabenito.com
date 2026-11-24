@@ -170,24 +170,38 @@ article > .authors, article > .cite, article > .links { margin: .15rem 0; }
 .links a { font: 500 .8rem var(--display); text-decoration: none; padding: .15rem .7rem; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
 .links a:hover { background: var(--accent); color: var(--bg); }
 
-/* CV timeline: icon on the line; date above the entry on phones, in a left column on wide screens */
-.timeline { list-style: none; margin: 0; padding: 0; position: relative; --icon: 2.3rem; --date: 0rem; }
-.timeline::before { content: ""; position: absolute; left: calc(var(--date) + var(--icon) / 2 - 1px); top: 1rem; bottom: 1rem; width: 2px; background: linear-gradient(var(--accent), var(--line)); border-radius: 2px; opacity: .5; }
-.timeline li { position: relative; display: grid; grid-template-columns: var(--icon) minmax(0, 1fr); grid-template-areas: "icon date" "icon body"; column-gap: 1rem; padding-bottom: 1.6rem; }
+/* CV timeline: icon on the line; date above the entry on phones, in a left column on wide screens.
+   With JavaScript it starts "folded": only the station selected in the circuit is shown, without the line. */
+.timeline { list-style: none; margin: 0; padding: 0; position: relative; --icon: 2.3rem; --date: 0rem; --gap: 1rem; }
+.timeline::before { content: ""; position: absolute; left: calc(var(--icon) / 2 - 1px); top: 1rem; bottom: 1rem; width: 2px; background: linear-gradient(var(--accent), var(--line)); border-radius: 2px; opacity: .5; }
+.timeline li { position: relative; display: grid; grid-template-columns: var(--icon) minmax(0, 1fr); grid-template-areas: "icon date" "icon body"; column-gap: var(--gap); padding-bottom: 1.5rem; scroll-margin-top: 6rem; }
 .timeline li:last-child { padding-bottom: 0; }
-.cv-icon { grid-area: icon; align-self: start; width: var(--icon); height: var(--icon); border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--accent); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, var(--line)); box-shadow: 0 0 0 5px var(--bg); position: relative; transition: background .2s, color .2s, transform .2s; }
+.cv-icon { grid-area: icon; align-self: start; width: var(--icon); height: var(--icon); border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--accent); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, var(--line)); box-shadow: 0 0 0 5px var(--bg); position: relative; transition: background .2s, color .2s; }
 .cv-icon svg { width: 55%; height: 55%; }
-.timeline li:hover .cv-icon { background: var(--accent); color: var(--bg); transform: scale(1.08); }
 .timeline time { grid-area: date; color: var(--muted); font-size: .86rem; font-variant-numeric: tabular-nums; padding-top: .1rem; }
 .timeline li > div { grid-area: body; }
 .timeline h3 { margin: 0; }
-.timeline p { margin: .15rem 0 0; color: var(--muted); }
+.timeline p { margin: .15rem 0 0; color: var(--muted); max-width: 70ch; }
+.timeline li.current .cv-icon { background: var(--accent); color: var(--bg); }
+.timeline li.current h3 { color: var(--accent); }
+.timeline.folded::before { display: none; }
+.timeline.folded li { display: none; }
+.timeline.folded li.current { display: grid; padding-bottom: 0; animation: cv-in .25s ease; }
+@keyframes cv-in { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .timeline.folded li.current { animation: none; } }
 @media (min-width: 701px) {
   .timeline { --date: 8.5rem; }
+  .timeline::before { left: calc(var(--date) + var(--gap) + var(--icon) / 2 - 1px); }
   .timeline li { grid-template-columns: var(--date) var(--icon) minmax(0, 1fr); grid-template-areas: "date icon body"; }
   .timeline time { text-align: right; padding-top: .45rem; }
   .timeline li > div { padding-top: .3rem; }
 }
+.cv-toggle { display: inline-flex; align-items: center; gap: .35rem; font: 500 .9rem var(--display); color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 999px; padding: .3rem .8rem; cursor: pointer; }
+.cv-toggle:hover { background: var(--accent); color: var(--bg); }
+.cv-toggle svg { width: 1rem; height: 1rem; }
+.cv-toggle[hidden] { display: none; }
+.cvfig .gate.active rect { fill: var(--accent); }
+.cvfig .gate.active text { fill: var(--bg); }
 
 /* Logo: hovering flips both spins, like a spin pair flipping together */
 .logo .spin-arrow { transform-box: view-box; transition: transform .7s cubic-bezier(.5, -0.3, .3, 1.4); }
@@ -213,4 +227,38 @@ article > .authors, article > .cite, article > .links { margin: .15rem 0; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .img-light { display: none !important; }
   :root:not([data-theme="light"]) .img-dark { display: block !important; background: none; }
+}
+
+/* CV figure: a two-qubit circuit (layouts/partials/cv-figure.html) */
+.cvfig { margin: 0 0 2.2rem; }
+.cvfig-scroll { overflow-x: auto; padding-bottom: .3rem; }
+.cvfig svg { display: block; width: 100%; min-width: 880px; height: auto; font-family: var(--display); }
+.cvfig .ket { font: italic 400 17px var(--text); fill: var(--fg); }
+.cvfig .ket .sub { font-size: 11px; fill: var(--muted); }
+.cvfig .wire { stroke: var(--fg); stroke-width: 1.4; }
+.cvfig .year { font-size: 13px; fill: var(--muted); text-anchor: middle; }
+.cvfig .ctrl { stroke: var(--accent); stroke-width: 1.6; }
+.cvfig .dot { fill: var(--accent); }
+.cvfig .gate:hover .dot { fill: var(--fg); }
+.cvfig .gate rect { fill: var(--surface); stroke: var(--fg); stroke-width: 1.3; transition: fill .15s; }
+.cvfig .gate.awards rect { fill: var(--accent-soft); stroke: var(--accent); }
+.cvfig .gate text { font-size: 13px; font-weight: 500; fill: var(--fg); text-anchor: middle; }
+.cvfig .gate:focus-visible rect { fill: var(--accent); }
+.cvfig .gate:focus-visible text { fill: var(--bg); }
+.cvfig .gate:focus-visible { outline: none; }
+.cvfig .meter rect { fill: var(--surface); stroke: var(--fg); stroke-width: 1.3; }
+.cvfig .meter path, .cvfig .meter line { fill: none; stroke: var(--fg); stroke-width: 1.3; }
+.cvfig figcaption { color: var(--muted); font-size: .9rem; margin-top: .5rem; }
+.timeline li.award .cv-icon { color: var(--accent); background: var(--accent-soft); }
+.cvfig .measure { cursor: pointer; outline: none; }
+.cvfig .measure .meter rect, .cvfig .measure .meter path, .cvfig .measure .meter line { transition: fill .15s, stroke .15s; }
+.cvfig .measure:focus-visible .meter rect, .cvfig .measure.on .meter rect { fill: var(--accent); stroke: var(--accent); }
+.cvfig .measure:focus-visible .meter path, .cvfig .measure:focus-visible .meter line,
+.cvfig .measure.on .meter path, .cvfig .measure.on .meter line { stroke: var(--bg); }
+/* hover colours only with a real mouse: on phones a tapped element stays "hovered" until the next tap */
+@media (hover: hover) {
+  .cvfig .measure:hover .meter rect { fill: var(--accent); stroke: var(--accent); }
+  .cvfig .measure:hover .meter path, .cvfig .measure:hover .meter line { stroke: var(--bg); }
+  .cvfig .gate:hover rect { fill: var(--accent); }
+  .cvfig .gate:hover text { fill: var(--bg); }
 }
