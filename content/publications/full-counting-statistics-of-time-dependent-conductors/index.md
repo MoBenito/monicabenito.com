@@ -15,7 +15,7 @@ research:
 summary: "Computing the full-counting statistics of transport described by Markovian master equations with an arbitrary time dependence"
 aliases:
   - "/full-counting-statistics-of-time-dependent-conductors/"
-darkFigure: "original"
+darkFigure: "invert"
 ---
 
 Computing the full-counting statistics of transport described by Markovian master equations with an arbitrary time dependence

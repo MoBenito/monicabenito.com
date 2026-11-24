@@ -84,7 +84,6 @@ nav a[aria-current] { color: var(--accent); background: var(--accent-soft); }
 .menu-toggle { display: none; }
 @media (max-width: 640px) {
   .site-header .wrap { padding-block: .6rem; gap: .5rem; }
-  .site-title .logo { height: 1.7rem; }
   .theme-toggle { margin-left: 0; }
   /* without JavaScript the menu simply stays visible as a row below the logo */
   nav { order: 3; width: 100%; margin-inline: -.7rem; }
