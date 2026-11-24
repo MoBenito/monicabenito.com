@@ -57,7 +57,10 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 5rem; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.65 var(--text); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.65 var(--text);
+  /* at least one screen tall, with the main area taking the spare room, so the footer sits at the bottom of short pages */
+  min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+body > main { flex: 1 0 auto; width: 100%; }
 .wrap { max-width: 920px; margin: 0 auto; padding-inline: max(20px, env(safe-area-inset-left, 0px)) max(20px, env(safe-area-inset-right, 0px)); }
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { text-decoration-thickness: 2px; }
@@ -220,7 +223,7 @@ article > .authors, article > .cite, article > .links { margin: .15rem 0; }
   .timeline time { text-align: right; padding-top: .45rem; }
   .timeline li > div { padding-top: .3rem; }
 }
-.cv-toggle { display: inline-flex; align-items: center; gap: .35rem; font: 500 .9rem var(--display); color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 999px; padding: .3rem .8rem; cursor: pointer; }
+.cv-toggle { display: inline-flex; align-items: center; gap: .35rem; white-space: nowrap; flex: none; font: 500 .9rem var(--display); color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 999px; padding: .3rem .8rem; cursor: pointer; }
 .cv-toggle:hover { background: var(--accent); color: var(--bg); }
 .cv-toggle svg { width: 1rem; height: 1rem; }
 .cv-toggle[hidden] { display: none; }
@@ -314,3 +317,5 @@ article > .authors, article > .cite, article > .links { margin: .15rem 0; }
 .empty { color: var(--muted); }
 .empty button { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
 .source-note { margin-top: 2.5rem; font-size: .82rem; }
+.cv-head { margin-bottom: 1.4rem; }
+.cv-head h1 { margin-bottom: 0; }

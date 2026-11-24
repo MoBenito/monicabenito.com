@@ -32,7 +32,7 @@ ignoreFiles = ["\\.mode$"]
     weight = 4
   [[menus.main]]
     name = "CV"
-    url = "/#cv"
+    pageRef = "/cv"
     weight = 5
 
 [markup.goldmark.renderer]
