@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Outfit";
-  src: url("/fonts/outfit.woff") format("woff");
+  src: url("../fonts/outfit.woff")  /* relative to /css/, so it also works under a preview path */ format("woff");
   font-weight: 400 600;
   font-display: swap;
 }

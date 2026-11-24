@@ -28,14 +28,14 @@
 
 {{- with first 3 (where site.RegularPages "Section" "news") }}
 <section>
-  <h2 class="section-title">News <a class="more" href="{{ "/news/" | relURL }}">all news →</a></h2>
+  <h2 class="section-title">News <a class="more" href="{{ "news/" | relURL }}">all news →</a></h2>
   <div class="tiles">{{- range . }}{{ partial "news-item.html" . }}{{ end }}</div>
 </section>
 {{- end }}
 
 {{- with first 4 (where site.RegularPages "Section" "publications") }}
 <section>
-  <h2 class="section-title">Recent publications <a class="more" href="{{ "/publications/" | relURL }}">all publications →</a></h2>
+  <h2 class="section-title">Recent publications <a class="more" href="{{ "publications/" | relURL }}">all publications →</a></h2>
   <div class="tiles">{{- range . }}{{ partial "pub-item.html" . }}{{ end }}</div>
 </section>
 {{- end }}

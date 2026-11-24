@@ -1,0 +1,6 @@
+{{- /* Links in Markdown: site-internal ones ("/research/...") get the base path, so they also work on
+       pull-request previews served from a subfolder; external ones are left as they are. */ -}}
+{{- $href := .Destination }}
+{{- if hasPrefix $href "/" }}{{ $href = strings.TrimPrefix "/" $href | relURL }}{{ end -}}
+<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- /* */ -}}
