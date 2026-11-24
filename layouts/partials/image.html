@@ -1,0 +1,10 @@
+{{- /* Responsive WebP image from a page resource. Args: res (resource), width (int), alt, class, eager */ -}}
+{{- $res := .res }}
+{{- if $res }}
+{{- $w := .width | default 800 }}
+{{- $small := $res.Resize (printf "%dx webp" (cond (lt $res.Width $w) $res.Width $w)) }}
+{{- $large := $res.Resize (printf "%dx webp" (cond (lt $res.Width (mul $w 2)) $res.Width (mul $w 2))) }}
+<img src="{{ $small.RelPermalink }}" srcset="{{ $small.RelPermalink }} 1x, {{ $large.RelPermalink }} 2x"
+  width="{{ $small.Width }}" height="{{ $small.Height }}" alt="{{ .alt }}"{{ with .class }} class="{{ . }}"{{ end }}
+  {{ if not .eager }}loading="lazy" {{ end }}decoding="async">
+{{- end }}

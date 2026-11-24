@@ -1,0 +1,12 @@
+{{- /* One news card. Context: the news page. */ -}}
+{{- $img := .Resources.GetMatch "featured.*" }}
+<article class="reveal tile{{ if not $img }} no-thumb{{ end }}">
+  {{- with $img }}
+  <div class="tile-thumb">{{ partial "featured.html" (dict "page" $ "width" 220 "alt" "") }}</div>
+  {{- end }}
+  <div>
+    <p class="date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time></p>
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <p class="teaser">{{ .Summary | plainify | truncate 180 }}</p>
+  </div>
+</article>

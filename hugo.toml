@@ -1,0 +1,48 @@
+baseURL = "https://monicabenito.com/"
+locale = "en"
+title = "Mónica Benito"
+disableKinds = ["taxonomy", "term"]
+enableRobotsTXT = true
+
+[params]
+  description = "Mónica Benito, theoretical quantum physicist and professor at the University of Augsburg, where she leads the group Quantum Computing and Devices."
+  # Highlighted in author lists
+  authorName = "Mónica Benito"
+  authorAliases = ["Mónica Benito", "M. Benito", "Monica Benito"]
+  email = "monica.benito@uni-a.de"
+  group = "https://www.uni-augsburg.de/en/fakultaet/mntf/physik/groups/qcode/"
+  scholar = "https://scholar.google.de/citations?user=Pi4u4PkAAAAJ"
+  orcid = "https://orcid.org/0000-0001-6365-9505"
+  linkedin = "https://www.linkedin.com/in/monica-benito"
+
+[menus]
+  [[menus.main]]
+    name = "Research"
+    pageRef = "/research"
+    weight = 2
+  [[menus.main]]
+    name = "Publications"
+    pageRef = "/publications"
+    weight = 3
+  [[menus.main]]
+    name = "News"
+    pageRef = "/news"
+    weight = 4
+  [[menus.main]]
+    name = "CV"
+    url = "/#cv"
+    weight = 5
+
+[markup.goldmark.renderer]
+  unsafe = false
+
+[imaging]
+  resampleFilter = "Lanczos"
+  [imaging.webp]
+    quality = 82
+  [imaging.jpeg]
+    quality = 82
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]

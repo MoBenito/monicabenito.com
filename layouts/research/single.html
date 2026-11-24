@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="column">
+  <article class="prose">
+    <h1>{{ .Title }}</h1>
+    {{- partial "featured.html" (dict "page" . "width" 760 "alt" "" "class" "featured" "eager" true) }}
+    {{ .Content }}
+  </article>
+  {{- $slug := .File.ContentBaseName }}
+  {{- with where (where site.RegularPages "Section" "publications") "Params.research" "intersect" (slice $slug) }}
+  <section>
+    <h2 class="section-title">Related publications</h2>
+    <div class="tiles">{{- range . }}{{ partial "pub-item.html" . }}{{ end }}</div>
+  </section>
+  {{- end }}
+</div>
+{{ end }}

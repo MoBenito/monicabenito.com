@@ -1,0 +1,11 @@
+{{- /* One publication card. Context: the publication page. */ -}}
+{{- $img := .Resources.GetMatch "featured.*" }}
+<article class="reveal tile{{ if not $img }} no-thumb{{ end }}">
+  {{- with $img }}
+  <div class="tile-thumb">{{ partial "featured.html" (dict "page" $ "width" 220 "alt" "") }}</div>
+  {{- end }}
+  <div>
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    {{ partial "pub-meta.html" . }}
+  </div>
+</article>

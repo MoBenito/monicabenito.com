@@ -1,0 +1,7 @@
+public/
+resources/_gen/
+.hugo_build.lock
+tools/fonts/
+__pycache__/
+# stamp files tools/darkfigs.py uses to notice a changed darkFigure setting
+*.mode

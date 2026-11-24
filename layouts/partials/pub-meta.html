@@ -1,0 +1,15 @@
+{{- /* Authors, citation and links of a publication. Context: the publication page. */ -}}
+{{- $me := site.Params.authorAliases }}
+<p class="authors">
+  {{- range $i, $a := .Params.authors }}{{ if $i }}, {{ end }}{{ if in $me $a }}<strong>{{ $a }}</strong>{{ else }}{{ $a }}{{ end }}{{ end -}}
+</p>
+<p class="cite">
+  {{- with .Params.journal }}<em>{{ . }}</em>{{ end }}
+  {{- with .Params.volume }} <strong>{{ . }}</strong>{{ end }}
+  {{- with .Params.pages }}, {{ . }}{{ end }}
+  {{- if .Params.journal }} ({{ .Date.Year }}){{ else }}Preprint ({{ .Date.Year }}){{ end -}}
+</p>
+<p class="links">
+  {{- with .Params.doi }}<a href="https://doi.org/{{ . }}" target="_blank" rel="noopener">Journal</a>{{ end }}
+  {{- with .Params.arxiv }}<a href="https://arxiv.org/abs/{{ . }}" target="_blank" rel="noopener">arXiv</a>{{ end -}}
+</p>

@@ -1,0 +1,28 @@
+---
+title: "A coherent spin–photon interface in silicon"
+date: "2018-03-01"
+authors:
+  - "X. Mi"
+  - "M. Benito"
+  - "S. Putz"
+  - "D. M. Zajac"
+  - "J. M. Taylor"
+  - "Guido Burkard"
+  - "J. R. Petta"
+journal: "Nature"
+volume: "555"
+pages: "599-603"
+doi: "10.1038/nature25769"
+arxiv: "1710.03265"
+research:
+  - "spin-quantum-computing"
+summary: "First demonstration of strong coupling between a single spin in silicon and a single microwave-frequency photon."
+aliases:
+  - "/a-coherent-spin-photon-interface-in-silicon/"
+darkFigure: "cutout"
+---
+
+First demonstration of strong coupling between a single spin in silicon and a single microwave-frequency photon.
+
+Electron spins in silicon quantum dots are attractive systems for quantum computing due to their long coherence times and the promise of rapid scaling using semiconductor fabrication techniques. While nearest neighbor exchange coupling of two spins has been demonstrated, the interaction of spins via microwave frequency photons could enable long distance spin-spin coupling and “all-to-all” qubit connectivity. Here we demonstrate strong-coupling between a single spin in silicon and a microwave frequency photon with spin-photon coupling rates gs/2π > 10 MHz. The mechanism
+enabling coherent spin-photon interactions is based on spin-charge hybridization in the presence of a magnetic field gradient. In addition to spin-photon coupling, we demonstrate coherent control of a single spin in the device and quantum non-demolition spin state readout using cavity photons. These results open a direct path toward entangling single spins using microwave frequency photons.

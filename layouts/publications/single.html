@@ -1,0 +1,13 @@
+{{ define "main" }}
+<article class="prose">
+  <h1>{{ .Title }}</h1>
+  {{ partial "pub-meta.html" . }}
+  {{- partial "featured.html" (dict "page" . "width" 760 "alt" "" "class" "featured" "eager" true) }}
+  {{ .Content }}
+  {{- with .Params.research }}
+  <p class="meta">Research area:
+    {{- range $i, $slug := . }}{{ if $i }},{{ end }} {{ with site.GetPage (printf "/research/%s" $slug) }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}
+  </p>
+  {{- end }}
+</article>
+{{ end }}
