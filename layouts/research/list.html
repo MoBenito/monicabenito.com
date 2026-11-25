@@ -6,7 +6,7 @@
   <article class="reveal tile stacked">
     <div class="tile-thumb">{{ partial "featured.html" (dict "page" . "width" 480 "alt" "") }}</div>
     <div>
-      <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+      <h3>{{ partial "area-icon.html" .File.ContentBaseName }}<a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
       <p class="teaser">{{ .Summary | plainify | truncate 140 }}</p>
     </div>
   </article>

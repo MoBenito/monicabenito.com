@@ -11,6 +11,11 @@
   <div class="tile-thumb">{{ partial "featured.html" (dict "page" $ "width" 220 "alt" "") }}</div>
   {{- end }}
   <div>
+    {{- with .Params.research }}
+    <span class="tile-areas">
+      {{- range . }}{{ with site.GetPage (printf "/research/%s" .) }}<span title="{{ .Title }}">{{ partial "area-icon.html" .File.ContentBaseName }}<span class="visually-hidden">{{ .Title }}</span></span>{{ end }}{{ end -}}
+    </span>
+    {{- end }}
     <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
     {{ partial "pub-meta.html" . }}
   </div>

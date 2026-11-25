@@ -6,7 +6,7 @@
   {{ .Content }}
   {{- with .Params.research }}
   <p class="meta">Research area:
-    {{- range $i, $slug := . }}{{ if $i }},{{ end }} {{ with site.GetPage (printf "/research/%s" $slug) }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}
+    {{- range $i, $slug := . }}{{ if $i }},{{ end }} {{ with site.GetPage (printf "/research/%s" $slug) }}<a class="area-link" href="{{ .RelPermalink }}">{{ partial "area-icon.html" .File.ContentBaseName }}{{ .Title }}</a>{{ end }}{{ end }}
   </p>
   {{- end }}
 </article>
