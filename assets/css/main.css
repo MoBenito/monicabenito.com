@@ -188,8 +188,12 @@ img.featured { display: block; margin: 1.4rem 0; border-radius: var(--radius); }
   .tile-thumb img { max-width: 280px; }
 }
 /* research areas: picture on top, several cards per row */
-.tiles.grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; margin-top: 1.4rem; }
-.tile.stacked { grid-template-columns: 1fr; gap: 0; padding: 0; overflow: hidden; }
+.tiles.grid { grid-template-columns: 1fr; gap: 1.2rem; margin-top: 1.4rem; }
+/* never 3 + 1: two per row on tablets, all four in one row on wide screens */
+@media (min-width: 560px) { .tiles.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .tiles.grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; } }
+.tile.stacked { grid-template-columns: 1fr; align-content: start; gap: 0; padding: 0; overflow: hidden; }
+.tile.stacked .tile-thumb { align-self: start; }
 .tile.stacked .tile-thumb img { border-radius: 0; aspect-ratio: 16 / 9; object-fit: cover; max-width: none; }
 .tile.stacked > div:not(.tile-thumb) { padding: .9rem 1.1rem 1rem; }
 

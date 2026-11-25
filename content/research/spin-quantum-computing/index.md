@@ -3,10 +3,9 @@ title: "Spin quantum computing"
 weight: 1
 slug: "spin-quantum-computing"
 darkFigure: "original"
+summary: "Qubits from single electron and hole spins in semiconductor quantum dots, and how to make them scale."
 ---
 
-The possibility to access the quantum nature of matter at the mesoscopic level has opened a new era in condensed matter physics. Its success is based on the low dimensionality reached for the charge carriers, i.e., on the strong confinement of spatial dimensions to length scales comparable to the particle’s wavelength.
+Quantum dots are tiny islands in a semiconductor that trap single electrons or holes. Their spin makes a natural qubit: it is small, can be controlled electrically, and is built with the same technology as today's computer chips, which makes it a promising route to large quantum processors.
 
-Quantum dots (QDs) are nanostructures hosted in semiconductors where a few electrons can be electrostatically trapped in discrete states. Therefore, QDs allow us to access and control the quantum nature of single electrons and interactions between them. Since the first measurements of few-electron phenomena in lateral gated QDs, the focus of applications of these systems has shifted from single spintronics toward quantum information science, as originally envisioned by Loss and DiVincenzo.
-
-My main research interests in this field are the coupling between distant spin qubits and the control over negative influences of the environment with the goal of a scalable design of useful quantum devices based on this promising qubit platform.
+To get there, spin qubits must become faster, more robust against noise, and able to talk to each other beyond their nearest neighbours. My group develops the theory for this: new qubit designs such as the flopping-mode qubit and squeezed hole spins in germanium, fast gates at low power, ways to read out spins, and new platforms such as electrons on solid neon and on helium.

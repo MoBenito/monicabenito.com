@@ -1,7 +1,8 @@
 ---
 title: "Light–matter interaction"
-weight: 4
+weight: 2
 slug: "light-matter-interaction"
+summary: "Spins and microwave photons in superconducting resonators: strong coupling, long-distance links and readout."
 darkFigure: "invert"
 ---
 

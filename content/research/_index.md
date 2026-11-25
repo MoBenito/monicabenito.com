@@ -2,9 +2,4 @@
 title: "Research"
 ---
 
-My research is on quantum information in solid-state systems, light–matter interaction, Floquet engineering, topological matter, quantum transport and quantum simulation. Current topics in my group:
-
-- Spin-based Floquet quantum information processing
-- Quantum computing with spins in quantum dots
-- Quantum simulation of condensed-matter systems
-- Hybrid semiconductor–superconductor devices
+I work on the theory of quantum information in solid-state devices: how to make qubits from single spins in semiconductors, connect them with light, protect them from their noisy surroundings, and use driving and topology to make them more robust.
