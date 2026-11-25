@@ -3,6 +3,7 @@ title: "Open positions"
 date: "2023-02-24"
 aliases:
   - "/open-positions/"
+darkFigure: "invert"
 ---
 
 From April 2023 I will be a professor at the University of Augsburg and I am inviting motivated scientists to join our group to work on Quantum information theory based on solid state spin qubits.

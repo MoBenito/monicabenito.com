@@ -10,10 +10,13 @@ small theme of its own; there is no external theme and no JavaScript build step.
     hugo build --gc --minify     # must finish with no ERROR and no WARN lines
     python tools/darkfigs.py     # after adding or changing any figure
     python tools/logo.py         # only when the logo or favicon changes
+    python tools/newsart.py      # redraws the drawn news pictures (featured.png + featured-dark.png)
     python tools/webfont.py      # only when the heading font changes
     python tools/citations.py    # refreshes citation counts (data/citations.json) from OpenAlex
 
-The tools need Python with fontTools, numpy and Pillow; `logo.py` also needs `rsvg-convert`.
+The tools need Python with fontTools, numpy and Pillow; `logo.py` and `newsart.py` also need `rsvg-convert`.
+News posts without a photo of their own get a drawing in the logo's style: add a function to `PICTURES` in
+`tools/newsart.py` (keyed by the post's folder name) and run it.
 
 ## Layout
 
