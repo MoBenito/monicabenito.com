@@ -330,3 +330,13 @@ article > .authors, article > .cite, article > .links { margin: .15rem 0; }
 .source-note { margin-top: 2.5rem; font-size: .82rem; }
 .cv-head { margin-bottom: 1.4rem; }
 .cv-head h1 { margin-bottom: 0; }
+
+/* Research-area icons: small and muted; on paper cards in the top right corner */
+.area-icon { width: 1.05em; height: 1.05em; flex: none; vertical-align: -.17em; }
+.tile-areas { position: relative; z-index: 1; float: right; display: flex; gap: .3rem; margin: .1rem 0 .2rem .6rem; color: var(--muted); opacity: .5; }
+.tile-areas .area-icon { width: 17px; height: 17px; }
+.area-link { white-space: nowrap; }
+.area-link .area-icon { margin-right: .25em; }
+.chip .area-icon { margin-right: .3em; }
+.tile.stacked h3 { display: flex; align-items: center; gap: .4rem; }
+.tile.stacked h3 .area-icon { color: var(--accent); width: 20px; height: 20px; }

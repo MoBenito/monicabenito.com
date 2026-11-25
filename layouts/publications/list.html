@@ -25,7 +25,7 @@
       </label>
       <div class="chips" role="group" aria-label="Research area">
         {{- range (site.GetPage "/research").Pages.ByWeight }}
-        <button type="button" class="chip" data-area="{{ .File.ContentBaseName }}" aria-pressed="false">{{ .Title }}</button>
+        <button type="button" class="chip" data-area="{{ .File.ContentBaseName }}" aria-pressed="false">{{ partial "area-icon.html" .File.ContentBaseName }}{{ .Title }}</button>
         {{- end }}
       </div>
       <div class="chips" role="group" aria-label="Type">
