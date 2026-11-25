@@ -1,12 +1,11 @@
 ---
 title: "Topological matter"
-weight: 2
+weight: 4
 slug: "topological-matter"
 darkFigure: "invert"
+summary: "Protected edge states, Majorana modes and quantum geometry in driven and nanoscale systems."
 ---
 
-Condensed matter physics deals with diverse phases of matter, transitions between them, and how their physical properties are affected by factors such as an applied pressure, doping, spin of the particles, and temperature. In the last decades, an additional family of phases of matter, whose interest lies on independence on the parameters, has attracted intense attention: topological phases. Topology is a branch of mathematics concerned with properties that are preserved under continuous deformations, i.e., without abrupt changes. Analogously, topological phenomena in condensed matter imply physical properties insensitive to details of the material, which obviously suggests their potential for novel technological applications.
+Topological phases of matter have properties that do not depend on the details of a material, such as states at their edges that are protected against local perturbations. Majorana modes at the ends of topological superconductors could store quantum information non-locally, a route to fault-tolerant quantum computing.
 
-In insulators and superconductors, the topological protection is related to discrete symmetries and the existence of a bulk gap. In a physical boundary between two materials with distinct topological phases, the energy gap has to close, which explains the appearance of subgap boundary modes. In many cases, these edge states of topological origin become perfect conducting channels due to the bulk-gap topological protection, as is the case of Quantum Hall edge states. They also allow for the storage of quantum information in a non-local way making it robust against local perturbations, which paves the way to fault-tolerant quantum computation using for example Majorana boundary modes.
-
-In the following publications we have analyzed the interplay of topology, transport and driving electromagnetic fields in nanostructures, not only in electronic systems but also bosonic and classical non-linear systems.
+I study how topology shows up in nanostructures and how it can be created or detected: Floquet engineering of topological superconductivity and Majorana modes in driven quantum dots, edge states in quantum dot arrays and their fingerprints in transport and noise, topology in bosonic and nonlinear circuits, and, more recently, quantum geometry and minimal Kitaev chains.

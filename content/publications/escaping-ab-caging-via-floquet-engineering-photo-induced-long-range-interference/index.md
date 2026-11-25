@@ -8,6 +8,7 @@ authors:
 arxiv: "2511.20255"
 research:
   - "topological-matter"
+  - "light-matter-interaction"
 summary: "Periodic driving lets particles escape Aharonov-Bohm caging in a flat-band diamond chain."
 darkFigure: "invert"
 ---

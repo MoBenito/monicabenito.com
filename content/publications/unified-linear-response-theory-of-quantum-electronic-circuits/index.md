@@ -13,6 +13,8 @@ doi: "10.1038/s41534-024-00907-9"
 arxiv: "2310.17399"
 summary: "One theory for the electrical response of quantum devices at any frequency, including relaxation and dephasing."
 darkFigure: "invert"
+research:
+  - "open-systems-dynamics"
 ---
 
 One theory for the electrical response of quantum devices at any frequency, including relaxation and dephasing.

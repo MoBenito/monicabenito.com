@@ -13,12 +13,13 @@ doi: "10.1103/physrevlett.118.197702"
 arxiv: "1611.01467"
 research:
   - "topological-matter"
-summary: "Exploring the relationship of topological insulators and superconductors and the field of nonlinear dynamics."
+  - "light-matter-interaction"
+summary: "A nonlinear topological insulator in superconducting circuits, whose topology shows up as bifurcations and chaos."
 aliases:
   - "/topologically-enforced-bifurcations-in-superconducting-circuits/"
 darkFigure: "invert"
 ---
 
-Exploring the relationship of topological insulators and superconductors and the field of nonlinear dynamics.
+A nonlinear topological insulator in superconducting circuits, whose topology shows up as bifurcations and chaos.
 
 To address this subject, we adopt the linear coupling geometry of the Su-Schrieffer-Heeger model, a paradigmatic example for a topological insulator, and render it nonlinearly in the context of superconducting circuits. As a consequence, the system exhibits topologically enforced bifurcations as a function of the topological control parameter, which finally gives rise to chaotic dynamics, separating phases that exhibit clear topological features.
