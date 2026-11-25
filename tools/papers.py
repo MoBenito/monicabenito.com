@@ -37,6 +37,9 @@ PUBS = ROOT / "content" / "publications"
 ORCID = "0000-0001-6365-9505"
 ME = {"M. Benito", "Mónica Benito", "Monica Benito"}
 UA = {"User-Agent": "monicabenito.com publication bot (https://github.com/MoBenito/monicabenito.com)"}
+NOT_MINE = {  # papers by other M. Benitos that the search finds: never proposed (arXiv id or DOI)
+    "2312.12914", "10.1103/physrevb.109.134506",  # parity-flipping microwave transitions in a Josephson junction (Saclay)
+}
 AREAS = {  # keywords for suggesting a research area; the pull request asks to confirm
     "spin-quantum-computing": ["spin qubit", "quantum dot", "spin-photon", "electron spin", "hole spin", "edsr",
                                "flopping", "readout", "resonator", "solid neon", "helium", "two-qubit", "qubit"],
@@ -207,7 +210,8 @@ def find():
         print(f"arXiv did not answer ({err}); no search this time, the next run tries again", file=sys.stderr)
         return {"new": [], "published": []}
     for e in mine:
-        if e["arxiv"] in known_arxiv or norm_title(e["title"]) in known_title:
+        if e["arxiv"] in known_arxiv | NOT_MINE or (e["doi"] or "").lower() in NOT_MINE \
+                or norm_title(e["title"]) in known_title:
             continue
         shared = sorted({surname(a) for a in e["authors"]} & coauthors)
         new.append({"arxiv": e["arxiv"], "title": e["title"], "date": e["date"], "known_coauthors": shared,
@@ -229,7 +233,7 @@ def find():
     known_doi |= {p["doi"] for p in published}
     new_arxiv = {n["arxiv"] for n in new}
     for w in orcid_dois():  # papers on ORCID that neither the site nor the arXiv search above knows
-        if w["doi"] in known_doi or norm_title(w["title"]) in known_title:
+        if w["doi"] in known_doi | NOT_MINE or norm_title(w["title"]) in known_title:
             continue
         if w["doi"].startswith("10.48550/arxiv.") and w["doi"].split("arxiv.", 1)[1] in known_arxiv | new_arxiv:
             continue
