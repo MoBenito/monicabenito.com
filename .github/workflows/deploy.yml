@@ -20,11 +20,10 @@ env:
   HUGO_VERSION: "0.170.1"
   HOST: v220261131597565817.hotsrv.de
   HOST_KEY: "v220261131597565817.hotsrv.de ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5LHaH0UYKBN+Feygkr84BHOpXplQrfPUsqi6+IoQ7"
-  # Until monicabenito.com points to the VPS, the site is served under the VPS's own name and kept out of search
-  # engines ("preview"). To switch: SITE_URL https://monicabenito.com/, SITE_ENV production, and the name in
-  # /opt/web/Caddyfile on the VPS.
-  SITE_URL: https://v220261131597565817.hotsrv.de/
-  SITE_ENV: preview
+  # The live address. For a test under another name, set that name here, SITE_ENV to preview (noindex) and the
+  # same name in /opt/web/Caddyfile on the VPS.
+  SITE_URL: https://monicabenito.com/
+  SITE_ENV: production
 
 jobs:
   deploy:
