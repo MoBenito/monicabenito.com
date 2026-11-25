@@ -17,3 +17,5 @@ SymPT, a software tool that automates Schrieffer-Wolff transformations for effec
 The Schrieffer-Wolff transformation is a standard way to derive effective Hamiltonians by eliminating couplings between energetically distant subspaces, but for complex systems it means long, error-prone calculations. SymPT (Symbolic Perturbation Theory) automates it, building on a universal framework for constructing the generator of the transformation. It handles time-independent and time-periodic Hamiltonians and goes beyond the standard transformation with arbitrary coupling elimination, block-diagonalization and full diagonalization.
 
 Try it out: `pip install sympt`. The code and examples are on [GitHub](https://github.com/qcode-uni-a/sympt).
+
+Wow fancy!
