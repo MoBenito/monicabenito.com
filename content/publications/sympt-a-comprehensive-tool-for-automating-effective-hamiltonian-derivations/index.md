@@ -7,6 +7,8 @@ authors:
   - "Mónica Benito"
 arxiv: "2412.10240"
 summary: "SymPT, a software tool that automates Schrieffer-Wolff transformations for effective Hamiltonians."
+research:
+  - "spin-quantum-computing"
 darkFigure: "invert"
 ---
 
