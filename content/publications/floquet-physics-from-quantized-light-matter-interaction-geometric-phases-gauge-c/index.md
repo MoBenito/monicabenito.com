@@ -7,7 +7,6 @@ authors:
   - "Mónica Benito"
 arxiv: "2609.21741"
 research:
-  - "open-systems-dynamics"
   - "light-matter-interaction"
 summary: "How Floquet physics of classically driven systems emerges from fully quantized light-matter interaction."
 darkFigure: "invert"

@@ -15,12 +15,12 @@ arxiv: "1603.01130"
 research:
   - "open-systems-dynamics"
   - "spin-quantum-computing"
-summary: "Proposal for deterministic generation and long-term stabilization of entanglement between two electronic spin qubits confined in spatially separated quantum dots."
+summary: "A scheme that creates entanglement between two distant spin qubits in quantum dots and keeps it stable through dissipation."
 aliases:
   - "/dissipative-long-range-entanglement-generation-between-electronic-spins/"
 darkFigure: "invert"
 ---
 
-Proposal for deterministic generation and long-term stabilization of entanglement between two electronic spin qubits confined in spatially separated quantum dots.
+A scheme that creates entanglement between two distant spin qubits in quantum dots and keeps it stable through dissipation.
 
 Our approach relies on an electronic quantum bus, consisting either of quantum Hall edge channels or surface acoustic waves, that can mediate long-range coupling between localized spins over distances of tens of micrometers. Since the entanglement is actively stabilized by dissipative dynamics, our scheme is inherently robust against noise and imperfections.

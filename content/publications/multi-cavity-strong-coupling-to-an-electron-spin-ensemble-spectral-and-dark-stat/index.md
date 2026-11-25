@@ -12,7 +12,6 @@ authors:
   - "H. Huebl"
 arxiv: "2608.05765"
 research:
-  - "spin-quantum-computing"
   - "light-matter-interaction"
 summary: "Several superconducting cavities strongly coupled to one spin ensemble, with signatures of dark states."
 darkFigure: "invert"

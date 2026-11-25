@@ -12,12 +12,12 @@ doi: "10.1103/physrevb.101.195438"
 arxiv: "2003.02137"
 research:
   - "spin-quantum-computing"
-summary: "Versatile set of quantum gates between qubits of a spin quantum computer node."
+summary: "A versatile set of two-qubit gates between neighbouring flopping-mode spin qubits within one node of a spin quantum computer."
 aliases:
   - "/programmable-two-qubit-gates-in-capacitively-coupled-flopping-mode-spin-qubits/"
 darkFigure: "invert"
 ---
 
-Versatile set of quantum gates between qubits of a spin quantum computer node.
+A versatile set of two-qubit gates between neighbouring flopping-mode spin qubits within one node of a spin quantum computer.
 
 Recent achievements in the field of gate-defined semiconductor quantum dots reinforce the concept of a spin-based quantum computer consisting of nodes of locally connected qubits which communicate with each other via superconducting circuit resonator photons. In this paper, we theoretically demonstrate a versatile set of quantum gates between adjacent spin qubits defined in semiconductor quantum dots situated within the same node of such a spin-based quantum computer. The electric dipole acquired by the spin of an electron that moves across a double quantum dot potential in a magnetic field gradient has enabled strong coupling to resonator photons and low-power spin control. Here we show that this flopping-mode spin qubit also provides the tunability to program multiple two-qubit gates. Since the capacitive coupling between these qubits brings about additional dephasing, we calculate the estimated infidelity of different two-qubit gates in the most immediate possible experimental realizations.

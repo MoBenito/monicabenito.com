@@ -13,12 +13,12 @@ arxiv: "1506.08157"
 research:
   - "open-systems-dynamics"
   - "light-matter-interaction"
-summary: "Degenerate parametric oscillation, one of the most elusive models in the field of open system dynamics, can be implemented in modern optomechanical setups."
+summary: "Optomechanical setups can realise degenerate parametric oscillation, a paradigm of dissipative phase transitions that optical cavities never could."
 aliases:
   - "/degenerate-parametric-oscillation-in-quantum-membrane-optomechanics/"
 darkFigure: "invert"
 ---
 
-Degenerate parametric oscillation, one of the most elusive models in the field of open system dynamics, can be implemented in modern optomechanical setups.
+Optomechanical setups can realise degenerate parametric oscillation, a paradigm of dissipative phase transitions that optical cavities never could.
 
 In this work we show that modern optomechanical setups are mature enough to implement one of the most elusive models in the field of open system dynamics: degenerate parametric oscillation. Introduced in the eighties and motivated by its alleged implementability in nonlinear optical resonators, it rapidly became a paradigm for the study of dissipative phase transitions whose corresponding spontaneously broken symmetry is discrete. However, it was found that the intrinsic multimode nature of optical cavities makes it impossible to experimentally study the model all the way through its phase transition. In contrast, here we show that this long-awaited model can be implemented in the motion of a mechanical object dispersively coupled to the light contained in a cavity, when the latter is properly driven with multichromatic laser light. We focus on membranes as the mechanical element, showing that the main signatures of the degenerate parametric oscillation model can be studied in state-of-the-art setups, thus opening the possibility of analyzing spontaneous symmetry breaking and enhanced metrology in one of the cleanest dissipative phase transitions. In addition, the ideas put forward in this work would allow for the dissipative preparation of squeezed mechanical states.

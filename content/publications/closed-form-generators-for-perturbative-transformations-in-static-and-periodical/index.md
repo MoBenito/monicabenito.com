@@ -7,7 +7,6 @@ authors:
   - "Mónica Benito"
 arxiv: "2411.11535"
 research:
-  - "open-systems-dynamics"
   - "light-matter-interaction"
 summary: "A closed-form expression for the generator of perturbative transformations, for static and periodically driven systems."
 darkFigure: "invert"

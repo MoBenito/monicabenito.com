@@ -14,6 +14,7 @@ doi: "10.1103/physrevapplied.18.014009"
 arxiv: "2012.09507"
 research:
   - "open-systems-dynamics"
+  - "spin-quantum-computing"
 summary: "Protocol for the deterministic generation of entanglement between two ensembles of nuclear spins surrounding two distant quantum dots."
 aliases:
   - "/entangling-nuclear-spins-in-distant-quantum-dots-via-an-electron-bus/"

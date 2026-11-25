@@ -9,7 +9,7 @@ arxiv: "2412.10240"
 summary: "SymPT, a software tool that automates Schrieffer-Wolff transformations for effective Hamiltonians."
 darkFigure: "invert"
 research:
-  - "open-systems-dynamics"
+  - "light-matter-interaction"
 ---
 
 SymPT, a software tool that automates Schrieffer-Wolff transformations for effective Hamiltonians.
