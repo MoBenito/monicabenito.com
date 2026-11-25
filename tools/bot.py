@@ -128,24 +128,40 @@ def main():
     done = proposed_branches()
     run("git", "fetch", "--quiet", "origin", "main")
     run("git", "switch", "--quiet", "--detach", "origin/main")
+    failed = []
     for found in changes["new"]:
         ident = found.get("arxiv") or found["doi"]
         branch = branch_name("paper", ident)
         if branch in done:
             continue
-        run("git", "switch", "--quiet", "--detach", "origin/main")
-        added = json.loads(run(sys.executable, "-I", "tools/papers.py", "add", ident, capture=True))
-        run(sys.executable, "-I", "tools/darkfigs.py")
-        body = new_paper_body(found, added, branch)
-        open_pr(branch, f"New paper: {added['title']}", body, [f"content/publications/{added['slug']}"])
+        try:
+            run("git", "switch", "--quiet", "--detach", "origin/main")
+            added = json.loads(run(sys.executable, "-I", "tools/papers.py", "add", ident, capture=True))
+            run(sys.executable, "-I", "tools/darkfigs.py")
+            body = new_paper_body(found, added, branch)
+            open_pr(branch, f"New paper: {added['title']}", body, [f"content/publications/{added['slug']}"])
+        except Exception as err:  # e.g. arXiv not answering: leave it for the next run
+            print(f"skipped {ident}: {err}", file=sys.stderr)
+            failed.append(ident)
+        finally:
+            run("git", "reset", "--quiet", "--hard")
+            run("git", "clean", "--quiet", "-fd", "content")
     for change in changes["published"]:
         branch = branch_name("published", change["slug"])
         if branch in done:
             continue
-        run("git", "switch", "--quiet", "--detach", "origin/main")
-        result = json.loads(run(sys.executable, "-I", "tools/papers.py", "publish", change["slug"], change["doi"], capture=True))
-        open_pr(branch, f"Published: {front(change['slug'])['title']} ({result['journal']})",
-                published_body(change, result, branch), [f"content/publications/{change['slug']}/index.md"])
+        try:
+            run("git", "switch", "--quiet", "--detach", "origin/main")
+            result = json.loads(run(sys.executable, "-I", "tools/papers.py", "publish", change["slug"], change["doi"], capture=True))
+            open_pr(branch, f"Published: {front(change['slug'])['title']} ({result['journal']})",
+                    published_body(change, result, branch), [f"content/publications/{change['slug']}/index.md"])
+        except Exception as err:
+            print(f"skipped {change['slug']}: {err}", file=sys.stderr)
+            failed.append(change["slug"])
+        finally:
+            run("git", "reset", "--quiet", "--hard")
+    if failed:
+        sys.exit(f"not proposed this time (tried again next run): {', '.join(failed)}")
 
 
 if __name__ == "__main__":
