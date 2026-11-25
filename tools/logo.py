@@ -3,7 +3,7 @@
     python tools/logo.py
 
 Writes layouts/partials/logo.html (inline SVG; letters and arrows use currentColor, so they follow dark mode)
-and static/favicon.svg, favicon-32.png, icon-192.png (Android), apple-touch-icon.png (iOS), icon-512.png.
+and static/favicon.svg, favicon-32.png, apple-touch-icon.png, icon-512.png.
 Needs fontTools and rsvg-convert. The font (Outfit, SIL Open Font License) is downloaded on first use.
 """
 
@@ -102,13 +102,12 @@ def wordmark(size=100, pad=14):
             f'<path fill="currentColor" d="{" ".join(letters)}"/>{"".join(spins)}</svg>\n')
 
 
-def favicon(background=None, width=460, margin=6):
-    """A bold white MB, centred in a full-size spin ball; the M's right diagonal shoots out as the spin arrow,
-    its tip leaving the ball towards the top right corner (outside the ball it is teal, so it shows on light
-    and dark tab bars). Made to stay readable at 16 px in a browser tab: no equator (too fine to see), and a
-    darker highlight than the logo so the M keeps its contrast. `width` is the letters' span in px (the ball is
-    512 across); the arrow grows until its head is `margin` px from the edge of the picture. `background` fills the square behind
-    the ball and shrinks the picture a little (for app icons, which iOS shows on black and with round corners)."""
+def favicon(width=460, margin=6):
+    """A bold white MB, centred in a full-size spin ball; the M's right diagonal shoots out as the spin arrow
+    towards the top right corner (whatever sticks out of the ball is teal, so it shows on light and dark tab
+    bars). Made to stay readable at 16 px in a browser tab: the letters nearly fill the ball, no equator (too
+    fine to see), and a darker highlight than the logo so the M keeps its contrast. `width` is the letters'
+    span in px (the ball is 512 across); the arrow grows until its head is `margin` px from the picture's edge."""
     bold = instantiateVariableFont(TTFont(FONT_FILE), {"wght": 700})
     gs, cmap = bold.getGlyphSet(), bold.getBestCmap()
     bounds = {}
@@ -155,9 +154,6 @@ def favicon(background=None, width=460, margin=6):
     shapes = pen.getCommands() + arrow_d  # teal where it sticks out of the ball, white on it
     picture = (f'<circle cx="256" cy="256" r="256" fill="url(#f)"/><path fill="{TEAL}" d="{shapes}"/>'
                f'<path fill="#fff" clip-path="url(#ball)" d="{shapes}"/>')
-    if background:
-        picture = (f'<rect width="512" height="512" fill="{background}"/>'
-                   f'<g transform="translate(256 256) scale(.84) translate(-256 -256)">{picture}</g>')
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>{shade}</defs>{picture}</svg>\n'
 
 
@@ -165,9 +161,9 @@ if __name__ == "__main__":
     (ROOT / "layouts" / "partials" / "logo.html").write_text(wordmark())
     icon = ROOT / "static" / "favicon.svg"
     icon.write_text(favicon())
-    on_light = favicon(background="#fbfcfb").encode()  # iOS home screens show transparency as black
-    for px, name, svg in ((32, "favicon-32.png", icon.read_bytes()), (180, "apple-touch-icon.png", on_light),
-                          (192, "icon-192.png", icon.read_bytes()), (512, "icon-512.png", icon.read_bytes())):
+    # all transparent: Firefox on Android shows the apple-touch-icon too (iOS home screens fill the corners black)
+    for px, name in ((32, "favicon-32.png"), (180, "apple-touch-icon.png"), (512, "icon-512.png")):
+        svg = icon.read_bytes()
         subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), "-o", str(ROOT / "static" / name)],
                        input=svg, check=True)
     print("logo written")
