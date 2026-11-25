@@ -1,0 +1,55 @@
+# Nightly: refresh citation counts, look for new papers and for preprints that have been published, and open a
+# pull request for each (see tools/bot.py). Can also be started by hand from the Actions tab.
+# Repository settings needed: Actions > General > Workflow permissions: "Read and write" and
+# "Allow GitHub Actions to create and approve pull requests".
+name: Publications
+
+on:
+  schedule:
+    - cron: "23 4 * * *"   # every night at 04:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write   # to start the preview workflow for the pull requests it opens
+
+concurrency:
+  group: publications
+  cancel-in-progress: false
+
+jobs:
+  papers:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: |
+          pip install --quiet numpy pillow
+          sudo apt-get install -y --no-install-recommends poppler-utils ghostscript >/dev/null
+
+      - name: Set the bot as committer
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Refresh citation counts
+        run: |
+          python tools/citations.py
+          if ! git diff --quiet data/citations.json; then
+            git add data/citations.json
+            git commit --quiet -m "Update citation counts"
+            git push --quiet origin HEAD:main
+          fi
+
+      - name: Open pull requests for new and newly published papers
+        run: python tools/bot.py

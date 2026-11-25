@@ -1,0 +1,79 @@
+# A preview of every pull request on GitHub Pages, at
+#   https://<owner>.github.io/<repo>/pr-preview/pr-<number>/
+# Built on every push to the pull request, announced in one comment on it (updated, not repeated), and deleted
+# when the pull request is merged or closed. Previews live on the gh-pages branch; Pages must be set to
+# "Deploy from a branch: gh-pages". The publication bot starts this workflow by hand (workflow_dispatch),
+# because pull requests it opens itself do not trigger workflows.
+name: PR preview
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number || inputs.pr }}
+  cancel-in-progress: true
+
+env:
+  HUGO_VERSION: "0.170.1"
+  PR: ${{ github.event.pull_request.number || inputs.pr }}
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  deploy:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ env.PR }}/head
+
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Reuse processed images from earlier builds
+        uses: actions/cache@v4
+        with:
+          path: resources/_gen
+          key: hugo-resources-${{ hashFiles('content/**/*.png', 'content/**/*.jpg', 'assets/**') }}
+          restore-keys: hugo-resources-
+
+      - name: Build
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          repo="${GITHUB_REPOSITORY#*/}"
+          echo "URL=https://${owner}.github.io/${repo}/pr-preview/pr-${PR}/" >> "$GITHUB_ENV"
+          hugo build --gc --minify --environment preview --baseURL "https://${owner}.github.io/${repo}/pr-preview/pr-${PR}/"
+
+      - name: Publish to gh-pages
+        run: ./.github/scripts/pages.sh put "pr-preview/pr-${PR}" public
+
+      - name: Comment on the pull request
+        run: |
+          sha=$(git rev-parse --short HEAD)
+          ./.github/scripts/comment.sh "$PR" "🔍 **Preview:** ${URL}
+
+          Built from ${sha}. It updates with every push (GitHub Pages may take a minute to show it) and is deleted when this pull request is merged or closed."
+
+  remove:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Delete the preview
+        run: ./.github/scripts/pages.sh delete "pr-preview/pr-${PR}"
+      - name: Update the comment
+        run: ./.github/scripts/comment.sh "$PR" "🧹 The preview of this pull request has been deleted."

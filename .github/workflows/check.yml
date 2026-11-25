@@ -1,0 +1,24 @@
+# Builds the site on every push to main, so a broken template, a bad front matter or a Hugo warning shows up
+# right away (pull requests get the same check through their preview build).
+name: Check
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.170.1"
+          extended: true
+      - uses: actions/cache@v4
+        with:
+          path: resources/_gen
+          key: hugo-resources-${{ hashFiles('content/**/*.png', 'content/**/*.jpg', 'assets/**') }}
+          restore-keys: hugo-resources-
+      - name: Build (warnings count as errors)
+        run: hugo build --gc --minify --panicOnWarning

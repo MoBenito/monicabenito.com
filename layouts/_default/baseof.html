@@ -13,6 +13,8 @@
   {{- with .Resources.GetMatch "featured.*" }}{{ with .Fit "1200x630 webp" }}
   <meta property="og:image" content="{{ .Permalink }}">{{ end }}{{ end }}
   <link rel="canonical" href="{{ .Permalink }}">
+  {{- if eq hugo.Environment "preview" }}
+  <meta name="robots" content="noindex, nofollow">{{ end }}
   <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
   <link rel="icon" href="{{ "favicon-32.png" | relURL }}" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
@@ -67,7 +69,7 @@
   <footer class="site-footer">
     <div class="wrap">
       {{ partial "contact.html" . }}
-      <p>© {{ now.Year }} {{ site.Title }} · <a href="{{ "/impressum/" | relURL }}">Impressum</a> · <a href="{{ "/privacy-policy/" | relURL }}">Privacy</a></p>
+      <p>© {{ now.Year }} {{ site.Title }} · <a href="{{ "impressum/" | relURL }}">Impressum</a> · <a href="{{ "privacy-policy/" | relURL }}">Privacy</a></p>
     </div>
   </footer>
   <script>
