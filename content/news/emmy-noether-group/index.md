@@ -1,6 +1,7 @@
 ---
 title: "Emmy Noether group: a spin-based Floquet quantum processor"
 date: "2022-01-01"
+darkFigure: "invert"
 ---
 
 The German Research Foundation (DFG) will fund my Emmy Noether junior research group *[Spin-based Floquet quantum information processor](https://gepris.dfg.de/project/496173695/2?lang=en)*.

@@ -1,6 +1,7 @@
 ---
 title: "Public talk: when spins learn to compute"
 date: "2026-07-02"
+darkFigure: "invert"
 ---
 
 I gave a public talk in the series [Faszination Mathematik und Physik](https://www.uni-a.de/de/fakultaet/mntf/infos/veranstaltungen/faszination/2026/) of the University of Augsburg, in the Zeughaus Augsburg: *Wenn Spins rechnen lernen – Auf dem Weg zu skalierbaren Quantencomputern* (when spins learn to compute: on the way to scalable quantum computers).
