@@ -82,7 +82,16 @@ coloured areas or for renders, so look at the result in dark mode and change `da
 |---|---|---|
 | `.github/workflows/preview.yml` | every pull request | builds the site into `gh-pages` under `pr-preview/pr-<n>/`, comments the link on the PR (one comment, updated), deletes the preview when the PR is merged or closed |
 | `.github/workflows/publications.yml` | nightly, or by hand | refreshes `data/citations.json` (committed to `main`), then `tools/bot.py` opens one PR per new paper (`paper/<id>`) or newly published preprint (`published/<slug>`) and starts its preview |
-| `.github/workflows/check.yml` | push to `main` | builds with `--panicOnWarning` |
+| `.github/workflows/deploy.yml` | push to `main`, after each Publications run, or by hand | builds with `--panicOnWarning` and uploads to the VPS over SSH (`DEPLOY_KEY` secret); see below |
+
+### Hosting (VPS)
+
+- Caddy in Docker (`/opt/web/compose.yml`, `/opt/web/Caddyfile`) serves `/srv/www/current` with automatic HTTPS.
+- The `deploy` user's key may only run `/usr/local/bin/site-receive`: it unpacks the uploaded tar into
+  `/srv/www/releases/<time>`, switches the `current` link at once and keeps the last three versions. To roll back,
+  point `current` at an older release.
+- Until monicabenito.com points to the VPS, the site runs under the VPS's own name with `--environment preview`
+  (noindex). Switching: `SITE_URL`/`SITE_ENV` in `deploy.yml` and the site name in the Caddyfile.
 
 - `tools/papers.py find|add|publish` does the work; `tools/bot.py` only wraps it in branches and PRs. A change is
   proposed once: any PR for it, open, merged or closed, stops it from being proposed again.
