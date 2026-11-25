@@ -1,0 +1,58 @@
+# Builds the site and uploads it to the VPS: on every push to main, after each nightly Publications run (so
+# fresh citation counts go live; its own commits do not trigger workflows), and by hand from the Actions tab.
+# The upload goes over SSH with the DEPLOY_KEY secret to the "deploy" user, whose key can only run
+# /usr/local/bin/site-receive on the VPS (unpacks the upload and switches to it at once; Caddy serves it).
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: [Publications]
+    types: [completed]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  HUGO_VERSION: "0.170.1"
+  HOST: v220261131597565817.hotsrv.de
+  HOST_KEY: "v220261131597565817.hotsrv.de ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5LHaH0UYKBN+Feygkr84BHOpXplQrfPUsqi6+IoQ7"
+  # Until monicabenito.com points to the VPS, the site is served under the VPS's own name and kept out of search
+  # engines ("preview"). To switch: SITE_URL https://monicabenito.com/, SITE_ENV production, and the name in
+  # /opt/web/Caddyfile on the VPS.
+  SITE_URL: https://v220261131597565817.hotsrv.de/
+  SITE_ENV: preview
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - uses: actions/cache@v4
+        with:
+          path: resources/_gen
+          key: hugo-resources-${{ hashFiles('content/**/*.png', 'content/**/*.jpg', 'assets/**') }}
+          restore-keys: hugo-resources-
+
+      - name: Build
+        run: hugo build --gc --minify --panicOnWarning --environment "$SITE_ENV" --baseURL "$SITE_URL"
+
+      - name: Upload to the VPS
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          echo "$HOST_KEY" > ~/.ssh/known_hosts
+          tar -czf - -C public . | ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes -o BatchMode=yes "deploy@$HOST"
