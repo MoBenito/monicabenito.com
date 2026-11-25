@@ -62,7 +62,7 @@ def emmy_noether(c):
     """Spin-based Floquet processor: a row of spins riding a periodic drive, precessing in step with it."""
     out = wave(150, 1450, 640, 70, 2.5, c, 12)
     out += wave(150, 1450, 640, 70, 2.5, c, 4, c["soft"], math.pi)
-    for i, x in enumerate((340, 620, 900, 1180)):
+    for i, x in enumerate((380, 660, 940, 1220)):  # centred on x = 800 like the wave
         tilt = 40 * math.sin(2 * math.pi * 2.5 * (x - 150) / 1300)
         out += f'<line x1="{x}" y1="560" x2="{x}" y2="430" stroke="{c["muted"]}" stroke-width="5" stroke-dasharray="4 14" stroke-linecap="round"/>'
         out += spin(x, 330, 95, tilt, c)
@@ -74,8 +74,8 @@ def professor(c):
     ink, soft = c["ink"], c["soft"]
     out = f'<polygon points="400,330 800,130 1200,330" fill="none" stroke="{ink}" stroke-width="16" stroke-linejoin="round"/>'
     out += f'<rect x="420" y="330" width="760" height="34" rx="6" fill="{ink}"/>'
-    for x in range(480, 1160, 130):
-        out += f'<rect x="{x}" y="390" width="56" height="330" rx="10" fill="{soft}"/>'
+    for i in range(6):  # pillars spaced evenly around the centre line x = 800
+        out += f'<rect x="{800 + (i - 2.5) * 130 - 28:.0f}" y="390" width="56" height="330" rx="10" fill="{soft}"/>'
     out += f'<rect x="380" y="740" width="840" height="34" rx="6" fill="{ink}"/>'
     out += f'<rect x="340" y="790" width="920" height="30" rx="6" fill="{ink}" opacity=".55"/>'
     out += spin(800, 250, 55, 30, c)
