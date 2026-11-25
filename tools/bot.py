@@ -22,7 +22,8 @@ AREA_NAMES = {"spin-quantum-computing": "Spin quantum computing", "topological-m
 
 
 def run(*cmd, capture=False):
-    r = subprocess.run(cmd, cwd=ROOT, check=True, text=True, capture_output=capture)
+    # Only stdout is captured; error messages go straight to the workflow log.
+    r = subprocess.run(cmd, cwd=ROOT, check=True, text=True, stdout=subprocess.PIPE if capture else None)
     return r.stdout.strip() if capture else None
 
 

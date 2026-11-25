@@ -51,7 +51,8 @@ def get(url, as_json=False, tries=4):
             with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
                 data = r.read()
             return json.loads(data) if as_json else data
-        except Exception:
+        except Exception as err:
+            print(f"{url}: {err}", file=sys.stderr)
             if i == tries - 1:
                 raise
             time.sleep(3 * (i + 1))
