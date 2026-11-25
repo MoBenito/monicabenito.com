@@ -190,14 +190,15 @@ def light_matter(c):
     """Light-matter interaction: a spin between the two mirrors of a cavity, inside the photon's standing wave."""
     ink, soft, acc = c["ink"], c["soft"], c["accent"]
     out = ""
-    for x, sweep in ((250, 1), (1350, 0)):  # curved cavity mirrors
-        out += (f'<path d="M{x} 170 A420 420 0 0 {sweep} {x} 790" fill="none" stroke="{ink}" stroke-width="30" '
+    # concave cavity mirrors facing each other, "( )": radius 420 over a 620 px chord, so each bulges 137 px outwards
+    for x_end, sweep in ((337, 0), (1263, 1)):
+        out += (f'<path d="M{x_end} 170 A420 420 0 0 {sweep} {x_end} 790" fill="none" stroke="{ink}" stroke-width="30" '
                 f'stroke-linecap="round"/>')
-    for k in (1, -1):  # standing wave between the mirrors (its envelope)
-        pts = " ".join(f"{300 + 1000 * i / 200:.1f},{480 + k * 200 * math.sin(2 * math.pi * i / 200 * 1.5):.1f}"
+    for k in (1, -1):  # standing wave from mirror to mirror: nodes at the mirrors, antinode at the spin
+        pts = " ".join(f"{200 + 1200 * i / 200:.1f},{480 + k * 200 * math.sin(2 * math.pi * i / 200 * 1.5):.1f}"
                        for i in range(201))
         out += f'<polyline points="{pts}" fill="none" stroke="{acc}" stroke-width="10" opacity=".8"/>'
-    out += f'<line x1="300" y1="480" x2="1300" y2="480" stroke="{soft}" stroke-width="6" stroke-dasharray="4 18"/>'
+    out += f'<line x1="200" y1="480" x2="1400" y2="480" stroke="{soft}" stroke-width="6" stroke-dasharray="4 18"/>'
     out += spin(800, 480, 95, 30, c)
     return out
 
