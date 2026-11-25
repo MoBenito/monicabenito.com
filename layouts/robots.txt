@@ -1,0 +1,8 @@
+User-agent: *
+{{- if eq hugo.Environment "preview" }}
+Disallow: /
+{{- else }}
+Allow: /
+{{- end }}
+
+Sitemap: {{ "sitemap.xml" | absURL }}

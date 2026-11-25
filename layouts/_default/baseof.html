@@ -4,14 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
-  {{- $desc := cond .IsHome site.Params.description (.Summary | plainify | truncate 160) }}
+  {{- $desc := cond .IsHome site.Params.description (or .Description (.Summary | plainify | replaceRE `\s+` " " | truncate 160)) }}
   <meta name="description" content="{{ $desc }}">
   <meta property="og:title" content="{{ .Title }}">
   <meta property="og:description" content="{{ $desc }}">
   <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
   <meta property="og:url" content="{{ .Permalink }}">
-  {{- with .Resources.GetMatch "featured.*" }}{{ with .Fit "1200x630 webp" }}
-  <meta property="og:image" content="{{ .Permalink }}">{{ end }}{{ end }}
+  {{- partial "seo.html" . }}
   <link rel="canonical" href="{{ .Permalink }}">
   {{- if eq hugo.Environment "preview" }}
   <meta name="robots" content="noindex, nofollow">{{ end }}

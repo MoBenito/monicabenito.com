@@ -24,6 +24,7 @@ The tools need Python with fontTools, numpy and Pillow; `logo.py` also needs `rs
 | `content/publications/<slug>/` | One folder per paper: `index.md` and `featured.png` |
 | `content/news/<slug>/`, `content/research/<slug>/` | News posts and the three research areas, same pattern |
 | `layouts/` | All templates. Lists use the shared card partials `pub-item.html` and `news-item.html` |
+| `layouts/partials/seo.html` | Share image, schema.org data (Person on the home page, ScholarlyArticle per paper) and Google Scholar `citation_*` tags; built from the front matter, nothing to fill in by hand. List pages take their meta description from `description:` |
 | `layouts/partials/featured.html` | Picks the light or dark figure; always use it instead of rendering `featured.*` directly |
 | `assets/css/main.css` | The only stylesheet. Colours are tokens on `:root`, redefined for dark mode |
 | `static/` | Favicons and the self-hosted heading font |

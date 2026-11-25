@@ -1,0 +1,80 @@
+{{- /* Search-engine metadata in <head>: a share image, structured data (schema.org JSON-LD) and, on publication
+       pages, the citation_* tags Google Scholar reads. Context: the page. */ -}}
+{{- $portrait := site.Home.Resources.GetMatch "portrait.*" }}
+
+{{- /* Share image: the paper's figure, otherwise the portrait (JPEG, which every link preview can show) */}}
+{{- $img := "" }}
+{{- with .Resources.GetMatch "featured.*" }}{{ $img = .Fit "1200x630 webp" }}{{ end }}
+{{- if and (not $img) $portrait }}{{ $img = $portrait.Fill "630x630 jpg Center" }}{{ end }}
+{{- with $img }}
+<meta property="og:image" content="{{ .Permalink }}">
+<meta property="og:image:width" content="{{ .Width }}">
+<meta property="og:image:height" content="{{ .Height }}">
+<meta name="twitter:card" content="{{ if gt .Width .Height }}summary_large_image{{ else }}summary{{ end }}">
+{{- end }}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:locale" content="en_GB">
+
+{{- $person := dict
+  "@type" "Person"
+  "@id" (print site.Home.Permalink "#person")
+  "name" site.Params.authorName
+  "alternateName" "Monica Benito"
+  "url" site.Home.Permalink
+  "jobTitle" "Professor of Theoretical Physics"
+  "worksFor" (dict "@type" "CollegeOrUniversity" "name" "University of Augsburg" "url" "https://www.uni-augsburg.de/")
+  "sameAs" (slice site.Params.orcid site.Params.scholar site.Params.linkedin site.Params.group)
+}}
+{{- with $portrait }}{{ $person = merge $person (dict "image" (.Fill "600x600 jpg Center").Permalink) }}{{ end }}
+
+{{- $data := "" }}
+{{- if .IsHome }}
+  {{- $data = dict "@context" "https://schema.org" "@graph" (slice
+        $person
+        (dict "@type" "WebSite" "@id" (print site.Home.Permalink "#website") "url" site.Home.Permalink "name" site.Title
+              "about" (dict "@id" (print site.Home.Permalink "#person")))
+        (dict "@type" "ProfilePage" "url" site.Home.Permalink "mainEntity" (dict "@id" (print site.Home.Permalink "#person")))) }}
+{{- else if and .IsPage (eq .Section "publications") }}
+  {{- $authors := slice }}
+  {{- range .Params.authors }}
+    {{- if in site.Params.authorAliases . }}{{ $authors = $authors | append (dict "@id" (print site.Home.Permalink "#person")) }}
+    {{- else }}{{ $authors = $authors | append (dict "@type" "Person" "name" .) }}{{ end }}
+  {{- end }}
+  {{- $same := slice }}
+  {{- with .Params.doi }}{{ $same = $same | append (print "https://doi.org/" .) }}{{ end }}
+  {{- with .Params.arxiv }}{{ $same = $same | append (print "https://arxiv.org/abs/" .) }}{{ end }}
+  {{- $article := dict "@context" "https://schema.org" "@type" "ScholarlyArticle" "headline" .Title "name" .Title
+        "url" .Permalink "author" $authors "datePublished" (.Date.Format "2006-01-02")
+        "abstract" (.Plain | strings.TrimSpace) "sameAs" $same "isAccessibleForFree" true }}
+  {{- with .Params.doi }}{{ $article = merge $article (dict "identifier" (dict "@type" "PropertyValue" "propertyID" "DOI" "value" .)) }}{{ end }}
+  {{- with .Params.journal }}{{ $article = merge $article (dict "isPartOf" (dict "@type" "Periodical" "name" .)) }}{{ end }}
+  {{- with $img }}{{ $article = merge $article (dict "image" .Permalink) }}{{ end }}
+  {{- $data = $article }}
+{{- else if .IsPage }}
+  {{- $data = dict "@context" "https://schema.org" "@type" (cond (eq .Section "news") "NewsArticle" "WebPage")
+        "headline" .Title "url" .Permalink "author" (dict "@id" (print site.Home.Permalink "#person"))
+        "datePublished" (.Date.Format "2006-01-02") }}
+{{- end }}
+{{- with $data }}
+<script type="application/ld+json">{{ . | jsonify | safeJS }}</script>
+{{- end }}
+
+{{- /* Google Scholar (https://scholar.google.com/intl/en/scholar/inclusion.html#indexing) */}}
+{{- if and .IsPage (eq .Section "publications") }}
+<meta name="citation_title" content="{{ .Title }}">
+{{- range .Params.authors }}
+<meta name="citation_author" content="{{ . }}">
+{{- end }}
+<meta name="citation_publication_date" content="{{ .Date.Format "2006/01/02" }}">
+{{- with .Params.journal }}
+<meta name="citation_journal_title" content="{{ . }}">{{ end }}
+{{- with .Params.volume }}
+<meta name="citation_volume" content="{{ . }}">{{ end }}
+{{- with .Params.pages }}
+<meta name="citation_firstpage" content="{{ index (split . "-") 0 }}">{{ end }}
+{{- with .Params.doi }}
+<meta name="citation_doi" content="{{ . }}">{{ end }}
+{{- with .Params.arxiv }}
+<meta name="citation_arxiv_id" content="{{ . }}">{{ end }}
+<meta name="citation_abstract_html_url" content="{{ .Permalink }}">
+{{- end }}
