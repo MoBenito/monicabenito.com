@@ -102,11 +102,13 @@ def wordmark(size=100, pad=14):
             f'<path fill="currentColor" d="{" ".join(letters)}"/>{"".join(spins)}</svg>\n')
 
 
-def favicon(background=None):
-    """A bold white MB filling a full-size spin ball; the M's right stroke grows up into the spin arrow.
-    Made to stay readable at 16 px in a browser tab: no equator (too fine to see), and a darker highlight than
-    the logo so the M keeps its contrast. `background` fills the square behind the ball (for app icons, which
-    iOS would otherwise show on black)."""
+def favicon(background=None, width=330, tip_radius=300):
+    """A bold white MB, centred in a full-size spin ball; the M's right diagonal shoots out as the spin arrow,
+    its tip leaving the ball towards the top right corner (outside the ball it is teal, so it shows on light
+    and dark tab bars). Made to stay readable at 16 px in a browser tab: no equator (too fine to see), and a
+    darker highlight than the logo so the M keeps its contrast. `width` is the letters' span in px, `tip_radius`
+    the arrow tip's distance from the centre (the ball's radius is 256). `background` fills the square behind
+    the ball and shrinks the picture a little (for app icons, which iOS shows on black and with round corners)."""
     bold = instantiateVariableFont(TTFont(FONT_FILE), {"wght": 700})
     gs, cmap = bold.getGlyphSet(), bold.getBestCmap()
     bounds = {}
@@ -114,29 +116,46 @@ def favicon(background=None):
         bp = BoundsPen(gs)
         gs[cmap[ord(ch)]].draw(bp)
         bounds[ch] = bp.bounds
-    upm = bold["head"].unitsPerEm
-    gap = 0.04 * upm
-    ink = (bounds["M"][2] - bounds["M"][0]) + gap + (bounds["B"][2] - bounds["B"][0])
-    s = 360 / ink  # the letters span 360 of the 512 px
-    x, baseline = 256 - 180, 380
+    gap = 0.04 * bold["head"].unitsPerEm
+    s = width / ((bounds["M"][2] - bounds["M"][0]) + gap + (bounds["B"][2] - bounds["B"][0]))
+    left, baseline = 256 - width / 2, 256 + bounds["M"][3] * s / 2  # centred on the cap height
     pen = SVGPathPen(gs)
+    x = left
     for ch in "MB":
         gs[cmap[ord(ch)]].draw(TransformPen(pen, (s, 0, 0, -s, x - bounds[ch][0] * s, baseline)))
         x += (bounds[ch][2] - bounds[ch][0] + gap) * s
-    # the arrow: the M's right stem (font units: x 634 to 790.5, top 706) extended up, with a head on top
-    m_x = 256 - 180 - bounds["M"][0] * s
-    X, Y = (lambda u: m_x + u * s), (lambda v: baseline - v * s)
-    left, right, top, head_h, head_w = 634, 790.5, 906, 250, 420
-    mid = (left + right) / 2
-    arrow_path = (f'M{X(left):.1f} {Y(600):.1f}V{Y(top):.1f}H{X(right):.1f}V{Y(600):.1f}Z'
-                  f'M{X(mid - head_w / 2):.1f} {Y(top - 2):.1f}L{X(mid):.1f} {Y(top + head_h):.1f}'
-                  f'L{X(mid + head_w / 2):.1f} {Y(top - 2):.1f}Z')
+    # The arrow continues the M's right diagonal past its top corner. In Outfit Bold (font units) that stroke
+    # lies between the line (400.5, 272.5)-(678, 706) and the parallel line through (481, 152).
+    (ax, ay), (bx, by), (qx, qy) = (400.5, 272.5), (678, 706), (481, 152)
+    length = math.hypot(bx - ax, by - ay)
+    ux, uy = (bx - ax) / length, (by - ay) / length   # along the stroke, up and to the right
+    nx, ny = uy, -ux                                  # across it
+    stroke = (qx - ax) * nx + (qy - ay) * ny
+    cx0, cy0 = ax + nx * stroke / 2, ay + ny * stroke / 2
+
+    def px(t, off=0.0):  # t along the stroke's centre line, off across it (font units) -> picture px
+        fx, fy = cx0 + ux * t + nx * off, cy0 + uy * t + ny * off
+        return left + (fx - bounds["M"][0]) * s, baseline - fy * s
+
+    head_len, head_w = 290, 430
+    lo, hi = length, length + 3000  # find the shaft length that puts the tip at tip_radius
+    for _ in range(50):
+        mid = (lo + hi) / 2
+        tx, ty = px(mid + head_len)
+        lo, hi = (mid, hi) if math.hypot(tx - 256, ty - 256) < tip_radius else (lo, mid)
+    end = lo
+    arrow_d = "M" + "L".join("{:.1f} {:.1f}".format(*px(t, off)) for t, off in (
+        (300, -stroke / 2), (end, -stroke / 2), (end, -head_w / 2), (end + head_len, 0),
+        (end, head_w / 2), (end, stroke / 2), (300, stroke / 2))) + "Z"
     shade = (f'<radialGradient id="f" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#2a9e83"/>'
-             f'<stop offset=".55" stop-color="{TEAL}"/><stop offset="1" stop-color="{TEAL_D}"/></radialGradient>')
-    back = f'<rect width="512" height="512" fill="{background}"/>' if background else ""
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>{shade}</defs>{back}'
-            f'<circle cx="256" cy="256" r="{232 if background else 256}" fill="url(#f)"/>'
-            f'<path fill="#fff" d="{pen.getCommands()}{arrow_path}"/></svg>\n')
+             f'<stop offset=".55" stop-color="{TEAL}"/><stop offset="1" stop-color="{TEAL_D}"/></radialGradient>'
+             f'<clipPath id="ball"><circle cx="256" cy="256" r="256"/></clipPath>')
+    picture = (f'<circle cx="256" cy="256" r="256" fill="url(#f)"/><path fill="{TEAL}" d="{arrow_d}"/>'
+               f'<path fill="#fff" clip-path="url(#ball)" d="{pen.getCommands()}{arrow_d}"/>')
+    if background:
+        picture = (f'<rect width="512" height="512" fill="{background}"/>'
+                   f'<g transform="translate(256 256) scale(.84) translate(-256 -256)">{picture}</g>')
+    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>{shade}</defs>{picture}</svg>\n'
 
 
 if __name__ == "__main__":
