@@ -24,18 +24,21 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  HUGO_VERSION: "0.170.1"
   PR: ${{ github.event.pull_request.number || inputs.pr }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+# Dependabot's pull requests only touch workflow versions and get a read-only token, so they get no preview.
 jobs:
   deploy:
-    if: github.event.action != 'closed'
+    if: github.event.action != 'closed' && github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: refs/pull/${{ env.PR }}/head
+
+      - name: Hugo version (from .hugo-version, kept current by update-hugo.yml)
+        run: echo "HUGO_VERSION=$(cat .hugo-version)" >> "$GITHUB_ENV"
 
       - uses: peaceiris/actions-hugo@v3
         with:
@@ -67,7 +70,7 @@ jobs:
           Built from ${sha}. It updates with every push (GitHub Pages may take a minute to show it) and is deleted when this pull request is merged or closed."
 
   remove:
-    if: github.event.action == 'closed'
+    if: github.event.action == 'closed' && github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -1,0 +1,13 @@
+# Keeps the GitHub Actions used by the workflows up to date: one grouped pull request per month at most.
+# (Hugo and KaTeX are kept current by .github/workflows/update-hugo.yml; Dependabot cannot update them.)
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "Update actions"

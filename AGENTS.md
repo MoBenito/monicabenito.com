@@ -84,6 +84,8 @@ coloured areas or for renders, so look at the result in dark mode and change `da
 | `.github/workflows/publications.yml` | nightly, or by hand | refreshes `data/citations.json` (committed to `main`), then `tools/bot.py` opens one PR per new paper (`paper/<id>`) or newly published preprint (`published/<slug>`) and starts its preview |
 | `.github/workflows/deploy.yml` | push to `main`, after each Publications run, or by hand | builds with `--panicOnWarning` and uploads to the VPS over SSH (`DEPLOY_KEY` secret); see below |
 | `.github/workflows/pr-form.yml` | a new-paper PR's description is edited, or files are pushed to it | keeps the description form and the page files in step (see below) |
+| `.github/workflows/update-hugo.yml` | monthly, or by hand | if Hugo has a new release: PR that changes `.hugo-version` (read by all workflows) and, if its built-in KaTeX changed, replaces `static/katex/` (`tools/update_hugo.py`) |
+| `.github/dependabot.yml` | monthly | one grouped PR updating the GitHub Actions the workflows use (no preview: Dependabot PRs get a read-only token) |
 
 - New-paper PR descriptions are an editing form (`tools/prform.py`, workflow `.github/workflows/pr-form.yml`):
   figure in light and dark mode, checkboxes for the dark-mode setting and the research areas, and the page text
@@ -102,6 +104,9 @@ coloured areas or for renders, so look at the result in dark mode and change `da
 ### Hosting (VPS)
 
 - Caddy in Docker (`/opt/web/compose.yml`, `/opt/web/Caddyfile`) serves `/srv/www/current` with automatic HTTPS.
+- Updates: Debian and Docker through unattended-upgrades. Container images (Caddy, later Pangolin) are to be watched
+  and updated by What's Up Docker on the home server over a private WireGuard link (planned with Pangolin); until
+  then update by hand: `cd /opt/web && docker compose pull && docker compose up -d`.
 - The `deploy` user's key may only run `/usr/local/bin/site-receive`: it unpacks the uploaded tar into
   `/srv/www/releases/<time>`, switches the `current` link at once and keeps the last three versions. To roll back,
   point `current` at an older release.

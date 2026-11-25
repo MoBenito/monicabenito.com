@@ -1,0 +1,45 @@
+# Once a month: if there is a newer Hugo, open a pull request that switches .hugo-version to it (and swaps the
+# KaTeX styles if the new Hugo uses another KaTeX, see tools/update_hugo.py). Its preview is the test: if the
+# preview builds and looks right, merge. Closing the pull request skips that Hugo version for good.
+name: Update Hugo
+
+on:
+  schedule:
+    - cron: "41 5 3 * *"   # 05:41 UTC on the 3rd of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write   # to start the preview of the pull request it opens
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Update and open a pull request
+        run: |
+          out=$(python tools/update_hugo.py)
+          [ -n "$out" ] || { echo "Hugo is up to date"; exit 0; }
+          to=$(echo "$out" | python -c 'import json,sys; print(json.load(sys.stdin)["to"])')
+          branch="update/hugo-$to"
+          if [ -n "$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --state all --json number --jq '.[].number')" ]; then
+            echo "Hugo $to was already proposed"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add -A .hugo-version static/katex
+          git commit --quiet -m "Update Hugo to $to"
+          git push --quiet origin "$branch"
+          body=$(echo "$out" | python -c 'import json,sys; print(json.load(sys.stdin)["body"])')
+          url=$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" --title "Update Hugo to $to" --body "$body")
+          gh workflow run preview.yml --repo "$GITHUB_REPOSITORY" --ref main -f pr="${url##*/}"
