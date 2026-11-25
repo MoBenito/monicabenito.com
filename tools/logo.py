@@ -102,29 +102,50 @@ def wordmark(size=100, pad=14):
             f'<path fill="currentColor" d="{" ".join(letters)}"/>{"".join(spins)}</svg>\n')
 
 
-def favicon():
-    """Spin ball with a white MB inside; the arrow passes behind the letters."""
-    cx, cy, r, size = 236, 276, 200, 190
-    t = math.radians(30)
-    ux, uy = math.sin(t), -math.cos(t)
-    width = 26
-    back = arrow(cx, cy, r, 30, 1.2, 1.22, width, 0.3 * r, 0.17 * r, ARROW_ON_ICON)
-    mb_w = advance("M", size) + advance("B", size)
-    x0, baseline = cx - mb_w / 2, cy + 0.35 * size
-    letters = glyph("M", x0, baseline, size) + glyph("B", x0 + advance("M", size), baseline, size)
-    front = "".join(  # the arrow's visible pieces in front of the sphere, near its rim
-        f'<line x1="{cx + ux * a * r:.1f}" y1="{cy + uy * a * r:.1f}" x2="{cx + ux * b * r:.1f}" '
-        f'y2="{cy + uy * b * r:.1f}" stroke="{ARROW_ON_ICON}" stroke-width="{width}"/>'
-        for a, b in ((0.62, 1.0), (-1.0, -0.75)))
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>{gradient("f")}</defs>'
-            f'{back}{sphere(cx, cy, r, "f", 0.3)}<path fill="#fff" d="{letters}"/>{front}</svg>\n')
+def favicon(background=None):
+    """A bold white MB filling a full-size spin ball; the M's right stroke grows up into the spin arrow.
+    Made to stay readable at 16 px in a browser tab: no equator (too fine to see), and a darker highlight than
+    the logo so the M keeps its contrast. `background` fills the square behind the ball (for app icons, which
+    iOS would otherwise show on black)."""
+    bold = instantiateVariableFont(TTFont(FONT_FILE), {"wght": 700})
+    gs, cmap = bold.getGlyphSet(), bold.getBestCmap()
+    bounds = {}
+    for ch in "MB":
+        bp = BoundsPen(gs)
+        gs[cmap[ord(ch)]].draw(bp)
+        bounds[ch] = bp.bounds
+    upm = bold["head"].unitsPerEm
+    gap = 0.04 * upm
+    ink = (bounds["M"][2] - bounds["M"][0]) + gap + (bounds["B"][2] - bounds["B"][0])
+    s = 360 / ink  # the letters span 360 of the 512 px
+    x, baseline = 256 - 180, 380
+    pen = SVGPathPen(gs)
+    for ch in "MB":
+        gs[cmap[ord(ch)]].draw(TransformPen(pen, (s, 0, 0, -s, x - bounds[ch][0] * s, baseline)))
+        x += (bounds[ch][2] - bounds[ch][0] + gap) * s
+    # the arrow: the M's right stem (font units: x 634 to 790.5, top 706) extended up, with a head on top
+    m_x = 256 - 180 - bounds["M"][0] * s
+    X, Y = (lambda u: m_x + u * s), (lambda v: baseline - v * s)
+    left, right, top, head_h, head_w = 634, 790.5, 906, 250, 420
+    mid = (left + right) / 2
+    arrow_path = (f'M{X(left):.1f} {Y(600):.1f}V{Y(top):.1f}H{X(right):.1f}V{Y(600):.1f}Z'
+                  f'M{X(mid - head_w / 2):.1f} {Y(top - 2):.1f}L{X(mid):.1f} {Y(top + head_h):.1f}'
+                  f'L{X(mid + head_w / 2):.1f} {Y(top - 2):.1f}Z')
+    shade = (f'<radialGradient id="f" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#2a9e83"/>'
+             f'<stop offset=".55" stop-color="{TEAL}"/><stop offset="1" stop-color="{TEAL_D}"/></radialGradient>')
+    back = f'<rect width="512" height="512" fill="{background}"/>' if background else ""
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>{shade}</defs>{back}'
+            f'<circle cx="256" cy="256" r="{232 if background else 256}" fill="url(#f)"/>'
+            f'<path fill="#fff" d="{pen.getCommands()}{arrow_path}"/></svg>\n')
 
 
 if __name__ == "__main__":
     (ROOT / "layouts" / "partials" / "logo.html").write_text(wordmark())
     icon = ROOT / "static" / "favicon.svg"
     icon.write_text(favicon())
-    for px, name in ((32, "favicon-32.png"), (180, "apple-touch-icon.png"), (512, "icon-512.png")):
-        subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), "-o", str(ROOT / "static" / name), str(icon)],
-                       check=True)
+    on_light = favicon(background="#fbfcfb").encode()  # home-screen icons get a square background
+    for px, name, svg in ((32, "favicon-32.png", icon.read_bytes()), (180, "apple-touch-icon.png", on_light),
+                          (512, "icon-512.png", on_light)):
+        subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), "-o", str(ROOT / "static" / name)],
+                       input=svg, check=True)
     print("logo written")
