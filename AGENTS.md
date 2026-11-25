@@ -90,8 +90,8 @@ coloured areas or for renders, so look at the result in dark mode and change `da
 - The `deploy` user's key may only run `/usr/local/bin/site-receive`: it unpacks the uploaded tar into
   `/srv/www/releases/<time>`, switches the `current` link at once and keeps the last three versions. To roll back,
   point `current` at an older release.
-- Until monicabenito.com points to the VPS, the site runs under the VPS's own name with `--environment preview`
-  (noindex). Switching: `SITE_URL`/`SITE_ENV` in `deploy.yml` and the site name in the Caddyfile.
+- DNS at netcup: only `@` A/AAAA point to the VPS. The `*` wildcard and MX stay on the old netcup web hosting,
+  which still runs the monicabenito.com email (`mail.monicabenito.com` resolves through the wildcard).
 
 - `tools/papers.py find|add|publish` does the work; `tools/bot.py` only wraps it in branches and PRs. A change is
   proposed once: any PR for it, open, merged or closed, stops it from being proposed again.
