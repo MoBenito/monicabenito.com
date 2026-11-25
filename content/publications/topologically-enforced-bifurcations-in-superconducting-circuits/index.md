@@ -13,6 +13,7 @@ doi: "10.1103/physrevlett.118.197702"
 arxiv: "1611.01467"
 research:
   - "topological-matter"
+  - "light-matter-interaction"
 summary: "A nonlinear topological insulator in superconducting circuits, whose topology shows up as bifurcations and chaos."
 aliases:
   - "/topologically-enforced-bifurcations-in-superconducting-circuits/"
