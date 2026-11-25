@@ -186,7 +186,23 @@ def qsit_award(c):
     return out
 
 
+def keynote_vek(c):
+    """Keynote on simulating scalable quantum computers: a lectern next to a screen showing a grid of spins."""
+    ink, soft, paper = c["ink"], c["soft"], c["paper"]
+    out = f'<rect x="560" y="90" width="900" height="560" rx="24" fill="{paper}" stroke="{ink}" stroke-width="14"/>'
+    for row in range(3):
+        for col in range(5):
+            x, y = 720 + col * 145, 210 + row * 160
+            out += spin(x, y, 46, ((row * 5 + col) * 47) % 120 - 60, c)
+    out += (f'<polygon points="170,520 450,520 420,820 200,820" fill="{soft}"/>'
+            f'<rect x="140" y="480" width="340" height="50" rx="12" fill="{ink}"/>'
+            f'<line x1="310" y1="480" x2="360" y2="400" stroke="{ink}" stroke-width="10" stroke-linecap="round"/>'
+            f'<circle cx="365" cy="392" r="16" fill="{ink}"/>')
+    return out
+
+
 PICTURES = {
+    "keynote-virtual-engine-conference-2026": keynote_vek,
     "new-website": new_website,
     "open-positions": open_positions,
     "qsit-inspire-postdoc-award": qsit_award,
