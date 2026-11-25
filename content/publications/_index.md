@@ -1,5 +1,6 @@
 ---
 title: "Publications"
+description: "Publications of Mónica Benito on spin qubits, circuit QED, topological matter and open quantum systems, with links to the journal, arXiv and citations."
 aliases:
   - "/category/publications/"
 cascade:
