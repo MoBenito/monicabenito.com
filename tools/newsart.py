@@ -137,7 +137,59 @@ def public_talk(c):
     return out
 
 
+def new_website(c):
+    """New website: a browser window and a phone showing the spin, the browser half light, half dark."""
+    ink, soft, paper = c["ink"], c["soft"], c["paper"]
+    out = (f'<clipPath id="win"><rect x="230" y="130" width="860" height="620" rx="30"/></clipPath>'
+           f'<g clip-path="url(#win)"><rect x="230" y="130" width="430" height="620" fill="#ffffff"/>'
+           f'<rect x="660" y="130" width="430" height="620" fill="#0f1412"/></g>'
+           f'<rect x="230" y="130" width="860" height="620" rx="30" fill="none" stroke="{ink}" stroke-width="14"/>'
+           f'<line x1="230" y1="220" x2="1090" y2="220" stroke="{ink}" stroke-width="12"/>')
+    for i in range(3):
+        out += f'<circle cx="{290 + i * 46}" cy="175" r="14" fill="{soft}"/>'
+    out += spin(660, 470, 120, 30, {**c, "ink": TEAL})  # teal arrow: shows on both halves
+    # the phone, overlapping the browser's lower right corner
+    out += (f'<rect x="1080" y="330" width="300" height="520" rx="44" fill="{paper}" stroke="{ink}" stroke-width="14"/>'
+            f'<line x1="1185" y1="380" x2="1275" y2="380" stroke="{soft}" stroke-width="12" stroke-linecap="round"/>')
+    out += spin(1230, 600, 70, -30, c)
+    return f'<g transform="translate(-5 0)">{out}</g>'  # browser + phone span 230..1380: centre them
+
+
+def open_positions(c):
+    """Open positions: a row of spins with free places, one of them waiting with a plus."""
+    ink, muted, acc = c["ink"], c["muted"], c["accent"]
+    out = ""
+    for i, x in enumerate(range(260, 1400, 270)):
+        if i in (1, 3):
+            out += (f'<circle cx="{x}" cy="450" r="100" fill="none" stroke="{muted}" stroke-width="10" '
+                    f'stroke-dasharray="22 18"/>'
+                    f'<path d="M{x - 40} 450 h80 M{x} 410 v80" stroke="{acc}" stroke-width="16" stroke-linecap="round"/>')
+        else:
+            out += spin(x, 450, 100, (-25, 0, 25)[i // 2], c)
+    return out
+
+
+def qsit_award(c):
+    """Postdoc award: a medal whose face is a spin, on two ribbons."""
+    ink, soft, acc = c["ink"], c["soft"], c["accent"]
+    out = (f'<polygon points="690,90 790,90 860,420 760,420" fill="{acc}" opacity=".75"/>'
+           f'<polygon points="910,90 810,90 740,420 840,420" fill="{acc}"/>')
+    rays = 24
+    pts = []
+    for k in range(2 * rays):
+        r = 230 if k % 2 == 0 else 200
+        a = math.pi * k / rays
+        pts.append(f"{800 + r * math.sin(a):.1f},{560 - r * math.cos(a):.1f}")
+    out += f'<polygon points="{" ".join(pts)}" fill="{soft}"/>'
+    out += f'<circle cx="800" cy="560" r="180" fill="none" stroke="{ink}" stroke-width="12"/>'
+    out += spin(800, 560, 105, 30, c)
+    return out
+
+
 PICTURES = {
+    "new-website": new_website,
+    "open-positions": open_positions,
+    "qsit-inspire-postdoc-award": qsit_award,
     "emmy-noether-group": emmy_noether,
     "professor-in-augsburg": professor,
     "qukit-eic-pathfinder": qukit,
