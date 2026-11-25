@@ -38,6 +38,14 @@ ignoreFiles = ["\\.mode$"]
 [markup.goldmark.renderer]
   unsafe = false
 
+# LaTeX in Markdown: $...$ or \(...\) inline, $$...$$ or \[...\] on its own line. Rendered to MathML while the
+# site is built (layouts/_default/_markup/render-passthrough.html), so pages need no JavaScript or extra fonts.
+[markup.goldmark.extensions.passthrough]
+  enable = true
+  [markup.goldmark.extensions.passthrough.delimiters]
+    block = [['\[', '\]'], ['$$', '$$']]
+    inline = [['\(', '\)'], ['$', '$']]
+
 [imaging]
   resampleFilter = "Lanczos"
   [imaging.webp]

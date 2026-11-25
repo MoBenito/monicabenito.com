@@ -121,6 +121,9 @@ coloured areas or for renders, so look at the result in dark mode and change `da
   `layouts/publications/single.bibtex.bib` and `single.ris.ris`, key from `partials/cite-key.html`); they are
   built from the front matter, so keep authors, journal, volume, pages, DOI and arXiv correct.
 - Keep old WordPress addresses working through `aliases`.
+- Formulas: LaTeX in Markdown, `$...$` inline and `$$...$$` as a block. Hugo renders them with KaTeX while building
+  (`layouts/_default/_markup/render-passthrough.html`); pages with formulas load `static/katex/katex.min.css`. A dollar
+  sign in normal text must be escaped as `\$`.
 - After editing CSS, make sure braces are balanced: a stray `}` silently drops the next rule.
 
 ## Before finishing a change

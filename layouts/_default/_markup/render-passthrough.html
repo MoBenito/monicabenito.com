@@ -1,0 +1,13 @@
+{{- /* LaTeX between $...$ / $$...$$ (see [markup.goldmark.extensions.passthrough] in hugo.toml), rendered while the
+       site is built by Hugo's built-in KaTeX: no JavaScript in the browser. The page then loads
+       static/katex/katex.min.css (its fonts load only as needed), see baseof.html; the MathML copy is for screen
+       readers. A formula KaTeX cannot read fails the build, with the formula's position in the message. */ -}}
+{{- $opts := dict "output" "htmlAndMathml" "displayMode" (eq .Type "block") "throwOnError" true }}
+{{- with try (transform.ToMath .Inner $opts) }}
+  {{- with .Err }}
+    {{- errorf "LaTeX in %s: %s" $.Position . }}
+  {{- else }}
+    {{- $.Page.Store.Set "hasMath" true }}
+    {{- if eq $.Type "block" }}<div class="math-block">{{ .Value }}</div>{{ else }}{{ .Value }}{{ end }}
+  {{- end }}
+{{- end -}}

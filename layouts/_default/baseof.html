@@ -25,6 +25,17 @@
   <link rel="preload" href="{{ "fonts/outfit.woff" | relURL }}" as="font" type="font/woff" crossorigin>
   {{- $css := resources.Get "css/main.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  {{- /* KaTeX styles only where formulas are shown: this page's text, or (on lists) a listed page's summary.
+         render-passthrough.html marks a page when it renders a formula; .Summary renders it if needed. */}}
+  {{- if .IsPage }}{{ $_ := .Content }}{{ end }}
+  {{- $math := .Store.Get "hasMath" }}
+  {{- if not .IsPage }}
+    {{- range cond .IsHome site.RegularPages .RegularPagesRecursive }}
+      {{- $_ := .Summary }}{{ if .Store.Get "hasMath" }}{{ $math = true }}{{ break }}{{ end }}
+    {{- end }}
+  {{- end }}
+  {{- if $math }}
+  <link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">{{ end }}
   {{- /* Apply a saved light/dark choice before the page paints, so it doesn't flash */}}
   <script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
