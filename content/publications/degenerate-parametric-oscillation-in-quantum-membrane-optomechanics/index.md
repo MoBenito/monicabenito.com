@@ -12,6 +12,7 @@ doi: "10.1103/physreva.93.023846"
 arxiv: "1506.08157"
 research:
   - "open-systems-dynamics"
+  - "light-matter-interaction"
 summary: "Degenerate parametric oscillation, one of the most elusive models in the field of open system dynamics, can be implemented in modern optomechanical setups."
 aliases:
   - "/degenerate-parametric-oscillation-in-quantum-membrane-optomechanics/"

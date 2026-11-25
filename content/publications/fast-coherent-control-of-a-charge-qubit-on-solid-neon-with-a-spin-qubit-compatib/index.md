@@ -15,6 +15,7 @@ authors:
 arxiv: "2605.31185"
 research:
   - "spin-quantum-computing"
+  - "light-matter-interaction"
 summary: "A charge qubit on solid neon with fast coherent control, coupled to a magnetic-field-compatible resonator."
 darkFigure: "invert"
 ---

@@ -14,6 +14,7 @@ doi: "10.1103/physrevb.96.235434"
 arxiv: "1710.02508"
 research:
   - "spin-quantum-computing"
+  - "light-matter-interaction"
 summary: "The recent advances in Si DQDs fabrication and control, a spin-photon coupling of more than 10 MHz with a sufficiently low spin decoherence rate is achievable, potentially allowing the strong-coupling regime and paving the way towards a spin-based quantum processor with full connectivity."
 aliases:
   - "/input-output-theory-for-spin-photon-coupling-in-si-double-quantum-dots/"

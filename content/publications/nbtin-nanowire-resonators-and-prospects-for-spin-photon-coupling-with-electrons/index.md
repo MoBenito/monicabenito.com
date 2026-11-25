@@ -21,6 +21,7 @@ doi: "10.1103/jq9v-n4rn"
 arxiv: "2505.24303"
 research:
   - "spin-quantum-computing"
+  - "light-matter-interaction"
 summary: "Superconducting NbTiN nanowire resonators keep their high quality on solid neon, a step toward spin qubits with electrons on neon."
 darkFigure: "invert"
 ---

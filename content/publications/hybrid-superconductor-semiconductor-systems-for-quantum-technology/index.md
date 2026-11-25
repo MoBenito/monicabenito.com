@@ -11,6 +11,7 @@ doi: "10.1063/5.0004777"
 arxiv: "2005.00030"
 research:
   - "spin-quantum-computing"
+  - "light-matter-interaction"
 summary: "Perspectives article in Applied Physics Letters special topic Hybrid Quantum Devices. We summarize recent progress and theoretical models that describe superconducting-semiconducting hybrid quantum systems, explain the limitations of these systems, and describe different directions where future experiments and theory are headed."
 aliases:
   - "/this-is-my-super-awesome-publication/"

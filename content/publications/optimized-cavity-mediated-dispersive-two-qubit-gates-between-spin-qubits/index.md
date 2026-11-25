@@ -12,6 +12,7 @@ doi: "10.1103/physrevb.100.081412"
 arxiv: "1902.07649"
 research:
   - "spin-quantum-computing"
+  - "light-matter-interaction"
 summary: "Performance of single-electron spin qubits in DQDs with respect to dispersive long-distance two-qubit gates mediated by virtual cavity photons."
 aliases:
   - "/optimized-cavity-mediated-dispersive-two-qubit-gates-between-spin-qubits/"

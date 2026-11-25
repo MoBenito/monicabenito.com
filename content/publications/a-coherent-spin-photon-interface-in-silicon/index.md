@@ -16,6 +16,7 @@ doi: "10.1038/nature25769"
 arxiv: "1710.03265"
 research:
   - "spin-quantum-computing"
+  - "light-matter-interaction"
 summary: "First demonstration of strong coupling between a single spin in silicon and a single microwave-frequency photon."
 aliases:
   - "/a-coherent-spin-photon-interface-in-silicon/"

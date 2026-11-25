@@ -1,4 +1,4 @@
-"""Draws the illustrations of some news posts (featured.png and featured-dark.png in their page bundles).
+"""Draws the illustrations of some pages (featured.png and featured-dark.png in their page bundles).
 
     python tools/newsart.py            # all
     python tools/newsart.py gemos      # only those whose folder name contains "gemos"
@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-NEWS = ROOT / "content" / "news"
+CONTENT = ROOT / "content"
 W, H = 1600, 900
 TEAL, TEAL_D, TEAL_L = "#0f7a63", "#0a5646", "#5fc9ad"
 THEMES = {
@@ -186,6 +186,22 @@ def qsit_award(c):
     return out
 
 
+def light_matter(c):
+    """Light-matter interaction: a spin between the two mirrors of a cavity, inside the photon's standing wave."""
+    ink, soft, acc = c["ink"], c["soft"], c["accent"]
+    out = ""
+    for x, sweep in ((250, 1), (1350, 0)):  # curved cavity mirrors
+        out += (f'<path d="M{x} 170 A420 420 0 0 {sweep} {x} 790" fill="none" stroke="{ink}" stroke-width="30" '
+                f'stroke-linecap="round"/>')
+    for k in (1, -1):  # standing wave between the mirrors (its envelope)
+        pts = " ".join(f"{300 + 1000 * i / 200:.1f},{480 + k * 200 * math.sin(2 * math.pi * i / 200 * 1.5):.1f}"
+                       for i in range(201))
+        out += f'<polyline points="{pts}" fill="none" stroke="{acc}" stroke-width="10" opacity=".8"/>'
+    out += f'<line x1="300" y1="480" x2="1300" y2="480" stroke="{soft}" stroke-width="6" stroke-dasharray="4 18"/>'
+    out += spin(800, 480, 95, 30, c)
+    return out
+
+
 def keynote_vek(c):
     """Keynote on simulating scalable quantum computers: a lectern next to a screen showing a grid of spins."""
     ink, soft, paper = c["ink"], c["soft"], c["paper"]
@@ -201,17 +217,18 @@ def keynote_vek(c):
     return out
 
 
-PICTURES = {
-    "keynote-virtual-engine-conference-2026": keynote_vek,
-    "new-website": new_website,
-    "open-positions": open_positions,
-    "qsit-inspire-postdoc-award": qsit_award,
-    "emmy-noether-group": emmy_noether,
-    "professor-in-augsburg": professor,
-    "qukit-eic-pathfinder": qukit,
-    "gemos-quantera-project": gemos,
-    "humboldt-fellowship-beatriz-perez-gonzalez": humboldt,
-    "public-talk-faszination-2026": public_talk,
+PICTURES = {  # page folder below content/ -> drawing
+    "research/light-matter-interaction": light_matter,
+    "news/keynote-virtual-engine-conference-2026": keynote_vek,
+    "news/new-website": new_website,
+    "news/open-positions": open_positions,
+    "news/qsit-inspire-postdoc-award": qsit_award,
+    "news/emmy-noether-group": emmy_noether,
+    "news/professor-in-augsburg": professor,
+    "news/qukit-eic-pathfinder": qukit,
+    "news/gemos-quantera-project": gemos,
+    "news/humboldt-fellowship-beatriz-perez-gonzalez": humboldt,
+    "news/public-talk-faszination-2026": public_talk,
 }
 
 
@@ -222,7 +239,7 @@ def main(filters):
         for theme, name in (("light", "featured.png"), ("dark", "featured-dark.png")):
             svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}"><defs>{defs()}</defs>'
                    f'{draw(THEMES[theme])}</svg>')
-            subprocess.run(["rsvg-convert", "-w", str(W), "-h", str(H), "-o", str(NEWS / folder / name)],
+            subprocess.run(["rsvg-convert", "-w", str(W), "-h", str(H), "-o", str(CONTENT / folder / name)],
                            input=svg.encode(), check=True)
         print("drawn", folder)
 

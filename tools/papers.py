@@ -41,6 +41,8 @@ AREAS = {  # keywords for suggesting a research area; the pull request asks to c
     "spin-quantum-computing": ["spin qubit", "quantum dot", "spin-photon", "electron spin", "hole spin", "edsr",
                                "flopping", "readout", "resonator", "solid neon", "helium", "two-qubit", "qubit"],
     "topological-matter": ["topolog", "majorana", "kitaev", "edge state", "quantum geometr", "flat band", "caging"],
+    "light-matter-interaction": ["cavit", "photon", "resonator", "light-matter", "light–matter", "optomechan",
+                                 "circuit qed", "strong coupling", "dispersive"],
     "open-systems-dynamics": ["floquet", "dissipat", "open quantum", "lindblad", "decoherence", "driven",
                               "transport", "counting statistics", "master equation", "perturbative"],
 }
