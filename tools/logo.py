@@ -102,12 +102,12 @@ def wordmark(size=100, pad=14):
             f'<path fill="currentColor" d="{" ".join(letters)}"/>{"".join(spins)}</svg>\n')
 
 
-def favicon(background=None, width=330, tip_radius=300):
+def favicon(background=None, width=460, margin=6):
     """A bold white MB, centred in a full-size spin ball; the M's right diagonal shoots out as the spin arrow,
     its tip leaving the ball towards the top right corner (outside the ball it is teal, so it shows on light
     and dark tab bars). Made to stay readable at 16 px in a browser tab: no equator (too fine to see), and a
-    darker highlight than the logo so the M keeps its contrast. `width` is the letters' span in px, `tip_radius`
-    the arrow tip's distance from the centre (the ball's radius is 256). `background` fills the square behind
+    darker highlight than the logo so the M keeps its contrast. `width` is the letters' span in px (the ball is
+    512 across); the arrow grows until its head is `margin` px from the edge of the picture. `background` fills the square behind
     the ball and shrinks the picture a little (for app icons, which iOS shows on black and with round corners)."""
     bold = instantiateVariableFont(TTFont(FONT_FILE), {"wght": 700})
     gs, cmap = bold.getGlyphSet(), bold.getBestCmap()
@@ -137,12 +137,14 @@ def favicon(background=None, width=330, tip_radius=300):
         fx, fy = cx0 + ux * t + nx * off, cy0 + uy * t + ny * off
         return left + (fx - bounds["M"][0]) * s, baseline - fy * s
 
-    head_len, head_w = 290, 430
-    lo, hi = length, length + 3000  # find the shaft length that puts the tip at tip_radius
+    head_len, head_w = 70 / s, 104 / s  # arrow head size in px, whatever the letter size
+    def fits(end):  # the head's three corners stay inside the picture
+        return all(margin <= c <= 512 - margin
+                   for t, off in ((end + head_len, 0), (end, -head_w / 2), (end, head_w / 2)) for c in px(t, off))
+    lo, hi = length, length + 3000  # the longest shaft that still fits
     for _ in range(50):
         mid = (lo + hi) / 2
-        tx, ty = px(mid + head_len)
-        lo, hi = (mid, hi) if math.hypot(tx - 256, ty - 256) < tip_radius else (lo, mid)
+        lo, hi = (mid, hi) if fits(mid) else (lo, mid)
     end = lo
     arrow_d = "M" + "L".join("{:.1f} {:.1f}".format(*px(t, off)) for t, off in (
         (300, -stroke / 2), (end, -stroke / 2), (end, -head_w / 2), (end + head_len, 0),
@@ -150,8 +152,9 @@ def favicon(background=None, width=330, tip_radius=300):
     shade = (f'<radialGradient id="f" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#2a9e83"/>'
              f'<stop offset=".55" stop-color="{TEAL}"/><stop offset="1" stop-color="{TEAL_D}"/></radialGradient>'
              f'<clipPath id="ball"><circle cx="256" cy="256" r="256"/></clipPath>')
-    picture = (f'<circle cx="256" cy="256" r="256" fill="url(#f)"/><path fill="{TEAL}" d="{arrow_d}"/>'
-               f'<path fill="#fff" clip-path="url(#ball)" d="{pen.getCommands()}{arrow_d}"/>')
+    shapes = pen.getCommands() + arrow_d  # teal where it sticks out of the ball, white on it
+    picture = (f'<circle cx="256" cy="256" r="256" fill="url(#f)"/><path fill="{TEAL}" d="{shapes}"/>'
+               f'<path fill="#fff" clip-path="url(#ball)" d="{shapes}"/>')
     if background:
         picture = (f'<rect width="512" height="512" fill="{background}"/>'
                    f'<g transform="translate(256 256) scale(.84) translate(-256 -256)">{picture}</g>')
