@@ -3,7 +3,7 @@
     python tools/logo.py
 
 Writes layouts/partials/logo.html (inline SVG; letters and arrows use currentColor, so they follow dark mode)
-and static/favicon.svg, favicon-32.png, apple-touch-icon.png, icon-512.png.
+and static/favicon.svg, favicon-32.png, icon-192.png (Android), apple-touch-icon.png (iOS), icon-512.png.
 Needs fontTools and rsvg-convert. The font (Outfit, SIL Open Font License) is downloaded on first use.
 """
 
@@ -167,7 +167,7 @@ if __name__ == "__main__":
     icon.write_text(favicon())
     on_light = favicon(background="#fbfcfb").encode()  # iOS home screens show transparency as black
     for px, name, svg in ((32, "favicon-32.png", icon.read_bytes()), (180, "apple-touch-icon.png", on_light),
-                          (512, "icon-512.png", icon.read_bytes())):
+                          (192, "icon-192.png", icon.read_bytes()), (512, "icon-512.png", icon.read_bytes())):
         subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), "-o", str(ROOT / "static" / name)],
                        input=svg, check=True)
     print("logo written")
