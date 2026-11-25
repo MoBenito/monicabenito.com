@@ -136,6 +136,8 @@ nav a[aria-current] { color: var(--accent); background: var(--accent-soft); }
 @media (hover: hover) { .bloch-controls button:hover { background: var(--accent); color: var(--bg); } }
 .bloch-controls button:active { transform: scale(.94); }
 .bloch canvas { display: block; width: 100%; height: 100%; touch-action: none; }  /* dragging B must not scroll the page */
+html:not(.js) .bloch canvas, html:not(.js) .theme-toggle { display: none; }  /* without JavaScript: the <noscript> note replaces the sphere, and the theme follows the system setting */
+.bloch-nojs { display: grid; place-items: center; height: 100%; margin: 0; padding: 18%; box-sizing: border-box; border: 1.5px dashed var(--line); border-radius: 50%; font-size: .8rem; line-height: 1.4; text-align: center; color: var(--muted); }
 .bloch:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 @media (max-width: 900px) {
   .hero { grid-template-columns: 170px minmax(0, 1fr) 160px; gap: 1rem 1.6rem; }

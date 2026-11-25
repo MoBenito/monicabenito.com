@@ -8,7 +8,8 @@ Used by .github/workflows/publications.yml, which opens one pull request per cha
 - arXiv (author "M. Benito" / "Mónica Benito" in quant-ph, cond-mat and physics): catches preprints, including ones
   missing from ORCID;
 - ORCID works and OpenAlex (by ORCID iD): catch journal papers;
-- Crossref: journal details by DOI, and the journal version of a preprint by title.
+- journal version of a preprint: the DOI on arXiv, else OpenAlex (links preprint and published version even when
+  the title changed), else a Crossref title search; Crossref also gives the journal details by DOI.
 Figures: Figure 1 from the arXiv source (first \\includegraphics in a figure), rendered about 2400 px wide; if
 it is a tall stack of panels, only the top panel. Summaries are drafts made from the abstract and must be
 reviewed in the pull request.
@@ -134,9 +135,17 @@ def crossref(doi):
 
 
 def journal_version(entry):
-    """DOI of the journal version of an arXiv preprint, from arXiv itself or a Crossref title search."""
+    """DOI of the journal version of an arXiv preprint: from arXiv itself, from OpenAlex (which merges a preprint
+    with its published version, even when the title changed), or from a Crossref title search."""
     if entry.get("doi"):
         return entry["doi"]
+    try:
+        w = get(f"https://api.openalex.org/works/doi:10.48550/arxiv.{entry['arxiv']}?select=doi,type", as_json=True)
+        doi = (w.get("doi") or "").replace("https://doi.org/", "").lower()
+        if doi and not doi.startswith("10.48550/") and w.get("type") == "article":
+            return doi
+    except Exception as err:  # unknown to OpenAlex (yet), or OpenAlex not answering: try Crossref
+        print(f"OpenAlex, arXiv:{entry['arxiv']}: {err}", file=sys.stderr)
     r = get("https://api.crossref.org/works?rows=5&filter=type:journal-article&query.title=" +
             urllib.parse.quote(entry["title"]), as_json=True)
     for it in r["message"]["items"]:
@@ -201,25 +210,30 @@ def find():
         shared = sorted({surname(a) for a in e["authors"]} & coauthors)
         new.append({"arxiv": e["arxiv"], "title": e["title"], "date": e["date"], "known_coauthors": shared,
                     "identity": identity_check(arxiv_id=e["arxiv"], doi=e["doi"])})
-    for w in orcid_dois():  # journal papers on ORCID without an arXiv version we already matched
-        if w["doi"] in known_doi or norm_title(w["title"]) in known_title:
-            continue
-        if any(difflib.SequenceMatcher(None, norm_title(w["title"]), norm_title(n["title"])).ratio() > 0.9 for n in new):
-            continue
-        new.append({"doi": w["doi"], "title": w["title"], "known_coauthors": [], "identity": ["orcid-record"]})
+    # Preprints on the site that have appeared in a journal. Checked before ORCID, so that a journal DOI found here
+    # is proposed as an update of the preprint, not as a new paper (titles often change on publication).
     preprints = [p for p in have if p["arxiv"] and not p["journal"]]
     try:
         entries = arxiv_entries(ids=[p["arxiv"] for p in preprints]) if preprints else []
     except Exception as err:
-        print(f"arXiv did not answer ({err}); preprints are checked again next run", file=sys.stderr)
-        entries = []
-    if entries:
-        for e in entries:
-            doi = journal_version(e)
-            if doi:
-                slug = next(p["slug"] for p in preprints if p["arxiv"] == e["arxiv"])
-                published.append({"slug": slug, "doi": doi, "title": e["title"]})
-            time.sleep(1)
+        print(f"arXiv did not answer ({err}); no search this time, the next run tries again", file=sys.stderr)
+        return {"new": [], "published": []}
+    for e in entries:
+        doi = journal_version(e)
+        if doi:
+            slug = next(p["slug"] for p in preprints if p["arxiv"] == e["arxiv"])
+            published.append({"slug": slug, "doi": doi, "title": e["title"]})
+        time.sleep(1)
+    known_doi |= {p["doi"] for p in published}
+    new_arxiv = {n["arxiv"] for n in new}
+    for w in orcid_dois():  # papers on ORCID that neither the site nor the arXiv search above knows
+        if w["doi"] in known_doi or norm_title(w["title"]) in known_title:
+            continue
+        if w["doi"].startswith("10.48550/arxiv.") and w["doi"].split("arxiv.", 1)[1] in known_arxiv | new_arxiv:
+            continue
+        if any(difflib.SequenceMatcher(None, norm_title(w["title"]), norm_title(n["title"])).ratio() > 0.9 for n in new):
+            continue
+        new.append({"doi": w["doi"], "title": w["title"], "known_coauthors": [], "identity": ["orcid-record"]})
     return {"new": new, "published": published}
 
 
