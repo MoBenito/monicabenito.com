@@ -45,16 +45,24 @@ AREAS = {  # keywords for suggesting a research area; the pull request asks to c
 }
 
 
-def get(url, as_json=False, tries=4):
+def get(url, as_json=False, tries=5):
     for i in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
                 data = r.read()
             return json.loads(data) if as_json else data
-        except Exception:
+        except Exception as err:
+            print(f"{url}: {err}", file=sys.stderr)
             if i == tries - 1:
                 raise
-            time.sleep(3 * (i + 1))
+            # arXiv often answers GitHub's servers with 429 (too many requests): wait longer then
+            throttled = getattr(err, "code", None) in (429, 503)
+            wait = 30 * 2 ** i if throttled else 3 * (i + 1)
+            try:
+                wait = max(wait, int(err.headers.get("Retry-After", 0)))
+            except (AttributeError, TypeError, ValueError):
+                pass
+            time.sleep(min(wait, 300))
 
 
 def norm_title(t):
@@ -181,7 +189,13 @@ def find():
     known_title = {norm_title(p["title"]) for p in have}
     coauthors = known_coauthors()
     new, published = [], []
-    for e in my_arxiv_papers():
+    try:
+        mine = my_arxiv_papers()
+    except Exception as err:
+        # Without the arXiv list an ORCID entry could be proposed a second time under its DOI, so skip it all.
+        print(f"arXiv did not answer ({err}); no search this time, the next run tries again", file=sys.stderr)
+        return {"new": [], "published": []}
+    for e in mine:
         if e["arxiv"] in known_arxiv or norm_title(e["title"]) in known_title:
             continue
         shared = sorted({surname(a) for a in e["authors"]} & coauthors)
@@ -194,8 +208,13 @@ def find():
             continue
         new.append({"doi": w["doi"], "title": w["title"], "known_coauthors": [], "identity": ["orcid-record"]})
     preprints = [p for p in have if p["arxiv"] and not p["journal"]]
-    if preprints:
-        for e in arxiv_entries(ids=[p["arxiv"] for p in preprints]):
+    try:
+        entries = arxiv_entries(ids=[p["arxiv"] for p in preprints]) if preprints else []
+    except Exception as err:
+        print(f"arXiv did not answer ({err}); preprints are checked again next run", file=sys.stderr)
+        entries = []
+    if entries:
+        for e in entries:
             doi = journal_version(e)
             if doi:
                 slug = next(p["slug"] for p in preprints if p["arxiv"] == e["arxiv"])
