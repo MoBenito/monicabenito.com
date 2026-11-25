@@ -165,9 +165,9 @@ if __name__ == "__main__":
     (ROOT / "layouts" / "partials" / "logo.html").write_text(wordmark())
     icon = ROOT / "static" / "favicon.svg"
     icon.write_text(favicon())
-    on_light = favicon(background="#fbfcfb").encode()  # home-screen icons get a square background
+    on_light = favicon(background="#fbfcfb").encode()  # iOS home screens show transparency as black
     for px, name, svg in ((32, "favicon-32.png", icon.read_bytes()), (180, "apple-touch-icon.png", on_light),
-                          (512, "icon-512.png", on_light)):
+                          (512, "icon-512.png", icon.read_bytes())):
         subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), "-o", str(ROOT / "static" / name)],
                        input=svg, check=True)
     print("logo written")
