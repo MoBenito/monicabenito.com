@@ -102,29 +102,68 @@ def wordmark(size=100, pad=14):
             f'<path fill="currentColor" d="{" ".join(letters)}"/>{"".join(spins)}</svg>\n')
 
 
-def favicon():
-    """Spin ball with a white MB inside; the arrow passes behind the letters."""
-    cx, cy, r, size = 236, 276, 200, 190
-    t = math.radians(30)
-    ux, uy = math.sin(t), -math.cos(t)
-    width = 26
-    back = arrow(cx, cy, r, 30, 1.2, 1.22, width, 0.3 * r, 0.17 * r, ARROW_ON_ICON)
-    mb_w = advance("M", size) + advance("B", size)
-    x0, baseline = cx - mb_w / 2, cy + 0.35 * size
-    letters = glyph("M", x0, baseline, size) + glyph("B", x0 + advance("M", size), baseline, size)
-    front = "".join(  # the arrow's visible pieces in front of the sphere, near its rim
-        f'<line x1="{cx + ux * a * r:.1f}" y1="{cy + uy * a * r:.1f}" x2="{cx + ux * b * r:.1f}" '
-        f'y2="{cy + uy * b * r:.1f}" stroke="{ARROW_ON_ICON}" stroke-width="{width}"/>'
-        for a, b in ((0.62, 1.0), (-1.0, -0.75)))
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>{gradient("f")}</defs>'
-            f'{back}{sphere(cx, cy, r, "f", 0.3)}<path fill="#fff" d="{letters}"/>{front}</svg>\n')
+def favicon(width=460, margin=6):
+    """A bold white MB, centred in a full-size spin ball; the M's right diagonal shoots out as the spin arrow
+    towards the top right corner (whatever sticks out of the ball is teal, so it shows on light and dark tab
+    bars). Made to stay readable at 16 px in a browser tab: the letters nearly fill the ball, no equator (too
+    fine to see), and a darker highlight than the logo so the M keeps its contrast. `width` is the letters'
+    span in px (the ball is 512 across); the arrow grows until its head is `margin` px from the picture's edge."""
+    bold = instantiateVariableFont(TTFont(FONT_FILE), {"wght": 700})
+    gs, cmap = bold.getGlyphSet(), bold.getBestCmap()
+    bounds = {}
+    for ch in "MB":
+        bp = BoundsPen(gs)
+        gs[cmap[ord(ch)]].draw(bp)
+        bounds[ch] = bp.bounds
+    gap = 0.04 * bold["head"].unitsPerEm
+    s = width / ((bounds["M"][2] - bounds["M"][0]) + gap + (bounds["B"][2] - bounds["B"][0]))
+    left, baseline = 256 - width / 2, 256 + bounds["M"][3] * s / 2  # centred on the cap height
+    pen = SVGPathPen(gs)
+    x = left
+    for ch in "MB":
+        gs[cmap[ord(ch)]].draw(TransformPen(pen, (s, 0, 0, -s, x - bounds[ch][0] * s, baseline)))
+        x += (bounds[ch][2] - bounds[ch][0] + gap) * s
+    # The arrow continues the M's right diagonal past its top corner. In Outfit Bold (font units) that stroke
+    # lies between the line (400.5, 272.5)-(678, 706) and the parallel line through (481, 152).
+    (ax, ay), (bx, by), (qx, qy) = (400.5, 272.5), (678, 706), (481, 152)
+    length = math.hypot(bx - ax, by - ay)
+    ux, uy = (bx - ax) / length, (by - ay) / length   # along the stroke, up and to the right
+    nx, ny = uy, -ux                                  # across it
+    stroke = (qx - ax) * nx + (qy - ay) * ny
+    cx0, cy0 = ax + nx * stroke / 2, ay + ny * stroke / 2
+
+    def px(t, off=0.0):  # t along the stroke's centre line, off across it (font units) -> picture px
+        fx, fy = cx0 + ux * t + nx * off, cy0 + uy * t + ny * off
+        return left + (fx - bounds["M"][0]) * s, baseline - fy * s
+
+    head_len, head_w = 70 / s, 104 / s  # arrow head size in px, whatever the letter size
+    def fits(end):  # the head's three corners stay inside the picture
+        return all(margin <= c <= 512 - margin
+                   for t, off in ((end + head_len, 0), (end, -head_w / 2), (end, head_w / 2)) for c in px(t, off))
+    lo, hi = length, length + 3000  # the longest shaft that still fits
+    for _ in range(50):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if fits(mid) else (lo, mid)
+    end = lo
+    arrow_d = "M" + "L".join("{:.1f} {:.1f}".format(*px(t, off)) for t, off in (
+        (300, -stroke / 2), (end, -stroke / 2), (end, -head_w / 2), (end + head_len, 0),
+        (end, head_w / 2), (end, stroke / 2), (300, stroke / 2))) + "Z"
+    shade = (f'<radialGradient id="f" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#2a9e83"/>'
+             f'<stop offset=".55" stop-color="{TEAL}"/><stop offset="1" stop-color="{TEAL_D}"/></radialGradient>'
+             f'<clipPath id="ball"><circle cx="256" cy="256" r="256"/></clipPath>')
+    shapes = pen.getCommands() + arrow_d  # teal where it sticks out of the ball, white on it
+    picture = (f'<circle cx="256" cy="256" r="256" fill="url(#f)"/><path fill="{TEAL}" d="{shapes}"/>'
+               f'<path fill="#fff" clip-path="url(#ball)" d="{shapes}"/>')
+    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>{shade}</defs>{picture}</svg>\n'
 
 
 if __name__ == "__main__":
     (ROOT / "layouts" / "partials" / "logo.html").write_text(wordmark())
     icon = ROOT / "static" / "favicon.svg"
     icon.write_text(favicon())
+    # all transparent: Firefox on Android shows the apple-touch-icon too (iOS home screens fill the corners black)
     for px, name in ((32, "favicon-32.png"), (180, "apple-touch-icon.png"), (512, "icon-512.png")):
-        subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), "-o", str(ROOT / "static" / name), str(icon)],
-                       check=True)
+        svg = icon.read_bytes()
+        subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), "-o", str(ROOT / "static" / name)],
+                       input=svg, check=True)
     print("logo written")
