@@ -1,6 +1,8 @@
 """Dark-mode versions of the figures (featured.* in each page bundle).
 
-    python tools/darkfigs.py
+    python tools/darkfigs.py                 # all pages; regenerates only what changed
+    python tools/darkfigs.py <page folder>   # only these pages, always regenerated (the pull-request bot uses it,
+                                             # since a fresh checkout cannot tell from file times what changed)
 
 Each page with a figure gets a `darkFigure` setting in its front matter:
   invert    a dark version is generated as featured-dark-auto.png: brightness is flipped, colours are kept
@@ -15,6 +17,7 @@ choice is written into their front matter, so it can be reviewed and changed by 
 """
 
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -79,8 +82,11 @@ def front_matter(text):
     return m
 
 
+only = [Path(a).resolve() for a in sys.argv[1:]]
 for figure in sorted(ROOT.glob("content/**/featured.*")):
     bundle = figure.parent
+    if only and bundle not in only:
+        continue
     index = bundle / "index.md"
     text = index.read_text()
     fm = front_matter(text)
@@ -96,7 +102,7 @@ for figure in sorted(ROOT.glob("content/**/featured.*")):
     manual = [p for p in bundle.glob("featured-dark.*")]
     if mode in ("invert", "cutout") and not manual:
         stamp = auto.with_suffix(".mode")
-        if (not auto.exists() or auto.stat().st_mtime < figure.stat().st_mtime
+        if (only or not auto.exists() or auto.stat().st_mtime < figure.stat().st_mtime
                 or not stamp.exists() or stamp.read_text() != mode):
             rgb = flattened(figure) if rgb is None else rgb
             tmp = auto.with_name("." + auto.name + ".tmp")  # write first, then swap in at once, so a running

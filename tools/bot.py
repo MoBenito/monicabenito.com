@@ -15,10 +15,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+import prform  # the editable form in the pull request description
+
 ROOT = Path(__file__).resolve().parent.parent
 REPO = os.environ.get("GITHUB_REPOSITORY", "MoBenito/monicabenito.com")
-AREA_NAMES = {"spin-quantum-computing": "Spin quantum computing", "topological-matter": "Topological matter",
-              "open-systems-dynamics": "Open quantum systems dynamics"}
 
 
 def run(*cmd, capture=False):
@@ -46,11 +46,14 @@ def front(slug):
 
 
 def open_pr(branch, title, body, files):
+    """body: the description, or a function of the pushed commit's hash that returns it (for links to its files)."""
     run("git", "switch", "--quiet", "-c", branch, "origin/main")
     try:
         run("git", "add", *files)
         run("git", "commit", "--quiet", "-m", title)
         run("git", "push", "--quiet", "origin", branch)
+        if callable(body):
+            body = body(run("git", "rev-parse", "HEAD", capture=True))
         url = run("gh", "pr", "create", "--repo", REPO, "--base", "main", "--head", branch, "--title", title, "--body", body, capture=True)
         number = url.rstrip("/").rsplit("/", 1)[-1]
         run("gh", "workflow", "run", "preview.yml", "--repo", REPO, "--ref", "main", "-f", f"pr={number}")
@@ -68,9 +71,8 @@ def links(p):
     return " · ".join(out)
 
 
-def new_paper_body(found, added, branch):
+def new_paper_body(found, added, branch, sha):
     p = front(added["slug"])
-    path = f"content/publications/{added['slug']}"
     who = []
     if "orcid" in found.get("identity", []) or "orcid-record" in found.get("identity", []):
         who.append("✓ listed on your ORCID record" if "orcid-record" in found["identity"] else "✓ M. Benito on this paper is linked to your ORCID iD (OpenAlex)")
@@ -81,9 +83,9 @@ def new_paper_body(found, added, branch):
     if not who:
         who.append("⚠ **No known co-author, no ORCID link, no Augsburg affiliation: please check this paper is yours.** "
                    "If it is not, close this pull request; it will not be proposed again.")
-    areas = ", ".join(AREA_NAMES.get(a, a) for a in added.get("research", [])) or "none suggested, please choose"
-    figure = ("Figure 1 from the arXiv source (top panel only if it was a tall stack)." if added.get("figure")
-              else "⚠ No figure could be taken from the arXiv source: please add `featured.png`.")
+    figure_note = ("Figure 1 from the arXiv source (top panel only if it was a tall stack). The dark version and the "
+                   "research areas are first guesses." if added.get("figure")
+                   else "⚠ No figure could be taken from the arXiv source.")
     return f"""## New paper: {p['title']}
 
 {', '.join(p['authors'])}
@@ -92,15 +94,9 @@ def new_paper_body(found, added, branch):
 **Is it yours?**
 {chr(10).join('- ' + w for w in who)}
 
-**Suggested research area:** {areas}
-**Figure:** {figure}
+**Everything below can be changed right here:** tick boxes, or edit this description to rewrite the text. The bot writes each change into the paper's page within a minute and rebuilds the preview. {figure_note} The text is a draft made from the abstract: please rewrite it.
 
-### Before merging
-- [ ] Rewrite the summary: it is a draft copied from the abstract ([edit `index.md`](https://github.com/{REPO}/edit/{branch}/{path}/index.md))
-- [ ] Check the figure; replace `featured.png` in [the paper folder](https://github.com/{REPO}/tree/{branch}/{path}) if another figure works better
-- [ ] Look at the dark-mode version in the preview; if it looks wrong, upload your own `featured-dark.png` to the folder, or set `darkFigure` to `"original"` or `"cutout"` in `index.md`
-- [ ] Check the research areas (`research:` in `index.md`)
-
+{prform.form(added['slug'], sha, added.get('abstract', '')).replace('{branch}', branch)}
 Merging publishes the paper. Closing this pull request means it will not be proposed again. A preview link follows below once it is built.
 
 🤖 Opened by the publication bot (`.github/workflows/publications.yml`)
@@ -138,7 +134,7 @@ def main():
             run("git", "switch", "--quiet", "--detach", "origin/main")
             added = json.loads(run(sys.executable, "-I", "tools/papers.py", "add", ident, capture=True))
             run(sys.executable, "-I", "tools/darkfigs.py")
-            body = new_paper_body(found, added, branch)
+            body = lambda sha: new_paper_body(found, added, branch, sha)
             open_pr(branch, f"New paper: {added['title']}", body, [f"content/publications/{added['slug']}"])
         except Exception as err:  # e.g. arXiv not answering: leave it for the next run
             print(f"skipped {ident}: {err}", file=sys.stderr)

@@ -100,9 +100,10 @@ nav a[aria-current] { color: var(--accent); background: var(--accent-soft); }
   .js .menu-toggle { display: grid; place-items: center; order: 2; width: 2.1rem; height: 2.1rem; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
   .js .menu-toggle svg { width: 1.15rem; height: 1.15rem; }
   .js .menu-toggle path { transition: transform .2s, opacity .2s; transform-origin: 12px 12px; }
-  .js .menu-open .menu-toggle .l1 { transform: translateY(5px) rotate(45deg); }
+  /* move the outer lines onto the middle one first, then turn them (CSS applies the right-hand function first) */
+  .js .menu-open .menu-toggle .l1 { transform: rotate(45deg) translateY(5px); }
   .js .menu-open .menu-toggle .l2 { opacity: 0; }
-  .js .menu-open .menu-toggle .l3 { transform: translateY(-5px) rotate(-45deg); }
+  .js .menu-open .menu-toggle .l3 { transform: rotate(-45deg) translateY(-5px); }
   .js .theme-toggle { order: 3; }
   .js nav { order: 4; display: none; flex-direction: column; align-items: stretch; gap: .2rem; margin: .2rem 0 .3rem; padding-top: .5rem; border-top: 1px solid var(--line); }
   .js .menu-open nav { display: flex; }
@@ -156,6 +157,7 @@ html:not(.js) .bloch canvas, html:not(.js) .theme-toggle { display: none; }  /* 
 .column { max-width: 46rem; }
 .column .prose { max-width: none; }
 .prose ul { padding-left: 1.2rem; }
+.prose code { font: .86em/1 ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; padding: .2em .4em; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; white-space: nowrap; }
 .prose .contact { padding-left: 0; }
 .meta { color: var(--muted); font-size: .92rem; }
 img.featured { display: block; margin: 1.4rem 0; border-radius: var(--radius); }

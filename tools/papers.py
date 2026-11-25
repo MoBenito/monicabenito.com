@@ -357,7 +357,8 @@ def add(ident):
     write_bundle(slug, fm, f"{teaser}\n\n{body}" if teaser else "")
     fig = e["arxiv"] and figure_from_arxiv(e["arxiv"], PUBS / slug / "featured.png")
     print(json.dumps({"slug": slug, "title": title, "figure": bool(fig), "research": fm["research"],
-                      "journal": fm["journal"] or "preprint", "arxiv": e["arxiv"], "doi": fm["doi"]}))
+                      "journal": fm["journal"] or "preprint", "arxiv": e["arxiv"], "doi": fm["doi"],
+                      "abstract": e["abstract"]}, ensure_ascii=False))
 
 
 def publish(slug, doi):

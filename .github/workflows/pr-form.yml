@@ -1,0 +1,69 @@
+# Keeps a new-paper pull request's description and its files in step (see tools/prform.py):
+# - the description was edited (text rewritten, a box ticked): the change goes into index.md and is committed;
+# - files were pushed (e.g. a new featured.png uploaded): the dark version is made again and the description
+#   refreshed from the files.
+# Then the preview is rebuilt. Its own commits and description edits use the workflow's token, which does not
+# start workflows, so it never reacts to itself.
+name: PR form
+
+on:
+  pull_request:
+    types: [edited, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write   # to start the preview workflow after its own commits
+
+concurrency:
+  group: pr-form-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.head_ref, 'paper/') &&
+      github.event.pull_request.state == 'open' &&
+      (github.event.action == 'synchronize' || github.event.changes.body != null)
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: pip install --quiet numpy pillow
+
+      - name: Apply and refresh
+        env:
+          EVENT: ${{ github.event.action }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # always read the description as it is now, not as it was when the event fired
+          gh pr view "$PR" --json body --jq .body > "$RUNNER_TEMP/body.md"
+          slug=$(grep -o 'bot:page=[a-z0-9-]*' "$RUNNER_TEMP/body.md" | head -1 | cut -d= -f2)
+          [ -n "$slug" ] || { echo "no form in this description"; exit 0; }
+          if [ "$EVENT" = edited ]; then
+            python tools/prform.py apply "$RUNNER_TEMP/body.md"
+          fi
+          python tools/darkfigs.py "content/publications/$slug"
+          if [ -n "$(git status --porcelain content)" ]; then
+            git add -A "content/publications/$slug"
+            msg="Update from the pull request description"; [ "$EVENT" = edited ] || msg="Update the dark-mode figure"
+            git commit --quiet -m "$msg"
+            git push --quiet origin "HEAD:$GITHUB_HEAD_REF"
+            gh workflow run preview.yml --repo "$GITHUB_REPOSITORY" --ref main -f pr="$PR"
+          fi
+          python tools/prform.py render "$RUNNER_TEMP/body.md" "$(git rev-parse HEAD)" "$RUNNER_TEMP/new.md"
+          if ! cmp -s "$RUNNER_TEMP/body.md" "$RUNNER_TEMP/new.md"; then
+            gh pr edit "$PR" --body-file "$RUNNER_TEMP/new.md"
+          fi

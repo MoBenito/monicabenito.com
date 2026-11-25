@@ -83,6 +83,21 @@ coloured areas or for renders, so look at the result in dark mode and change `da
 | `.github/workflows/preview.yml` | every pull request | builds the site into `gh-pages` under `pr-preview/pr-<n>/`, comments the link on the PR (one comment, updated), deletes the preview when the PR is merged or closed |
 | `.github/workflows/publications.yml` | nightly, or by hand | refreshes `data/citations.json` (committed to `main`), then `tools/bot.py` opens one PR per new paper (`paper/<id>`) or newly published preprint (`published/<slug>`) and starts its preview |
 | `.github/workflows/deploy.yml` | push to `main`, after each Publications run, or by hand | builds with `--panicOnWarning` and uploads to the VPS over SSH (`DEPLOY_KEY` secret); see below |
+| `.github/workflows/pr-form.yml` | a new-paper PR's description is edited, or files are pushed to it | keeps the description form and the page files in step (see below) |
+
+- New-paper PR descriptions are an editing form (`tools/prform.py`, workflow `.github/workflows/pr-form.yml`):
+  figure in light and dark mode, checkboxes for the dark-mode setting and the research areas, and the page text
+  between `<!-- bot:text -->` markers. Editing the description writes the change into `index.md`; pushing files
+  (e.g. a new `featured.png`) makes the dark version again and refreshes the description. Files win when they
+  disagree.
+- `tools/papers.py find|add|publish` does the work; `tools/bot.py` only wraps it in branches and PRs. A change is
+  proposed once: any PR for it, open, merged or closed, stops it from being proposed again.
+- Identity checks in bot PRs: OpenAlex ORCID link, Augsburg affiliation, known co-authors. Without any of them the PR
+  carries a warning; there are other researchers called M. Benito.
+- Previews are built with `--environment preview` (adds `noindex`) under a subfolder, so internal links must go
+  through `relURL` without a leading slash, and CSS must use relative `url(...)`.
+- Repository settings: Actions > General > Workflow permissions "Read and write" plus "Allow GitHub Actions to create
+  and approve pull requests"; Pages > Deploy from branch `gh-pages`. Pages needs a public repository on a free plan.
 
 ### Hosting (VPS)
 
@@ -92,15 +107,6 @@ coloured areas or for renders, so look at the result in dark mode and change `da
   point `current` at an older release.
 - DNS at netcup: only `@` A/AAAA point to the VPS. The `*` wildcard and MX stay on the old netcup web hosting,
   which still runs the monicabenito.com email (`mail.monicabenito.com` resolves through the wildcard).
-
-- `tools/papers.py find|add|publish` does the work; `tools/bot.py` only wraps it in branches and PRs. A change is
-  proposed once: any PR for it, open, merged or closed, stops it from being proposed again.
-- Identity checks in bot PRs: OpenAlex ORCID link, Augsburg affiliation, known co-authors. Without any of them the PR
-  carries a warning; there are other researchers called M. Benito.
-- Previews are built with `--environment preview` (adds `noindex`) under a subfolder, so internal links must go
-  through `relURL` without a leading slash, and CSS must use relative `url(...)`.
-- Repository settings: Actions > General > Workflow permissions "Read and write" plus "Allow GitHub Actions to create
-  and approve pull requests"; Pages > Deploy from branch `gh-pages`. Pages needs a public repository on a free plan.
 
 ## Conventions
 
