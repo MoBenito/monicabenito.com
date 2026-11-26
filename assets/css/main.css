@@ -167,7 +167,7 @@ img.featured { display: block; margin: 1.4rem 0; border-radius: var(--radius); }
 
 /* Cards: one style for publications, news and research areas.
    The whole card opens its page (the title link is stretched over it); extra links like Journal/arXiv sit on top. */
-.tiles { display: grid; gap: .9rem; }
+.tiles { display: grid; gap: 1.2rem; }
 .tile { position: relative; display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 1.3rem; padding: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); transition: border-color .15s, box-shadow .15s; cursor: pointer; }
 .tile.no-thumb { grid-template-columns: minmax(0, 1fr); }
 .tile:hover, .tile:focus-within { border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); box-shadow: var(--shadow); }
@@ -331,10 +331,14 @@ article > .authors, article > .cite, article > .links { margin: .15rem 0; }
 .cv-head { margin-bottom: 1.4rem; }
 .cv-head h1 { margin-bottom: 0; }
 
-/* Research-area icons: small and muted; on paper cards in the top right corner */
+/* Research-area icons; on paper cards a badge on the top right corner that filters the publications list */
 .area-icon { width: 1.05em; height: 1.05em; flex: none; vertical-align: -.17em; }
-.tile-areas { position: relative; z-index: 1; float: right; display: flex; gap: .3rem; margin: .1rem 0 .2rem .6rem; color: var(--muted); opacity: .5; }
-.tile-areas .area-icon { width: 17px; height: 17px; }
+.tile-areas { position: absolute; z-index: 1; top: -.9rem; right: .9rem; display: flex; gap: .1rem; padding: .15rem; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; box-shadow: var(--shadow); }
+.tile-areas a { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 50%; color: var(--accent); transition: background-color .15s, color .15s; }
+.tile-areas .area-icon { width: 18px; height: 18px; }
+.tile-areas a:hover, .tile-areas a:focus-visible { background: var(--accent-soft); }
+.tile-areas a.on { background: var(--accent); color: var(--bg); }
+.tile-areas a:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .area-link { white-space: nowrap; }
 .area-link .area-icon { margin-right: .25em; }
 .chip .area-icon { margin-right: .3em; }

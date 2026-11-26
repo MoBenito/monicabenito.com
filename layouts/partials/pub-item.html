@@ -12,8 +12,10 @@
   {{- end }}
   <div>
     {{- with .Params.research }}
+    {{- /* Research areas as a small badge on the top right corner. Each icon links to its research page; on the
+           publications page a click filters the list by that area instead. */}}
     <span class="tile-areas">
-      {{- range . }}{{ with site.GetPage (printf "/research/%s" .) }}<span title="{{ .Title }}">{{ partial "area-icon.html" .File.ContentBaseName }}<span class="visually-hidden">{{ .Title }}</span></span>{{ end }}{{ end -}}
+      {{- range . }}{{ with site.GetPage (printf "/research/%s" .) }}<a href="{{ .RelPermalink }}" data-area="{{ .File.ContentBaseName }}" title="{{ .Title }}">{{ partial "area-icon.html" .File.ContentBaseName }}<span class="visually-hidden">{{ .Title }}</span></a>{{ end }}{{ end -}}
     </span>
     {{- end }}
     <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>

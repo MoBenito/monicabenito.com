@@ -92,6 +92,10 @@
       var filtered = shown.length < cards.length;
       badge.hidden = !filtered; badge.textContent = shown.length + "/" + cards.length;
       btn.classList.toggle("on", filtered || by !== "new");
+      list.querySelectorAll(".tile-areas a").forEach(function (a) { a.classList.toggle("on", areas.indexOf(a.dataset.area) >= 0); });
+      var url = new URL(location.href);
+      if (areas.length === 1) url.searchParams.set("area", areas[0]); else url.searchParams.delete("area");
+      history.replaceState(null, "", url);
     }
     var btn = document.getElementById("pub-filter-btn"), badge = document.getElementById("pub-badge");
     function setOpen(open) { form.hidden = !open; btn.setAttribute("aria-expanded", open); if (open) q.focus(); }
@@ -105,6 +109,21 @@
     form.querySelectorAll(".chip").forEach(function (c) {
       c.addEventListener("click", function () { c.setAttribute("aria-pressed", c.getAttribute("aria-pressed") !== "true"); render(); });
     });
+    // the area badge on each card filters by that area (click again to clear); kept in the address as ?area=
+    function setArea(area) {
+      areaChips.forEach(function (c) { c.setAttribute("aria-pressed", c.dataset.area === area); });
+    }
+    list.addEventListener("click", function (e) {
+      var a = e.target.closest(".tile-areas a");
+      if (!a) return;
+      e.preventDefault();
+      var on = pressed(areaChips, "area");
+      setArea(on.length === 1 && on[0] === a.dataset.area ? null : a.dataset.area);
+      render();
+      list.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    });
+    var start = new URLSearchParams(location.search).get("area");
+    if (start) setArea(start);
     document.getElementById("pub-reset").addEventListener("click", function () {
       q.value = ""; form.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); }); render();
     });
