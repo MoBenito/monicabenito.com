@@ -2,7 +2,7 @@
 title: "Open quantum systems"
 weight: 3
 slug: "open-systems-dynamics"
-darkFigure: "cutout"
+darkFigure: "original"
 summary: "Quantum systems that exchange energy and particles with their environment, and how to turn this into a tool."
 ---
 
