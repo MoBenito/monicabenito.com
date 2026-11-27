@@ -2,7 +2,7 @@
 title: "Topological matter"
 weight: 4
 slug: "topological-matter"
-darkFigure: "invert"
+darkFigure: "original"
 summary: "Protected edge states, Majorana modes and quantum geometry in driven and nanoscale systems."
 ---
 
