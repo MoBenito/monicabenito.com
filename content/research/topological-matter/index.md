@@ -3,6 +3,7 @@ title: "Topological matter"
 weight: 4
 slug: "topological-matter"
 darkFigure: "original"
+figureAlt: "Rendering of a Möbius strip made of a glowing lattice of bonds and sites, a topological SSH chain, floating in front of a blackboard full of chalk formulas and plots about topology, Berry phases and Majorana modes."
 summary: "Protected edge states, Majorana modes and quantum geometry in driven and nanoscale systems."
 ---
 

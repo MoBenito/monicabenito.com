@@ -3,6 +3,7 @@ title: "Spin quantum computing"
 weight: 1
 slug: "spin-quantum-computing"
 darkFigure: "original"
+figureAlt: "Rendering of a spin-qubit device: orange glass spheres with arrows, the electron spins, hover between gold gate electrodes on a stone-tile surface, each arrow pointing in a different direction."
 summary: "Qubits from single electron and hole spins in semiconductor quantum dots, and how to make them scale."
 ---
 

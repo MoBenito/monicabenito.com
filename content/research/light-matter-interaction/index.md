@@ -4,6 +4,7 @@ weight: 2
 slug: "light-matter-interaction"
 summary: "Spins and photons in superconducting resonators, and quantum systems driven periodically by light."
 darkFigure: "original"
+figureAlt: "Rendering of a cavity QED experiment on an optical table: two spins with flip arrows sit in a teal light mode focused between two curved silver mirrors, with pink, violet and blue lasers and gold microwave waveguides leading to each spin."
 ---
 
 Light and matter exchange energy and information one quantum at a time. When a single electron spin sits close to a superconducting resonator, which confines microwave photons to a tiny volume, this exchange can become faster than any loss. In this regime of strong coupling, spin and photon merge into one hybrid quantum system, which gives spin qubits a way to talk over long distances: a photon can carry quantum information between spins far apart on a chip, mediate two-qubit gates, and read out the qubit state without destroying it.
