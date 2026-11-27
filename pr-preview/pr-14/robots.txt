@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Sitemap: https://mobenito.github.io/monicabenito.com/pr-preview/pr-14/sitemap.xml
