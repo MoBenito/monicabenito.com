@@ -1,10 +1,10 @@
 {{- /* A page's figure with its dark-mode version, if any (see tools/darkfigs.py).
-       Args: page, width, alt, class, eager. */ -}}
+       Args: page, width, alt, class, eager. Without an alt, the page's figureAlt (front matter) is used. */ -}}
 {{- $p := .page }}
 {{- with $p.Resources.GetMatch "featured.*" }}
 {{- $dark := $p.Resources.GetMatch "featured-dark.*" }}
 {{- if and (not $dark) (in (slice "invert" "cutout") $p.Params.darkFigure) }}{{ $dark = $p.Resources.GetMatch "featured-dark-auto.png" }}{{ end }}
-{{- $args := dict "res" . "width" $.width "alt" $.alt "eager" $.eager }}
+{{- $args := dict "res" . "width" $.width "alt" ($.alt | default $p.Params.figureAlt) "eager" $.eager }}
 {{- if $dark }}
 {{ partial "image.html" (merge $args (dict "class" (printf "%s img-light" ($.class | default "")))) }}
 {{ partial "image.html" (merge $args (dict "res" $dark "class" (printf "%s img-dark" ($.class | default "")))) }}
