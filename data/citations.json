@@ -1,6 +1,6 @@
 {
   "source": "OpenAlex",
-  "updated": "2026-11-27",
+  "updated": "2026-11-28",
   "papers": {
     "a-coherent-spin-photon-interface-in-silicon": {
       "count": 510,
@@ -115,7 +115,7 @@
       "openalex": "W4416243645"
     },
     "squeezed-hole-spin-qubits-in-ge-quantum-dots-with-ultrafast-gates-at-low-power": {
-      "count": 100,
+      "count": 101,
       "openalex": "W3151290787"
     },
     "sympt-a-comprehensive-tool-for-automating-effective-hamiltonian-derivations": {
