@@ -17,6 +17,7 @@ summary: "A new qubit for electrons on liquid helium that combines their spin wi
 aliases:
   - "/blueprint-for-quantum-computing-with-electrons-in-helium/"
 darkFigure: "invert"
+figureAlt: "Rendering of a shallow pool of liquid helium over rows of blue domed pillars, each with an orange electron spin floating above it, glowing level rings and field lines around the front pair, and a gold waveguide at the right sending in a violet microwave."
 ---
 
 A new qubit for electrons on liquid helium that combines their spin with their quantized vertical motion, with schemes for gates and readout.

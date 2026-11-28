@@ -1,0 +1,28 @@
+{{- /* Credit line for a paper's own Figure 1, shown under it when a render takes the top spot.
+       Wording per publisher from data/figurecredits.yaml; `license:` in the front matter (open access) wins.
+       Context: the publication page. */ -}}
+{{- $authors := .Params.authors | default slice }}
+{{- $who := cond (gt (len $authors) 1) (printf "%s et al." (index $authors 0)) (index $authors 0 | default "") }}
+{{- $year := .Date.Year }}
+{{- if .Params.journal }}
+  {{- $ref := printf "<em>%s</em> %s" .Params.journal (.Params.volume | default "") }}
+  {{- with .Params.pages }}{{ $ref = printf "%s, %s" $ref . }}{{ end }}
+  {{- $ref = printf "%s, %s (%d)" $who (strings.TrimSpace $ref) $year }}
+  {{- with .Params.doi }}{{ $ref = printf `<a href="https://doi.org/%s" target="_blank" rel="noopener">%s</a>` . $ref }}{{ end }}
+  {{- $data := hugo.Data.figurecredits }}
+  {{- $text := "Figure 1 from CITE." }}
+  {{- with .Params.license }}
+    {{- $l := . }}{{ $parts := split . " " }}
+    {{- if and (eq (len $parts) 3) (eq (index $parts 0) "CC") }}
+      {{- $l = printf `<a href="https://creativecommons.org/licenses/%s/%s/" target="_blank" rel="noopener">%s</a>` (lower (index $parts 1)) (index $parts 2) . }}
+    {{- end }}
+    {{- $text = printf "Figure 1 from CITE, published under %s." $l }}
+  {{- else }}
+    {{- with index $data.journals .Params.journal }}{{ with index $data . }}{{ $text = . }}{{ end }}{{ end }}
+  {{- end }}
+  {{- replace (replace $text "CITE" $ref) "YEAR" (string $year) | safeHTML }}
+{{- else }}
+  {{- $ref := printf "%s, arXiv:%s (%d)" $who .Params.arxiv $year }}
+  {{- with .Params.arxiv }}{{ $ref = printf `<a href="https://arxiv.org/abs/%s" target="_blank" rel="noopener">%s</a>` . $ref }}{{ end }}
+  {{- printf "Figure 1 from %s." $ref | safeHTML }}
+{{- end }}

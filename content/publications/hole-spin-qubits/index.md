@@ -18,6 +18,7 @@ summary: "How orbital magnetic effects, strain and growth direction shape hole-s
 aliases:
   - "/hole-spin-qubits/"
 darkFigure: "invert"
+figureAlt: "Rendering of a square germanium–silicon core–shell nanowire, cut open to show a blue core with a hole spin between two gold wrap gates under upward blue magnetic-field arrows, beside a round core–shell nanowire with its own gold gates and a lattice-dotted cut face."
 ---
 
 How orbital magnetic effects, strain and growth direction shape hole-spin qubits in germanium nanowires, and which designs make the most of their spin-orbit interaction.

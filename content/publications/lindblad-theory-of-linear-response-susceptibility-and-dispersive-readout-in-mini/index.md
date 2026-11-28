@@ -12,6 +12,7 @@ research:
   - "open-systems-dynamics"
 summary: "A Lindblad-based linear response theory for readout of hybrid superconductor-semiconductor quantum dots."
 darkFigure: "invert"
+figureAlt: "Rendering of a glass nanowire with four glowing quantum dots and gold gates on a violet chip, joined by a large cyan superconducting loop whose flux is shown by a magenta arrow with glowing rings, with yellow chevrons marking the supercurrent around the loop."
 ---
 
 A Lindblad-based linear response theory for readout of hybrid superconductor-semiconductor quantum dots.

@@ -10,11 +10,13 @@ journal: "npj Quantum Information"
 volume: "10"
 pages: "114"
 doi: "10.1038/s41534-024-00907-9"
+license: "CC BY 4.0"
 arxiv: "2310.17399"
 summary: "One theory for the electrical response of quantum devices at any frequency, including relaxation and dephasing."
 darkFigure: "invert"
 research:
   - "open-systems-dynamics"
+figureAlt: "Rendering of a turquoise circuit board with gold rails holding three branches of red, blue and dark-blue capacitors, resistors and a coil, each crossed by a glass arrow, with a white double-dot chip at the top driven by an orange sine wave and a ground triangle at the bottom."
 ---
 
 One theory for the electrical response of quantum devices at any frequency, including relaxation and dephasing.

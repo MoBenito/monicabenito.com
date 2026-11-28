@@ -19,6 +19,7 @@ summary: "In an ac-driven quantum dot chain, the current and its shot noise map 
 aliases:
   - "/transport-shot-noise-and-topology-in-ac-driven-dimer-arrays/"
 darkFigure: "invert"
+figureAlt: "Rendering of glowing pink-to-cyan quasienergy bands threading through three violet glass panels with orange zero-energy edge-state segments, above a blue chip where a chain of paired blue dots with orange end dots tilts like a seesaw over pale resting copies, with purple rocking arrows at both ends and a purple wave below, between gold source and drain blocks."
 ---
 
 In an ac-driven quantum dot chain, the current and its shot noise map out the topological phase diagram.

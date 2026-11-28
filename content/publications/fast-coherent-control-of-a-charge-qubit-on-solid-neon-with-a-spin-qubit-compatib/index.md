@@ -18,6 +18,7 @@ research:
   - "light-matter-interaction"
 summary: "A charge qubit on solid neon with fast coherent control, coupled to a magnetic-field-compatible resonator."
 darkFigure: "invert"
+figureAlt: "Rendering of a pink superconducting nanowire and gold electrodes under a clear layer of solid neon, with a glowing blue electron split between two cyan lobes, pink microwave arcs, and a dark double-well curve with red and blue wavefunctions floating above."
 ---
 
 A charge qubit on solid neon with fast coherent control, coupled to a magnetic-field-compatible resonator.

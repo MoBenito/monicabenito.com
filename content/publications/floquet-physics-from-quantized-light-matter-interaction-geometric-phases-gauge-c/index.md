@@ -10,6 +10,7 @@ research:
   - "light-matter-interaction"
 summary: "How Floquet physics of classically driven systems emerges from fully quantized light-matter interaction."
 darkFigure: "invert"
+figureAlt: "Rendering of a gold-framed 3D sculpture of a quasienergy spectrum: a red and a navy band braiding across a glowing yellow strip, with indigo replica bands above and below, every band traced by a light dashed line."
 ---
 
 How Floquet physics of classically driven systems emerges from fully quantized light-matter interaction.

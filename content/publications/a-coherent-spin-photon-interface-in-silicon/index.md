@@ -21,6 +21,7 @@ summary: "First demonstration of strong coupling between a single spin in silico
 aliases:
   - "/a-coherent-spin-photon-interface-in-silicon/"
 darkFigure: "cutout"
+figureAlt: "Rendering of two curved cyan cavity mirrors with flaring hot spots, holding a glowing green standing-wave light mode in which an orange spin-down ball and a spin-up ball with a green glow inside are linked by two purple circular arrows, above a layered silicon chip on a polished blue wafer."
 ---
 
 First demonstration of strong coupling between a single spin in silicon and a single microwave-frequency photon.

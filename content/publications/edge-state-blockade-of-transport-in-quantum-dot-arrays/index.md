@@ -18,6 +18,7 @@ summary: "A new transport blockade in quantum dot arrays and molecules, caused b
 aliases:
   - "/edge-state-blockade-of-transport-in-quantum-dot-arrays/"
 darkFigure: "original"
+figureAlt: "Rendering of a chip with eight quantum dots arranged in four pairs, the first dot sitting right next to a gold source heaped with blue electrons, where an electron trapped in that first dot sends out red repulsion rings under a tall red edge-state peak and the next electron's single arcing hop from the source into the dot is crossed out with a red X."
 ---
 
 A new transport blockade in quantum dot arrays and molecules, caused by Coulomb repulsion together with topological edge states.

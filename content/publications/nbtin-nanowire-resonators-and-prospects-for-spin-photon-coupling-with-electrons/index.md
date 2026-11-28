@@ -24,6 +24,7 @@ research:
   - "light-matter-interaction"
 summary: "Superconducting NbTiN nanowire resonators keep their high quality on solid neon, a step toward spin qubits with electrons on neon."
 darkFigure: "invert"
+figureAlt: "Rendering of two pink NbTiN nanowire ends running side by side on blue silicon under clear solid neon, with golden electric-field arcs across their gap, a cobalt micromagnet with a pink cap at each side, an orange spin floating over the gap above a glowing double-dot trap, and glowing blue electrons scattered over the ice."
 ---
 
 Superconducting NbTiN nanowire resonators keep their high quality on solid neon, a step toward spin qubits with electrons on neon.

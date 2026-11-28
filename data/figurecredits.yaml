@@ -1,0 +1,24 @@
+# Credit line under a paper's own Figure 1 (layouts/partials/figure-credit.html), in each publisher's requested
+# wording for reusing a figure. CITE becomes the linked reference, YEAR the publication year.
+# Open-access papers carry `license:` in their front matter instead (e.g. "CC BY 4.0"); that always wins.
+# A journal missing here gets a plain "Figure 1 from CITE." Add it when a paper in a new journal gets a render.
+American Physical Society: "Figure 1 reprinted with permission from CITE. Copyright YEAR by the American Physical Society."
+AIP Publishing: "Figure 1 reproduced from CITE, with the permission of AIP Publishing."
+American Chemical Society: "Figure 1 reprinted with permission from CITE. Copyright YEAR American Chemical Society."
+Elsevier: "Figure 1 reprinted from CITE, copyright YEAR, with permission from Elsevier."
+Springer Nature: "Figure 1 reprinted by permission from Springer Nature: CITE, copyright YEAR."
+IOP Publishing: "Figure 1 from CITE. © YEAR IOP Publishing. Reproduced with permission. All rights reserved."
+journals:
+  Physical Review A: American Physical Society
+  Physical Review B: American Physical Society
+  Physical Review Letters: American Physical Society
+  Physical Review Applied: American Physical Society
+  Physical Review Research: American Physical Society
+  Physical Review X: American Physical Society
+  Applied Physics Letters: AIP Publishing
+  Journal of Applied Physics: AIP Publishing
+  Nano Letters: American Chemical Society
+  "Physica E: Low-dimensional Systems and Nanostructures": Elsevier
+  Nature: Springer Nature
+  npj Quantum Information: Springer Nature
+  Nanotechnology: IOP Publishing

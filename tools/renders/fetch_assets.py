@@ -1,4 +1,6 @@
-"""Downloads the CC0 assets from Poly Haven that scenes.py uses (studio HDRI, concrete tiles) into assets/."""
+"""Downloads the CC0 assets from Poly Haven that scenes.py uses (studio HDRI, concrete tiles) into assets/, and copies
+the Nimbus Sans Bold font (from Ghostscript's fonts, package gsfonts or fonts-urw-base35) that the SymPT scene needs."""
+import shutil
 import urllib.request
 from pathlib import Path
 
@@ -16,3 +18,10 @@ for name, url in FILES.items():
         print("downloading", name)
         req = urllib.request.Request(url, headers={"User-Agent": "research-renders"})
         dst.write_bytes(urllib.request.urlopen(req).read())
+
+FONT = ASSETS / "sp_NimbusSans-Bold.otf"
+for src in ("/usr/share/fonts/gsfonts/NimbusSans-Bold.otf", "/usr/share/fonts/opentype/urw-base35/NimbusSans-Bold.otf"):
+    if not FONT.exists() and Path(src).exists():
+        shutil.copy(src, FONT)
+if not FONT.exists():
+    print("NimbusSans-Bold.otf not found: install gsfonts (or fonts-urw-base35) for the SymPT scene")

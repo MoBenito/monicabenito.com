@@ -16,6 +16,7 @@ summary: "An efficient method for the full counting statistics of transport thro
 aliases:
   - "/full-counting-statistics-of-time-dependent-conductors/"
 darkFigure: "invert"
+figureAlt: "Rendering of a driven double quantum dot between gold contacts, purple drive waves above it and a panel with a blue interference pattern behind, next to a bell-shaped histogram built from stacks of blue electron spheres traced by an orange curve."
 ---
 
 An efficient method for the full counting statistics of transport through conductors with arbitrary time dependence.

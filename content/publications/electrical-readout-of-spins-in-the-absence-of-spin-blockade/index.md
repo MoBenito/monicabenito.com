@@ -14,11 +14,13 @@ journal: "npj Quantum Information"
 volume: "11"
 pages: "155"
 doi: "10.1038/s41534-025-01102-0"
+license: "CC BY 4.0"
 arxiv: "2403.12888"
 research:
   - "spin-quantum-computing"
 summary: "A way to read out spins electrically even when spin blockade is lifted."
 darkFigure: "invert"
+figureAlt: "Rendering of a silicon nanowire transistor on a mint substrate, where a hole hops between a quantum dot under the gold gate and a magenta boron acceptor, two orange hole spins float above, and a copper spiral resonator behind sends pink and blue radio-frequency waves in and out to read the spins."
 ---
 
 A way to read out spins electrically even when spin blockade is lifted.

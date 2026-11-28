@@ -17,6 +17,7 @@ summary: "Squeezing germanium quantum dots in one direction boosts the spin-orbi
 aliases:
   - "/squeezed-hole-spin-qubits-in-ge-quantum-dots-with-ultrafast-gates-at-low-power/"
 darkFigure: "invert"
+figureAlt: "Rendering of a blue germanium heterostructure slab with a long, narrow glowing hole dot inside a dotted outline between two gold gates, a red drive arrow beside it and an orange spin above, wrapped in a violet spiral."
 ---
 
 Squeezing germanium quantum dots in one direction boosts the spin-orbit interaction by orders of magnitude, for ultrafast hole-spin gates at low power.

@@ -15,6 +15,7 @@ research:
   - "light-matter-interaction"
 summary: "Several superconducting cavities strongly coupled to one spin ensemble, with signatures of dark states."
 darkFigure: "invert"
+figureAlt: "Rendering of a chip with three gold loop-shaped microwave resonators hanging off one feedline, the left one dark, the middle and right ones filled with a shared blue glow, a violet crystal full of aligned orange spins on the right resonator, and identical bright green waves entering the line on the left and leaving it on the right."
 ---
 
 Several superconducting cavities strongly coupled to one spin ensemble, with signatures of dark states.

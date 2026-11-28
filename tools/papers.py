@@ -136,7 +136,17 @@ def crossref(doi):
     return {"title": title, "journal": (m.get("container-title") or [""])[0], "volume": m.get("volume") or "",
             "pages": m.get("page") or m.get("article-number") or "", "doi": doi.lower(),
             "date": "-".join(f"{x:02d}" for x in (parts + [1, 1])[:3]),
-            "authors": [f"{a.get('given', '')} {a.get('family', '')}".strip() for a in m.get("author", [])]}
+            "authors": [f"{a.get('given', '')} {a.get('family', '')}".strip() for a in m.get("author", [])],
+            "license": cc_license(m)}
+
+
+def cc_license(m):
+    """Open-access licence from Crossref as e.g. "CC BY 4.0" (empty if none); used for the Figure 1 credit line."""
+    for lic in m.get("license", []):
+        hit = re.search(r"creativecommons\.org/licenses/([a-z-]+)/(\d\.\d)", lic.get("URL", ""))
+        if hit:
+            return f"CC {hit.group(1).upper()} {hit.group(2)}"
+    return ""
 
 
 def journal_version(entry):
@@ -358,7 +368,7 @@ def add(ident):
     teaser, body = draft_summary(e["abstract"]) if e["abstract"] else ("", "")
     fm = {"title": title, "date": meta.get("date") or e["date"], "authors": meta.get("authors") or e["authors"],
           "journal": meta.get("journal"), "volume": meta.get("volume"), "pages": meta.get("pages"),
-          "doi": meta.get("doi"), "arxiv": e["arxiv"], "research": suggest_areas(title, e["abstract"]),
+          "doi": meta.get("doi"), "license": meta.get("license"), "arxiv": e["arxiv"], "research": suggest_areas(title, e["abstract"]),
           "summary": teaser}
     write_bundle(slug, fm, f"{teaser}\n\n{body}" if teaser else "")
     fig = e["arxiv"] and figure_from_arxiv(e["arxiv"], PUBS / slug / "featured.png")
@@ -374,7 +384,7 @@ def publish(slug, doi):
     m = re.match(r"---\n(.*?\n)---\n", t, re.S)
     fm = m.group(1)
     fm = re.sub(r'^date: ".*"$', f'date: "{meta["date"]}"', fm, flags=re.M)
-    extra = "".join(f'{k}: {json.dumps(meta[k], ensure_ascii=False)}\n' for k in ("journal", "volume", "pages", "doi") if meta[k])
+    extra = "".join(f'{k}: {json.dumps(meta[k], ensure_ascii=False)}\n' for k in ("journal", "volume", "pages", "doi", "license") if meta[k])
     fm = re.sub(r'^(arxiv: ".*"\n)', extra + r"\1", fm, flags=re.M)
     old_title = re.search(r'^title: "(.*)"$', fm, re.M).group(1)
     if meta["title"] and norm_title(meta["title"]) != norm_title(old_title):

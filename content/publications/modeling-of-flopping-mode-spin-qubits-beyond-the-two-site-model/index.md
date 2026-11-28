@@ -17,6 +17,7 @@ research:
   - "spin-quantum-computing"
 summary: "A spatially resolved model of flopping-mode spin qubits that goes beyond the usual two-site description."
 darkFigure: "invert"
+figureAlt: "Rendering of a silicon chip with two flopping-mode qubits shown as glowing double-humped wavefunctions on grids with orange spins, under green and violet gates and a row of red-blue bar magnets whose computed blue field lines arc from each north pole above and down through the gates into the next south pole."
 ---
 
 A spatially resolved model of flopping-mode spin qubits that goes beyond the usual two-site description.

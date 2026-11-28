@@ -11,6 +11,7 @@ journal: "Physical Review Applied"
 volume: "18"
 pages: "014009"
 doi: "10.1103/physrevapplied.18.014009"
+license: "CC BY 4.0"
 arxiv: "2012.09507"
 research:
   - "open-systems-dynamics"
@@ -19,6 +20,7 @@ summary: "Protocol for the deterministic generation of entanglement between two 
 aliases:
   - "/entangling-nuclear-spins-in-distant-quantum-dots-via-an-electron-bus/"
 darkFigure: "invert"
+figureAlt: "Rendering of an orange electron spin riding as the passenger of a red open-top toy bus along a white channel between two pits filled with blue nuclear spins, with gold plunger, barrier and conveyor gates fanning out to a row of bond pads in front and pink threads arching between the two spin ensembles."
 ---
 
 Protocol for the deterministic generation of entanglement between two ensembles of nuclear spins surrounding two distant quantum dots.

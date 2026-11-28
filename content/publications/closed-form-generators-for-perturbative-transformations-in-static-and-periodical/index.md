@@ -10,6 +10,7 @@ research:
   - "light-matter-interaction"
 summary: "A closed-form expression for the generator of perturbative transformations, for static and periodically driven systems."
 darkFigure: "invert"
+figureAlt: "Rendering of a teal board of glass tiles forming a matrix, with an orange block, a pale blue block and floating pink tiles, passing through a large golden frame while a violet wave enters from the front side."
 ---
 
 A closed-form expression for the generator of perturbative transformations, for static and periodically driven systems.

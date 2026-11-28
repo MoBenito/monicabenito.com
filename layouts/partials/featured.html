@@ -1,9 +1,16 @@
-{{- /* A page's figure with its dark-mode version, if any (see tools/darkfigs.py).
-       Args: page, width, alt, class, eager. Without an alt, the page's figureAlt (front matter) is used. */ -}}
+{{- /* A page's picture with its dark-mode version, if any (see tools/darkfigs.py).
+       Args: page, width, alt, class, eager, figure1.
+       The picture is render.* (a full-bleed illustration, no dark version) if the bundle has one, otherwise featured.*.
+       With figure1 true it is always featured.* (on papers: Figure 1 of the paper).
+       Without an alt, the page's figureAlt (front matter, describing the top picture) is used. */ -}}
 {{- $p := .page }}
-{{- with $p.Resources.GetMatch "featured.*" }}
-{{- $dark := $p.Resources.GetMatch "featured-dark.*" }}
+{{- $render := cond (.figure1 | default false) nil ($p.Resources.GetMatch "render.*") }}
+{{- with $render | default ($p.Resources.GetMatch "featured.*") }}
+{{- $dark := false }}
+{{- if not $render }}
+{{- $dark = $p.Resources.GetMatch "featured-dark.*" }}
 {{- if and (not $dark) (in (slice "invert" "cutout") $p.Params.darkFigure) }}{{ $dark = $p.Resources.GetMatch "featured-dark-auto.png" }}{{ end }}
+{{- end }}
 {{- $args := dict "res" . "width" $.width "alt" ($.alt | default $p.Params.figureAlt) "eager" $.eager }}
 {{- if $dark }}
 {{ partial "image.html" (merge $args (dict "class" (printf "%s img-light" ($.class | default "")))) }}

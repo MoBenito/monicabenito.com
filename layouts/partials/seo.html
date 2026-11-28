@@ -2,9 +2,9 @@
        pages, the citation_* tags Google Scholar reads. Context: the page. */ -}}
 {{- $portrait := site.Home.Resources.GetMatch "portrait.*" }}
 
-{{- /* Share image: the page's figure, otherwise the portrait; JPEG, which every link preview can show */}}
+{{- /* Share image: the page's render or figure, otherwise the portrait; JPEG, which every link preview can show */}}
 {{- $img := "" }}
-{{- with .Resources.GetMatch "featured.*" }}{{ $img = .Fit "1200x630 jpg" }}{{ end }}
+{{- with .Resources.GetMatch "render.*" | default (.Resources.GetMatch "featured.*") }}{{ $img = .Fit "1200x630 jpg" }}{{ end }}
 {{- if and (not $img) $portrait }}{{ $img = $portrait.Fill "630x630 jpg Center" }}{{ end }}
 {{- with $img }}
 <meta property="og:image" content="{{ .Permalink }}">

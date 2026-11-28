@@ -19,6 +19,7 @@ summary: "A scheme that creates entanglement between two distant spin qubits in 
 aliases:
   - "/dissipative-long-range-entanglement-generation-between-electronic-spins/"
 darkFigure: "invert"
+figureAlt: "Rendering of two distant orange spins above a glowing racetrack-shaped quantum Hall bar whose edge carries blue electrons, each spin flanked by lavender helper dots and joined to the other by an arching pink-and-violet double helix."
 ---
 
 A scheme that creates entanglement between two distant spin qubits in quantum dots and keeps it stable through dissipation.

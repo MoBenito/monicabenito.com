@@ -17,6 +17,7 @@ summary: "Optomechanical setups can realise degenerate parametric oscillation, a
 aliases:
   - "/degenerate-parametric-oscillation-in-quantum-membrane-optomechanics/"
 darkFigure: "invert"
+figureAlt: "Rendering of an optical cavity between two curved mirrors on a breadboard, with a thin translucent cyan membrane in a square chip frame at its centre, bowed in a drum mode marked by glowing contour rings, while yellow and violet standing light waves fill the cavity."
 ---
 
 Optomechanical setups can realise degenerate parametric oscillation, a paradigm of dissipative phase transitions that optical cavities never could.

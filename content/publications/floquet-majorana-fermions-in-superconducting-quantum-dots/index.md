@@ -16,6 +16,7 @@ summary: "Periodically driven gates create Floquet Majorana modes in quantum dot
 aliases:
   - "/floquet-majorana-fermions-in-superconducting-quantum-dots/"
 darkFigure: "invert"
+figureAlt: "Rendering of three orange spin spheres above quantum dots on a violet chip, the middle spin tilted, linked by gold and violet arcs to two silver superconductor bars carrying paired blue electrons, with pink wavy signals on gold gate leads and teal glows around the two outer dots."
 ---
 
 Periodically driven gates create Floquet Majorana modes in quantum dots coupled to superconductors, even where the undriven system has none.

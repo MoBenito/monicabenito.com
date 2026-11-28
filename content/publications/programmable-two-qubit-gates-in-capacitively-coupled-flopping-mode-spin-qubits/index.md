@@ -9,6 +9,7 @@ journal: "Physical Review B"
 volume: "101"
 pages: "195438"
 doi: "10.1103/physrevb.101.195438"
+license: "CC BY 4.0"
 arxiv: "2003.02137"
 research:
   - "spin-quantum-computing"
@@ -16,6 +17,7 @@ summary: "A versatile set of two-qubit gates between neighbouring flopping-mode 
 aliases:
   - "/programmable-two-qubit-gates-in-capacitively-coupled-flopping-mode-spin-qubits/"
 darkFigure: "invert"
+figureAlt: "Rendering of the two device layouts side by side on a teal chip: on the left a row of four gold-ringed quantum dots joined by a round parallel-plate capacitor, with orange spins above each pair and green, blue and violet arcs linking the dots; on the right a 2×2 square of dots with spins in the two left dots, capacitors along the sides and crossing diagonals, a blue arrow between the left dots and a green arrow pointing at the crossing; in front of each layout lie two colour bars for the magnet's transverse (blue) and longitudinal (red) fields."
 ---
 
 A versatile set of two-qubit gates between neighbouring flopping-mode spin qubits within one node of a spin quantum computer.

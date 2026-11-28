@@ -164,6 +164,10 @@ html:not(.js) .bloch canvas, html:not(.js) .theme-toggle { display: none; }  /* 
 .prose .contact { padding-left: 0; }
 .meta { color: var(--muted); font-size: .92rem; }
 img.featured { display: block; margin: 1.4rem 0; border-radius: var(--radius); }
+/* a paper's own Figure 1 below the text, when the top picture is a render */
+.paper-figure { margin: 1.8rem 0 1.4rem; }
+.paper-figure img { display: block; max-width: 100%; height: auto; }
+.paper-figure figcaption { color: var(--muted); font-size: .88rem; margin-top: .5rem; }
 
 /* Cards: one style for publications, news and research areas.
    The whole card opens its page (the title link is stretched over it); extra links like Journal/arXiv sit on top. */
