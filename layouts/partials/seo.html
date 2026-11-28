@@ -87,4 +87,6 @@
 {{- with .Params.arxiv }}
 <meta name="citation_arxiv_id" content="{{ . }}">{{ end }}
 <meta name="citation_abstract_html_url" content="{{ .Permalink }}">
+{{- with index (hugo.Data.opus.papers | default dict) .File.ContentBaseName }}{{ with .pdf }}
+<meta name="citation_pdf_url" content="{{ . }}">{{ end }}{{ end }}
 {{- end }}

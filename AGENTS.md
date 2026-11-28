@@ -13,6 +13,8 @@ small theme of its own; there is no external theme and no JavaScript build step.
     python tools/newsart.py      # redraws the drawn news pictures (featured.png + featured-dark.png)
     python tools/webfont.py      # only when the heading font changes
     python tools/citations.py    # refreshes citation counts (data/citations.json) from OpenAlex
+    python tools/opus.py         # refreshes the free-PDF links (data/opus.json) from the Augsburg repository
+    python tools/linkcheck.py    # checks every link in public/ (after a build)
 
 The tools need Python with fontTools, numpy and Pillow; `logo.py` and `newsart.py` also need `rsvg-convert`.
 News posts without a photo of their own get a drawing in the logo's style: add a function to `PICTURES` in
@@ -66,6 +68,10 @@ Figures:
 - Check the edges for leftover frame lines or labels of the next panel.
 - Save it as `featured.png`, then run `python tools/darkfigs.py`.
 
+Free PDFs: when the University of Augsburg repository (OPUS) holds a paper's full text, the paper gets a
+"Free PDF" link and a `citation_pdf_url` tag for Google Scholar. Nothing to do by hand: `tools/opus.py` matches
+OPUS entries to papers by DOI (arXiv id for preprints) and writes `data/opus.json` every night.
+
 Every paper by the author should be on the site. ORCID has been incomplete before, so also check arXiv
 (`au:Benito_M` / `au:Benito_Monica`) and Crossref. Other researchers named "M. Benito" exist; confirm before
 adding anything outside quantum physics.
@@ -87,7 +93,8 @@ coloured areas or for renders, so look at the result in dark mode and change `da
 | Workflow | When | What |
 |---|---|---|
 | `.github/workflows/preview.yml` | every pull request | builds the site into `gh-pages` under `pr-preview/pr-<n>/`, comments the link on the PR (one comment, updated), deletes the preview when the PR is merged or closed |
-| `.github/workflows/publications.yml` | nightly, or by hand | refreshes `data/citations.json` (committed to `main`), then `tools/bot.py` opens one PR per new paper (`paper/<id>`) or newly published preprint (`published/<slug>`) and starts its preview |
+| `.github/workflows/publications.yml` | nightly, or by hand | refreshes `data/citations.json` and `data/opus.json` (committed to `main`), then `tools/bot.py` opens one PR per new paper (`paper/<id>`) or newly published preprint (`published/<slug>`) and starts its preview |
+| `.github/workflows/links.yml` | weekly, or by hand | builds the site and checks every link (`tools/linkcheck.py`); broken ones go into one issue "Broken links", which closes by itself once all work again |
 | `.github/workflows/deploy.yml` | push to `main`, after each Publications run, or by hand | builds with `--panicOnWarning` and uploads to the VPS over SSH (`DEPLOY_KEY` secret); see below |
 | `.github/workflows/pr-form.yml` | a new-paper PR's description is edited, or files are pushed to it | keeps the description form and the page files in step (see below) |
 | `.github/workflows/update-hugo.yml` | monthly, or by hand | if Hugo has a new release: PR that changes `.hugo-version` (read by all workflows) and, if its built-in KaTeX changed, replaces `static/katex/` (`tools/update_hugo.py`) |
@@ -98,6 +105,8 @@ coloured areas or for renders, so look at the result in dark mode and change `da
   between `<!-- bot:text -->` markers. Editing the description writes the change into `index.md`; pushing files
   (e.g. a new `featured.png`) makes the dark version again and refreshes the description. Files win when they
   disagree.
+- New papers come from arXiv, ORCID and, last, the author's list in the University of Augsburg repository OPUS
+  (`tools/opus.py`, read from her page on uni-augsburg.de; the OPUS export itself is closed).
 - `tools/papers.py find|add|publish` does the work; `tools/bot.py` only wraps it in branches and PRs. A change is
   proposed once: any PR for it, open, merged or closed, stops it from being proposed again.
 - Identity checks in bot PRs: OpenAlex ORCID link, Augsburg affiliation, known co-authors. Without any of them the PR

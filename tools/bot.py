@@ -76,6 +76,8 @@ def new_paper_body(found, added, branch, sha):
     who = []
     if "orcid" in found.get("identity", []) or "orcid-record" in found.get("identity", []):
         who.append("✓ listed on your ORCID record" if "orcid-record" in found["identity"] else "✓ M. Benito on this paper is linked to your ORCID iD (OpenAlex)")
+    if "opus" in found.get("identity", []):
+        who.append("✓ in your publication list of the University of Augsburg repository (OPUS)")
     if "augsburg" in found.get("identity", []):
         who.append("✓ affiliation: University of Augsburg")
     if found.get("known_coauthors"):
