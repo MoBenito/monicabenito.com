@@ -19,6 +19,7 @@ summary: "Periodic driving of the Kitaev chain creates topological phases with F
 aliases:
   - "/floquet-engineering-of-long-range-p-wave-superconductivity/"
 darkFigure: "invert"
+figureAlt: "Rendering of a chain of split glass spheres on a blue superconducting slab, with glowing orange halves at both ends, violet and pink arcs linking distant sites, and a row of fainter snapshot copies of the chain receding behind it alongside a pink drive wave."
 ---
 
 Periodic driving of the Kitaev chain creates topological phases with Floquet Majorana modes that the ac fields can tune and manipulate.

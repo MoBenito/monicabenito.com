@@ -1,6 +1,6 @@
-# Research-area renders
+# Research-area and paper renders
 
-Blender scenes for the pictures on the research pages. Blender 5 with Cycles (an NVIDIA GPU with OptiX makes it
+Blender scenes for the pictures on the research pages and the illustration at the top of each paper. Blender 5 with Cycles (an NVIDIA GPU with OptiX makes it
 fast; a full render takes a few minutes, a preview well under one). Python needs numpy and Pillow.
 
 | Page | Scene | Extra steps |
@@ -43,3 +43,22 @@ into chalk.
 
 `flare.py` takes the positions of the light sources as fractions of the image (`SOURCES`); they match the fixed
 camera of `laser_wow`, so update them if the camera moves.
+
+## Paper renders
+
+Each paper has one scene in `papers/<slug>.py`, named after its folder in `content/publications/`. The file runs
+inside `scenes.py` (all helpers in scope); it starts with `bright_stage()` (the shared light look of the series)
+and ends with `camera(...)` and `post_fx(...)`. Three scenes also load `papers/fieldlines_common.inc` (computed
+magnetic field lines); the SymPT scene needs the font that `fetch_assets.py` copies.
+
+    blender -b --factory-startup --python scenes.py -- <slug> out/<slug>.png preview   # 960x540 check
+    blender -b --factory-startup --python scenes.py -- <slug> out/<slug>.png           # 1920x1080
+    python grade.py out/<slug>.png out/<slug>_graded.png                               # shared finishing grade
+
+`grade.py` stretches the levels, deepens them slightly and adds saturation, so the whole series looks bright and
+projector-safe. Save the graded picture as `content/publications/<slug>/render.jpg` (JPEG quality 92) and describe
+it in `figureAlt:` in the paper's front matter ("Rendering of ..."). The page then shows the render at the top and
+on the card, and Figure 1 of the paper below the text.
+
+Keep scenes physically faithful to the paper: right device, right actors, nothing the paper does not contain; no
+text or labels in the picture. Check every render also at about 280 px wide (the card size).

@@ -19,6 +19,7 @@ summary: "A classical random walk can be topological too, and the statistics of 
 aliases:
   - "/random-walk-topological-transition-revealed-via-electron-counting/"
 darkFigure: "invert"
+figureAlt: "Rendering of a staircase of alternating teal and coral steps rising across the frame, with thick and thin gold and violet hop arrows between steps, a glowing blue ball on one step, red frames at both ends, and a gold source and drain with a single dot in the foreground."
 ---
 
 A classical random walk can be topological too, and the statistics of electron counting reveal it.

@@ -10,6 +10,7 @@ summary: "SymPT, a software tool that automates Schrieffer-Wolff transformations
 darkFigure: "invert"
 research:
   - "light-matter-interaction"
+figureAlt: "Rendering of a flowchart in 3D: a matrix of pink, orange and blue tiles on a green disc passes through a blue box labelled SymPT, with gold gears and a cyan diamond circled by a violet loop, and arrives block-diagonal on a red disc."
 ---
 
 SymPT, a software tool that automates Schrieffer-Wolff transformations for effective Hamiltonians.

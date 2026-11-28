@@ -18,6 +18,7 @@ summary: "AC driving can make bosonic modes unstable right at the edges of a sys
 aliases:
   - "/topological-instabilities-in-ac-driven-bosonic-systems/"
 darkFigure: "invert"
+figureAlt: "Rendering of a row of mint glass spheres on gold pins over a magenta plate, joined by alternating thick and thin pink springs, with a pink wave along the plate and two cones of green glowing balls spiralling upwards from the two end spheres."
 ---
 
 AC driving can make bosonic modes unstable right at the edges of a system, protected by topology.

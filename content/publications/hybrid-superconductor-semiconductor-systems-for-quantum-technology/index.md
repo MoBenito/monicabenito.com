@@ -16,6 +16,7 @@ summary: "A perspective on devices that combine superconducting circuits with se
 aliases:
   - "/this-is-my-super-awesome-publication/"
 darkFigure: "invert"
+figureAlt: "Rendering of a superconducting coplanar resonator on an orange chip with a blue half-wave field profile, ending at two blue semiconductor mesas where fine gold finger gates fan out into leads and pads and define double quantum dots, each holding an orange electron spin."
 ---
 
 A perspective on devices that combine superconducting circuits with semiconductor spin qubits: progress, limits and where the field is heading.

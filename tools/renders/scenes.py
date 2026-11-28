@@ -1913,6 +1913,52 @@ def spin_bath():
         ob = bpy.data.objects.new(name, me); sc.collection.objects.link(ob); me.materials.append(mat)
     camera((0.0, -6.0, 4.4), (0, 1.2, 0.3), lens=38, dof=3.5)
 
+def bright_stage(floor_z=-0.7, exposure=-0.45, sun_rot=(40, 0, -25)):
+    """The shared look of the paper renders (as in bath_wow): pale brick-grid floor, pastel sky gradient seen by the
+    camera only, studio HDRI for lighting and reflections, a warm sun, AgX Punchy, and the near-empty air box that
+    keeps Cycles/OptiX from crashing on object volumes. Call it first, then build the scene, then camera() and
+    post_fx(fog=0.25, streaks=0.0, ghosts=0.0, threshold=3.0, anamorphic=0.0, dispersion=0.0, contrast=18.0,
+    saturation=1.15). Set sc.camera.data.clip_end = 5000 after camera()."""
+    bpy.ops.mesh.primitive_plane_add(size=3000, location=(0, 0, floor_z))
+    fl = principled("pale_floor", **{"Base Color": (0.78, 0.8, 0.82, 1), "Roughness": 0.45})
+    nt = fl.node_tree
+    br = nt.nodes.new("ShaderNodeTexBrick")
+    br.inputs["Color1"].default_value = br.inputs["Color2"].default_value = (0.98, 0.9, 0.82, 1)
+    br.inputs["Mortar"].default_value = (0.95, 0.72, 0.62, 1)
+    br.inputs["Scale"].default_value = 0.6; br.inputs["Mortar Size"].default_value = 0.012
+    br.offset = 0.0; br.squash = 1.0
+    nt.links.new(br.outputs["Color"], nt.nodes["Principled BSDF"].inputs["Base Color"])
+    link(bpy.context.object, fl)
+    wt = sc.world.node_tree; wn_ = wt.nodes
+    lp = wn_.new("ShaderNodeLightPath")
+    grad_tc = wn_.new("ShaderNodeTexCoord"); gsep = wn_.new("ShaderNodeSeparateXYZ")
+    wt.links.new(grad_tc.outputs["Window"], gsep.inputs[0])
+    gr = wn_.new("ShaderNodeValToRGB"); ge = gr.color_ramp.elements
+    ge[0].position, ge[0].color = 0.55, (1.0, 0.82, 0.72, 1)
+    ge[1].position, ge[1].color = 1.0, (0.55, 0.75, 1.0, 1)
+    wt.links.new(gsep.outputs["Y"], gr.inputs["Fac"])
+    mixc = wn_.new("ShaderNodeMix"); mixc.data_type = "RGBA"
+    wt.links.new(lp.outputs["Is Camera Ray"], mixc.inputs["Factor"])
+    bg = wn_["Background"]
+    src_link = bg.inputs["Color"].links[0].from_socket
+    wt.links.new(src_link, mixc.inputs[6]); wt.links.new(gr.outputs["Color"], mixc.inputs[7])
+    wt.links.new(mixc.outputs[2], bg.inputs["Color"])
+    sun = bpy.data.lights.new("sun", "SUN"); sun.energy, sun.angle, sun.color = 4.2, math.radians(6), (1.0, 0.94, 0.86)
+    so = bpy.data.objects.new("sun", sun); so.rotation_euler = tuple(math.radians(a) for a in sun_rot); sc.collection.objects.link(so)
+    bg.inputs["Strength"].default_value = 0.8
+    sc.view_settings.look = "AgX - Punchy"
+    sc.view_settings.exposure = exposure
+    for o_ in [o_ for o_ in sc.objects if o_.type == "LIGHT"]:
+        o_.data.color = (1.0, 0.93, 0.85)
+    bpy.ops.mesh.primitive_cube_add(size=80, location=(0, 0, 10))
+    vb = bpy.context.object
+    vm = bpy.data.materials.new("air"); vm.use_nodes = True
+    vnt = vm.node_tree; vnt.nodes.remove(vnt.nodes["Principled BSDF"])
+    vs_ = vnt.nodes.new("ShaderNodeVolumeScatter"); vs_.inputs["Density"].default_value = 0.0002
+    vnt.links.new(vs_.outputs[0], vnt.nodes["Material Output"].inputs["Volume"])
+    vb.data.materials.append(vm); vb.visible_shadow = False
+
+
 def bath_wow():
     """Open quantum system, physical version: an electron spin qubit above a silicon lattice. Spinless 28Si atoms,
     sparse 29Si nuclear spins. The electron's wavefunction |psi|^2 (envelope x valley oscillations) glows on the
@@ -2256,8 +2302,14 @@ def bath_wow():
     post_fx(fog=0.25, streaks=0.0, ghosts=0.0, threshold=3.0, anamorphic=0.0, dispersion=0.0, contrast=18.0, saturation=1.15)
 
 
-{"bath_wow": bath_wow, "laser_wow": laser_wow, "mobius_variant": mobius_variant, "mobius_band_float": mobius_band_float, "mobius_float": mobius_float, "mobius_board": mobius_board, "mobius_zoo": mobius_zoo, "laser3": laser3, "spin_bath": spin_bath, "chip_cavity": chip_cavity, "open_bubble": open_bubble, "mobius_ssh": mobius_ssh, "neon": neon, "surf": surf, "timechain": timechain, "kitaev": kitaev, "bloch": bloch, "laser2": laser2, "mobius2": mobius2, "bath2": bath2, "light_matter": light_matter, "open_systems": open_systems, "topological": topological,
- "laser_cavity": laser_cavity, "mobius": mobius, "bath": bath}[SCENE]()
+SCENES = {"bath_wow": bath_wow, "laser_wow": laser_wow, "mobius_variant": mobius_variant, "mobius_band_float": mobius_band_float, "mobius_float": mobius_float, "mobius_board": mobius_board, "mobius_zoo": mobius_zoo, "laser3": laser3, "spin_bath": spin_bath, "chip_cavity": chip_cavity, "open_bubble": open_bubble, "mobius_ssh": mobius_ssh, "neon": neon, "surf": surf, "timechain": timechain, "kitaev": kitaev, "bloch": bloch, "laser2": laser2, "mobius2": mobius2, "bath2": bath2, "light_matter": light_matter, "open_systems": open_systems, "topological": topological,
+ "laser_cavity": laser_cavity, "mobius": mobius, "bath": bath}
+if SCENE in SCENES:
+    SCENES[SCENE]()
+else:
+    # paper scenes live in papers/<name>.py and run with this module's helpers in scope
+    _f = HERE / "papers" / (SCENE + ".py")
+    exec(compile(_f.read_text(), str(_f), "exec"), globals())
 # make the soft glow shell see-through
 for m in (GLOW_SOFT,):
     nt = m.node_tree

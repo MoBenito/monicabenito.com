@@ -29,11 +29,11 @@ News posts without a photo of their own get a drawing in the logo's style: add a
 | `layouts/` | All templates. Lists use the shared card partials `pub-item.html` and `news-item.html` |
 | `layouts/partials/seo.html` | Share image, schema.org data (Person on the home page, ScholarlyArticle per paper) and Google Scholar `citation_*` tags; built from the front matter, nothing to fill in by hand. List pages take their meta description from `description:` |
 | `layouts/partials/area-icon.html` | Small line icon per research area (paper cards, paper pages, filter, research cards); a new area needs a drawing here |
-| `layouts/partials/featured.html` | Picks the light or dark figure; always use it instead of rendering `featured.*` directly. Its alt text comes from `figureAlt:` in the front matter, which also feeds the share-image alt and the structured data |
+| `layouts/partials/featured.html` | Picks the light or dark figure; always use it instead of rendering `featured.*` directly. A `render.*` in the bundle (a full-bleed illustration, no dark version) takes the top spot and the share image; on paper pages `featured.*` then moves below the text as "Figure 1 from the paper". The top picture's alt text comes from `figureAlt:` in the front matter, which also feeds the share-image alt and the structured data |
 | `assets/css/main.css` | The only stylesheet. Colours are tokens on `:root`, redefined for dark mode |
 | `static/` | Favicons and the self-hosted heading font |
 | `tools/` | Scripts for dark figures, logo and font |
-| `tools/renders/` | Blender scenes for the research-area pictures; see its README |
+| `tools/renders/` | Blender scenes for the research-area pictures and the paper renders (`papers/<slug>.py`); see its README |
 
 ## Adding a publication
 
@@ -47,10 +47,12 @@ journal: "…"               # omit journal, volume, pages and doi for preprints
 volume: "…"
 pages: "…"
 doi: "…"                   # lowercase
+license: "CC BY 4.0"        # only for open-access papers; shown in the Figure 1 credit
 arxiv: "NNNN.NNNNN"        # without version suffix
 research: ["spin-quantum-computing"]   # any of: spin-quantum-computing, topological-matter, open-systems-dynamics
 summary: "One-sentence teaser."
 darkFigure: "invert"       # written by tools/darkfigs.py; see below
+figureAlt: "Rendering of …"  # describes render.jpg, the picture at the top
 aliases: ["/old-wordpress-slug/"]      # only for papers that existed on the old site
 ```
 
@@ -65,6 +67,11 @@ Figures:
 - If Figure 1 is a tall stack of panels, use only the top panel so the card stays compact.
 - Check the edges for leftover frame lines or labels of the next panel.
 - Save it as `featured.png`, then run `python tools/darkfigs.py`.
+- Add an illustration as `render.jpg` (1920×1080, made with `tools/renders/`, see its README) plus a `figureAlt:`
+  line describing it ("Rendering of ..."); Figure 1 then appears below the text with a credit line.
+- The credit line takes the publisher's requested wording from `data/figurecredits.yaml` (journal → publisher).
+  For an open-access paper set `license:` (e.g. `"CC BY 4.0"`, written by `tools/papers.py` from Crossref), which
+  wins. A paper in a journal not listed there gets a plain "Figure 1 from …": add the journal.
 
 Every paper by the author should be on the site. ORCID has been incomplete before, so also check arXiv
 (`au:Benito_M` / `au:Benito_Monica`) and Crossref. Other researchers named "M. Benito" exist; confirm before

@@ -13,6 +13,7 @@ journal: "Physical Review Research"
 volume: "2"
 pages: "012006"
 doi: "10.1103/physrevresearch.2.012006"
+license: "CC BY 4.0"
 arxiv: "1905.00346"
 research:
   - "spin-quantum-computing"
@@ -20,6 +21,7 @@ summary: "The flopping-mode configuration enables low-power spin control in quan
 aliases:
   - "/flopping-mode-electric-dipole-spin-resonance/"
 darkFigure: "invert"
+figureAlt: "Rendering of a silicon double quantum dot between two gold cobalt micromagnets, with a few computed blue magnetic field lines running from one magnet's pole face across the glowing double dot into the other and evenly spaced field loops arching over each magnet, while an orange spin above the dot spirals under a microwave drive and a superconducting resonator leads away at the front."
 ---
 
 The flopping-mode configuration enables low-power spin control in quantum dot arrays.

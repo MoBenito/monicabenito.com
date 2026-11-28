@@ -20,6 +20,7 @@ summary: "The flopping-mode spin qubit can be efficiently controlled and protect
 aliases:
   - "/electric-field-control-and-noise-protection-of-the-flopping-mode-spin-qubit/"
 darkFigure: "invert"
+figureAlt: "Rendering of an electron crossing a sculpted double-well potential, its orange spin turning under a row of red magnetic-field arrows, with the qubit resting in a protective bubble on top of the barrier while charge fluctuators ripple nearby."
 ---
 
 The flopping-mode spin qubit can be efficiently controlled and protected from charge fluctuations.

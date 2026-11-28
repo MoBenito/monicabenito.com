@@ -19,6 +19,7 @@ summary: "Theory showing that a single electron spin in a silicon double quantum
 aliases:
   - "/input-output-theory-for-spin-photon-coupling-in-si-double-quantum-dots/"
 darkFigure: "invert"
+figureAlt: "Rendering of a layered Si/SiGe heterostructure block with an electron spin sitting in each well of a deep golden double-well potential, red-blue micromagnets on top with blue stray-field arcs, and a glowing green standing-wave light mode between two blue cavity mirrors fed by purple input and orange output wave packets."
 ---
 
 Theory showing that a single electron spin in a silicon double quantum dot can couple strongly to a microwave photon, the route to a fully connected spin processor.

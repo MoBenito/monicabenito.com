@@ -1,6 +1,6 @@
 {{- /* One publication card. Context: the publication page. The data-* attributes feed the sort and filter
        controls on the publications page. */ -}}
-{{- $img := .Resources.GetMatch "featured.*" }}
+{{- $img := .Resources.GetMatch "render.*" | default (.Resources.GetMatch "featured.*") }}
 {{- $cites := 0 }}{{ with index (hugo.Data.citations.papers | default dict) .File.ContentBaseName }}{{ $cites = .count }}{{ end }}
 {{- $search := printf "%s %s %s" .Title (delimit (.Params.authors | default slice) " ") (.Params.journal | default "arxiv preprint") | lower }}
 <article class="reveal tile{{ if not $img }} no-thumb{{ end }}"

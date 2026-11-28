@@ -10,6 +10,7 @@ research:
   - "open-systems-dynamics"
 summary: "A protocol to measure the quantum geometric tensor in tunnel and molecular junctions."
 darkFigure: "invert"
+figureAlt: "Rendering of a molecular junction where two gold tips, one fed by a heap of blue electrons, point into a translucent green box holding three glowing energy-level bars (orange, magenta, blue) joined by a violet wavy arrow, while pink and cyan drive arcs rise from two gold gates and a gridded rainbow surface with an orange loop floats above."
 ---
 
 A protocol to measure the quantum geometric tensor in tunnel and molecular junctions.

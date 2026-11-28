@@ -11,6 +11,7 @@ research:
   - "light-matter-interaction"
 summary: "Periodic driving lets particles escape Aharonov-Bohm caging in a flat-band diamond chain."
 darkFigure: "invert"
+figureAlt: "Rendering of a diamond-shaped chain of blue, red and green balls on a lilac plate, with its first rhombus enclosed in a complete golden birdcage whose curved door stands open, an orange particle arcing out of the cage to the far end of the chain, violet flux arrows through each rhombus and wavy golden light rays falling from above."
 ---
 
 Periodic driving lets particles escape Aharonov-Bohm caging in a flat-band diamond chain.

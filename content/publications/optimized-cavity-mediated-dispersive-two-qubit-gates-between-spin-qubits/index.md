@@ -17,6 +17,7 @@ summary: "Long-distance two-qubit gates between spin qubits, mediated by virtual
 aliases:
   - "/optimized-cavity-mediated-dispersive-two-qubit-gates-between-spin-qubits/"
 darkFigure: "invert"
+figureAlt: "Rendering of two double-well potentials as blue tubes, each with an orange spin and a dashed ghost spin beneath a red-blue bar magnet whose computed blue field lines form nested closed loops in the plane of the wells, joined by a gold meandering superconducting resonator under three parallel gold arrows marking the external field."
 ---
 
 Long-distance two-qubit gates between spin qubits, mediated by virtual photons in a superconducting cavity, and how to optimise their fidelity.

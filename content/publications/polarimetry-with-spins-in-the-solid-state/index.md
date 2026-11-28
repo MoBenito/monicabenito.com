@@ -12,11 +12,13 @@ journal: "Nano Letters"
 volume: "25"
 pages: "9285-9292"
 doi: "10.1021/acs.nanolett.5c01511"
+license: "CC BY 4.0"
 arxiv: "2410.17867"
 research:
   - "spin-quantum-computing"
 summary: "Pauli spin blockade, the standard spin readout in semiconductor qubits, seen as polarimetry with spins."
 darkFigure: "invert"
+figureAlt: "Rendering of a hole spin's path drawn as an optical bench on a silicon chip: a yellow beam crosses the whole frame through a blue grating polarizer with a blue double-headed rotation arrow over it, a glass active-medium cylinder in which small spin arrows turn step by step, and a red analyzer spin tilted away from its dashed axis, with a magenta boron acceptor glowing on the chip."
 ---
 
 Pauli spin blockade, the standard spin readout in semiconductor qubits, seen as polarimetry with spins.
