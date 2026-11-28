@@ -1,5 +1,6 @@
-# Nightly: refresh citation counts, look for new papers and for preprints that have been published, and open a
-# pull request for each (see tools/bot.py). Can also be started by hand from the Actions tab.
+# Nightly: refresh citation counts and free-PDF links (University of Augsburg repository), look for new papers
+# (arXiv, ORCID, the repository) and for preprints that have been published, and open a pull request for each
+# (see tools/bot.py). Can also be started by hand from the Actions tab.
 # Repository settings needed: Actions > General > Workflow permissions: "Read and write" and
 # "Allow GitHub Actions to create and approve pull requests".
 name: Publications
@@ -42,12 +43,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Refresh citation counts
+      - name: Refresh citation counts and free PDFs
         run: |
           python tools/citations.py
-          if ! git diff --quiet data/citations.json; then
-            git add data/citations.json
-            git commit --quiet -m "Update citation counts"
+          python tools/opus.py || echo "::warning::OPUS list not read; free-PDF links unchanged"
+          if ! git diff --quiet data/; then
+            git add data/citations.json data/opus.json
+            git commit --quiet -m "Update citation counts and free-PDF links"
             git push --quiet origin HEAD:main
           fi
 

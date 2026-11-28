@@ -8,6 +8,7 @@ Used by .github/workflows/publications.yml, which opens one pull request per cha
 - arXiv (author "M. Benito" / "Mónica Benito" in quant-ph, cond-mat and physics): catches preprints, including ones
   missing from ORCID;
 - ORCID works and OpenAlex (by ORCID iD): catch journal papers;
+- the author's list in the University of Augsburg repository OPUS (tools/opus.py), last, for anything still missing;
 - journal version of a preprint: the DOI on arXiv, else OpenAlex (links preprint and published version even when
   the title changed), else a Crossref title search; Crossref also gives the journal details by DOI.
 Figures: Figure 1 from the arXiv source (first \\includegraphics in a figure), rendered about 2400 px wide; if
@@ -240,7 +241,35 @@ def find():
         if any(difflib.SequenceMatcher(None, norm_title(w["title"]), norm_title(n["title"])).ratio() > 0.9 for n in new):
             continue
         new.append({"doi": w["doi"], "title": w["title"], "known_coauthors": [], "identity": ["orcid-record"]})
+    new += opus_new(known_doi | NOT_MINE, known_arxiv | NOT_MINE, known_title, new, coauthors)
     return {"new": new, "published": published}
+
+
+def opus_new(known_doi, known_arxiv, known_title, new, coauthors):
+    """Papers in the author's University of Augsburg repository list (tools/opus.py) that no other source found."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import opus
+    try:
+        entries = opus.entries()
+    except BaseException as err:  # the university page is down or changed: the other sources still count
+        print(f"OPUS list not available ({err}); skipped this time", file=sys.stderr)
+        return []
+    seen = {n.get("arxiv") for n in new} | {n.get("doi") for n in new}
+    out = []
+    for e in entries:
+        if (e["doi"] and e["doi"] in known_doi | seen) or (e["arxiv"] and e["arxiv"] in known_arxiv | seen) \
+                or norm_title(e["title"]) in known_title:
+            continue
+        if any(difflib.SequenceMatcher(None, norm_title(e["title"]), norm_title(n["title"])).ratio() > 0.9 for n in new + out):
+            continue
+        if not (e["doi"] or e["arxiv"]):
+            print(f"OPUS entry without DOI or arXiv id, not proposed: {e['title']} ({e['url']})", file=sys.stderr)
+            continue
+        shared = sorted({surname(a) for a in re.split(r", | und | and ", e["authors"]) if a} & coauthors)
+        ident = {"arxiv": e["arxiv"]} if e["arxiv"] else {"doi": e["doi"]}
+        out.append({**ident, "title": e["title"], "known_coauthors": shared,
+                    "identity": sorted(set(identity_check(arxiv_id=e["arxiv"], doi=e["doi"])) | {"opus"})})
+    return out
 
 
 # --- writing bundles -----------------------------------------------------------------------------------------
